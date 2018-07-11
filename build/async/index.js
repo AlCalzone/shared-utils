@@ -4,6 +4,3 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./async"));
-__export(require("./deferred-promise"));
-__export(require("./math"));
-__export(require("./strings"));
