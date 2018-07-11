@@ -1,7 +1,7 @@
 {
   "name": "alcalzone-shared",
   "version": "0.0.1",
-  "description": "Boilerplate project for libraries written in TypeScript",
+  "description": "A set of utilities shared between my projects",
   "keywords": [],
   "main": "build/index.js",
   "types": "build/index.d.ts",
