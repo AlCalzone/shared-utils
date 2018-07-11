@@ -1,0 +1,1 @@
+process.env.TS_NODE_IGNORE_WARNINGS = "TRUE";
