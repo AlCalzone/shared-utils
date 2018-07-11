@@ -53,12 +53,12 @@ describe("async => ", () => {
 			promisifyNoError(callbackApiWithoutError).should.be.a("function");
 		});
 		it("that returns a promise", () => {
-			promisifyNoError(callbackApiWithoutError)(false).should.be.an.instanceof(Promise);
+			promisifyNoError(callbackApiWithoutError)().should.be.an.instanceof(Promise);
 		});
 
 		it("that is fulfilled with the first argument passed to the callback", () => {
 			const promisified = promisifyNoError(callbackApiWithoutError);
-			return expect(promisified()).to.eventually.become(true);
+			return expect(promisified()).to.become(true);
 		});
 	});
 
