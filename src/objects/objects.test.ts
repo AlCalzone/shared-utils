@@ -13,7 +13,7 @@ use(sinonChai);
 
 import { composeObject, entries, extend, filter, KeyValuePair, values } from "./objects";
 
-describe.only("objects => ", () => {
+describe("objects => ", () => {
 
 	describe("entries() => ", () => {
 
