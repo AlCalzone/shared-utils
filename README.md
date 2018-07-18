@@ -5,3 +5,6 @@
 [![Build Status](https://img.shields.io/circleci/project/github/AlCalzone/shared-utils.svg)](https://circleci.com/gh/AlCalzone/shared-utils)
 [![Coverage Status](https://img.shields.io/coveralls/github/AlCalzone/shared-utils.svg)](https://coveralls.io/github/AlCalzone/shared-utils)
 
+A set of utilities shared between my projects
+
+Function documentation available [here](docs/index.html)

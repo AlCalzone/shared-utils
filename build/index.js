@@ -1,11 +1,15 @@
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
+// tslint:disable:no-namespace
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./async"));
-__export(require("./comparable"));
-__export(require("./deferred-promise"));
-__export(require("./math"));
-__export(require("./objects"));
-__export(require("./strings"));
+const async = require("./async");
+exports.async = async;
+const comparable = require("./comparable");
+exports.comparable = comparable;
+const deferredPromise = require("./deferred-promise");
+exports.deferredPromise = deferredPromise;
+const math = require("./math");
+exports.math = math;
+const objects = require("./objects");
+exports.objects = objects;
+const strings = require("./strings");
+exports.strings = strings;
