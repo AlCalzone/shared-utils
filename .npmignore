@@ -6,7 +6,7 @@ tslint.json
 test/
 tests/
 src/
-build/**/*.map
+build/
 alcalzone-shared-*.tgz
 .vs*/
 .nyc_output/
