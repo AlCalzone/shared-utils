@@ -7,4 +7,4 @@
 
 A set of utilities shared between my projects
 
-Function documentation available [here](docs/index.html)
+Function documentation available [here](https://alcalzone.github.io/shared-utils/)
