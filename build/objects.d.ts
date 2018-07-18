@@ -20,4 +20,4 @@ export declare function composeObject<T = any>(properties: KeyValuePair<T>[]): {
  * This modifies the target object, so pass undefined or {}
  * to create a new object.
  */
-export declare function extend(target?: Record<string, any>, ...sources: Record<string, any>[]): Record<string, any>;
+export declare function extend(target: Record<string, any>, ...sources: Record<string, any>[]): Record<string, any>;

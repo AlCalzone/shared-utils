@@ -37,9 +37,11 @@ exports.composeObject = composeObject;
  * This modifies the target object, so pass undefined or {}
  * to create a new object.
  */
-function extend(target = {}, 
+function extend(target, 
 // tslint:disable-next-line:trailing-comma
 ...sources) {
+    if (target == null)
+        target = {};
     for (const source of sources) {
         for (const [prop, val] of entries(source)) {
             if (val instanceof Object) {

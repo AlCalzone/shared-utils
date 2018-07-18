@@ -21,6 +21,10 @@ describe("objects => ", () => {
 			expect(Array.isArray(entries({}))).to.be.true;
 		});
 
+		it("should work for empty objects", () => {
+			expect(entries({})).to.deep.equal([]);
+		});
+
 		it("the returned array should contain one entry for each key in the object", () => {
 			let ret = entries({ a: "b", c: "d" });
 			ret.length.should.equal(2);
@@ -45,6 +49,10 @@ describe("objects => ", () => {
 
 		it("should return an array", () => {
 			expect(Array.isArray(values({}))).to.be.true;
+		});
+
+		it("should work for empty objects", () => {
+			expect(values({})).to.deep.equal([]);
 		});
 
 		it("the returned array should contain one entry for each key in the object", () => {
@@ -106,6 +114,14 @@ describe("objects => ", () => {
 			ret = filter(original, (item) => item === true);
 			ret.should.deep.equal({ d: true, e: true });
 		});
+
+		it("should work correctly with an impossible filter", () => {
+			expect(filter({a: 1, b: 2, c: 3}, () => false)).to.deep.equal({ });
+		});
+
+		it("should work for empty objects", () => {
+			expect(filter({}, () => true)).to.deep.equal({});
+		});
 	});
 
 	describe("composeObject() => ", () => {
@@ -122,6 +138,22 @@ describe("objects => ", () => {
 				c: "d",
 			});
 		});
+		it("should overwrite duplicates", () => {
+			const ret = composeObject([
+				["a", 0xb],
+				["c", "d"],
+				["e", "E"],
+				["a", "A"],
+			] as KeyValuePair<string | number>[]);
+			ret.should.deep.equal({
+				c: "d",
+				e: "E",
+				a: "A",
+			});
+		});
+		it("should work for empty arrays", () => {
+			expect(composeObject([])).to.deep.equal({});
+		});
 	});
 
 	describe("extend() => ", () => {
@@ -129,7 +161,8 @@ describe("objects => ", () => {
 			extend({}, {}).should.be.an("object");
 		});
 		it("even if the passed target was null or undefined", () => {
-			extend(undefined!, {}).should.be.an("object");
+			extend(undefined, {}).should.be.an("object");
+			extend(null, {}).should.be.an("object");
 		});
 		it("should return the modified target object", () => {
 			const target = { a: "b", c: 0xd };
@@ -188,6 +221,13 @@ describe("objects => ", () => {
 				a: "b",
 				c: 0xd,
 			});
+		});
+
+		it("should correctly work with null as a target", () => {
+			expect(extend(null, {a: "a"})).to.deep.equal({a: "a"});
+		});
+		it("should correctly work with empty objects", () => {
+			expect(extend({}, {})).to.deep.equal({});
 		});
 	});
 
