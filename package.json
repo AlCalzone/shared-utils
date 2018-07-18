@@ -53,9 +53,9 @@
     "debug": "^3.1.0"
   },
   "scripts": {
-    "build": "node_modules/.bin/tsc && npm run docs",
-    "docs": "node node_modules/typedoc/bin/typedoc",
-    "prebuild": "rimraf ./build && rimraf ./docs",
+    "build": "node_modules/.bin/tsc",
+    "docs": "node node_modules/typedoc/bin/typedoc --options ./typedoc.js",
+    "prebuild": "rimraf ./build",
     "watch": "tsc --watch",
     "test:ts": "node_modules/.bin/mocha",
     "test": "npm run test:ts",
