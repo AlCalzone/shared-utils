@@ -12,7 +12,7 @@ should();
 use(sinonChai);
 use(chaiAsPromised);
 
-import { promisify, promisifyNoError, wait } from "./async";
+import { promiseSequence, promisify, promisifyNoError, wait } from "./async";
 
 /** A callback-style API which returns an error or a boolean */
 function callbackApiWithError(returnError: boolean, callback: (err: any, result?: boolean) => void) {
@@ -88,4 +88,54 @@ describe("async => ", () => {
 		});
 	});
 
+	describe.only("promiseSequence() => ", () => {
+		let clock: SinonFakeTimers;
+		beforeEach(() => {
+			clock = useFakeTimers();
+		});
+
+		it("should execute the given promises in a sequence", (done) => {
+			const leSpy = spy();
+			function doWait(time, result) {
+				return new Promise(res => {
+					setTimeout(() => {
+						leSpy(result);
+						res(result);
+					}, time);
+					clock.runAll();
+				});
+			}
+			// create an array of promise factories that would usually not finish in order
+			const factories = [
+				() => doWait(300, 1),
+				() => doWait(100, 2),
+				() => doWait(200, 3),
+				() => doWait(50, 4),
+			];
+			promiseSequence(factories).then(() => {
+				leSpy.callCount.should.equal(4);
+				leSpy.getCall(0).args[0].should.equal(1);
+				leSpy.getCall(1).args[0].should.equal(2);
+				leSpy.getCall(2).args[0].should.equal(3);
+				leSpy.getCall(3).args[0].should.equal(4);
+				done();
+			});
+			clock.runAll();
+		});
+
+		it("should return an array with the ordered results of the promises", async () => {
+			const expected = [4, 2, 1, 3];
+			const factories = expected.map(val => () => Promise.resolve(val));
+			const result = await promiseSequence(factories);
+			result.should.deep.equal(expected);
+		});
+
+		it("should work for empty arrays", async () => {
+			expect(await promiseSequence([])).to.deep.equal([]);
+		});
+
+		afterEach(() => {
+			clock.restore();
+		});
+	});
 });

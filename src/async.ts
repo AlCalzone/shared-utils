@@ -38,3 +38,18 @@ export function wait(ms: number): Promise<void> {
 		setTimeout(resolve, ms);
 	});
 }
+
+export type PromiseFactory<T> = () => Promise<T>;
+
+/**
+ * Executes the given promise-returning functions in sequence
+ * @param promiseFactories An array of promise-returning functions
+ * @returns An array containing all return values of the executed promises
+ */
+export async function promiseSequence<T>(promiseFactories: Iterable<PromiseFactory<T>>) {
+	const ret: T[] = [];
+	for (const f of promiseFactories) {
+		ret.push(await f());
+	}
+	return ret;
+}
