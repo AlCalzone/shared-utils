@@ -1,6 +1,6 @@
 {
   "name": "alcalzone-shared",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A set of utilities shared between my projects",
   "keywords": [],
   "main": "build/index.js",
