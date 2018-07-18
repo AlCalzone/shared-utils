@@ -18,3 +18,19 @@ function compareNumberOrString(a, b) {
             : -1;
 }
 exports.compareNumberOrString = compareNumberOrString;
+/**
+ * The default comparer method to handle string, numbers and Comparable<T>.
+ * @param a The first value to compare
+ * @param b The second value to compare
+ */
+function defaultComparer(a, b) {
+    if (typeof a === typeof b
+        && (typeof a === "number" || typeof a === "string")) {
+        return compareNumberOrString(a, b);
+    }
+    else if (isComparable(a) && isComparable(b)) {
+        return b.compareTo(a);
+    }
+    throw new Error(`cannot compare ${typeof a} with ${typeof b}`);
+}
+exports.defaultComparer = defaultComparer;

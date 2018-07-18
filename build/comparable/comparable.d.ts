@@ -12,3 +12,9 @@ export declare function isComparable<T>(obj: T | Comparable<T>): obj is Comparab
  * Compares two numbers or strings. Returns 1 when the 2nd one is larger, 0 when both are equal or -1 when the 2nd one is smaller
  */
 export declare function compareNumberOrString<T extends number | string>(a: T, b: T): CompareResult;
+/**
+ * The default comparer method to handle string, numbers and Comparable<T>.
+ * @param a The first value to compare
+ * @param b The second value to compare
+ */
+export declare function defaultComparer<T>(a: T, b: T): CompareResult;

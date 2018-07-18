@@ -23,3 +23,20 @@ export function compareNumberOrString<T extends number | string>(a: T, b: T): Co
 		: -1
 	;
 }
+
+/**
+ * The default comparer method to handle string, numbers and Comparable<T>.
+ * @param a The first value to compare
+ * @param b The second value to compare
+ */
+export function defaultComparer<T>(a: T, b: T): CompareResult {
+	if (
+		typeof a === typeof b
+		&& (typeof a === "number" || typeof a === "string")
+	) {
+		return compareNumberOrString(a, b as typeof a);
+	} else if (isComparable(a) && isComparable(b)) {
+		return b.compareTo(a);
+	}
+	throw new Error(`cannot compare ${typeof a} with ${typeof b}`);
+}
