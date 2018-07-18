@@ -162,6 +162,14 @@ describe("sorted-list => ", () => {
 		expect(list.toArray()).to.deep.equal([smallObj, largeObj]);
 	});
 
+	it("when the compareTo method throws an error it should be passed through", () => {
+		const faultyComparer = stub().throws(new Error("bogus error"));
+		const obj1 = {compareTo: faultyComparer};
+		const obj2 = {compareTo: faultyComparer};
+		const list = new SortedList();
+		expect(() => list.add(obj1, obj2)).to.throw("bogus");
+	});
+
 	it("should complain if only one item has a compareTo method", () => {
 		const largeObj = {compareTo: stub().returns(1)};
 		const smallObj = {};
