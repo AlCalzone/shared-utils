@@ -88,7 +88,7 @@ describe("async => ", () => {
 		});
 	});
 
-	describe.only("promiseSequence() => ", () => {
+	describe("promiseSequence() => ", () => {
 		let clock: SinonFakeTimers;
 		beforeEach(() => {
 			clock = useFakeTimers();
