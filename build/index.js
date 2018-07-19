@@ -13,3 +13,5 @@ const objects = require("./objects");
 exports.objects = objects;
 const strings = require("./strings");
 exports.strings = strings;
+const types = require("./types");
+exports.types = types;
