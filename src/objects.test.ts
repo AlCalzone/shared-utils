@@ -224,10 +224,28 @@ describe("objects => ", () => {
 		});
 
 		it("should correctly work with null as a target", () => {
-			expect(extend(null, {a: "a"})).to.deep.equal({a: "a"});
+			extend(null, {a: "a"}).should.deep.equal({a: "a"});
 		});
 		it("should correctly work with empty objects", () => {
-			expect(extend({}, {})).to.deep.equal({});
+			extend({}, {}).should.deep.equal({});
+		});
+
+		// Regression tests
+		it("should be able to overwrite a primitive with an object", () => {
+			const target = {a: 1, d: "e"};
+			const source = {a: {b: "c"}};
+			extend(target, source).should.deep.equal({
+				a: {b: "c"},
+				d: "e",
+			});
+		});
+		it("should be able to overwrite an object with a primitive", () => {
+			const target = {a: {b: "c"}, d: "e"};
+			const source = {a: 1};
+			extend(target, source).should.deep.equal({
+				a: 1,
+				d: "e",
+			});
 		});
 	});
 

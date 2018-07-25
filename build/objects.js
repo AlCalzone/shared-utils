@@ -44,7 +44,7 @@ function extend(target,
         target = {};
     for (const source of sources) {
         for (const [prop, val] of entries(source)) {
-            if (val instanceof Object) {
+            if (typeof target[prop] === "object" && typeof val === "object") {
                 target[prop] = extend(target[prop], val);
             }
             else {
