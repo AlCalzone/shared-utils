@@ -47,6 +47,9 @@ function extend(target,
             if (typeof target[prop] === "object" && typeof val === "object") {
                 target[prop] = extend(target[prop], val);
             }
+            else if (typeof val === "object") {
+                target[prop] = extend({}, val);
+            }
             else {
                 target[prop] = val;
             }

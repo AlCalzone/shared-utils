@@ -247,6 +247,17 @@ describe("objects => ", () => {
 				d: "e",
 			});
 		});
+
+		it("should never keep a reference to the original object around", () => {
+			const source = {a: {b: "c"}};
+			const target1 = extend({}, source);
+			const target2 = extend({}, source);
+			// we perform a deep copy
+			target1.should.deep.equal(target2);
+			// but don't copy source objects
+			target1.should.not.equal(target2);
+			target1.a.should.not.equal(target2.a);
+		});
 	});
 
 });
