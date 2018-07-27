@@ -259,16 +259,28 @@ describe("objects => ", () => {
 			target1.a.should.not.equal(target2.a);
 		});
 
-		it("should be able to handle a property with value null", () => {
+		it("should be able to handle a source property with value null", () => {
 			const target = {a: {b: "c"}};
 			const source = {a: null};
 			extend(target, source).should.deep.equal({a: null});
 		});
 
-		it("should be able to handle a property with value undefined", () => {
+		it("should be able to handle a target property with value null", () => {
+			const source = {a: {b: "c"}};
+			const target = {a: null};
+			extend(target, source).should.deep.equal({a: {b: "c"}});
+		});
+
+		it("should be able to handle a source property with value undefined", () => {
 			const target = {a: {b: "c"}};
 			const source = {a: undefined};
 			extend(target, source).should.deep.equal({a: undefined});
+		});
+
+		it("should be able to handle a target property with value undefined", () => {
+			const source = {a: {b: "c"}};
+			const target = {a: undefined};
+			extend(target, source).should.deep.equal({a: {b: "c"}});
 		});
 	});
 
