@@ -44,13 +44,20 @@ function extend(target,
         target = {};
     for (const source of sources) {
         for (const [prop, val] of entries(source)) {
-            if (typeof target[prop] === "object" && typeof val === "object") {
+            if (val === null) {
+                // copy null values
+                target[prop] = val;
+            }
+            else if (typeof target[prop] === "object" && typeof val === "object") {
+                // merge objects if both properties are objects
                 target[prop] = extend(target[prop], val);
             }
             else if (typeof val === "object") {
+                // create a copy of the source object if the target is primitive
                 target[prop] = extend({}, val);
             }
             else {
+                // copy primitive values
                 target[prop] = val;
             }
         }
