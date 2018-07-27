@@ -14,3 +14,12 @@ export type Optional<T, K> = { [P in Extract<keyof T, K>]+?: T[P] };
  * Makes the properties K in type T optional
  */
 export type SemiPartial<T, K extends keyof T> = T extends never ? never : Omit<T, K> & Optional<T, K>;
+
+/**
+ * Extracts a union of possible key-value pairs from type T
+ * @returns A union of `{key, value}` objects where `key` can take the values of `keyof T` and `value` the corresponding property types.
+ */
+export type KeyValuePairsOf<
+	T extends Record<string, any>,
+	U = {[K in keyof T]: {key: K, value: T[K] }}
+> = U[keyof U];
