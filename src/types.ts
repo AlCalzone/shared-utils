@@ -1,6 +1,15 @@
 // shameless copy from https://github.com/Microsoft/TypeScript/issues/25760#issuecomment-406158222
 
 /**
+ * Tests if two types are equal
+ */
+export type Equals<T, S> =
+	[T] extends [S] ? (
+		[S] extends [T] ? true : false
+	) : false
+;
+
+/**
  * Excludes the properties K from type T
  */
 export type Omit<T, K> = { [P in Exclude<keyof T, K>]: T[P] };
@@ -23,3 +32,9 @@ export type KeyValuePairsOf<
 	T extends Record<string, any>,
 	U = {[K in keyof T]: {key: K, value: T[K] }}
 > = U[keyof U];
+
+/**
+ * Returns the first item in a tuple
+ */
+export type Head<T extends any[]> =
+	T extends [infer H, ...any[]] ? H : never;
