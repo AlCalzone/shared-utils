@@ -136,3 +136,44 @@ export type Head<T extends any[]> =
  */
 export type Tail<T extends any[]> =
 	((...args: T) => any) extends ((head: any, ...tail: infer R) => any) ? R : never;
+
+/**
+ * Returns the given tuple/array with the item type prepended to it
+ */
+export type Unshift<List extends any[], Item> =
+	((first: Item, ...rest: List) => any) extends ((...list: infer R) => any) ? R : never;
+
+// type ForceTuple<T> = T extends any[] ? T : any[];
+
+// /**
+//  * Reverses the given list
+//  * WARNING: Use at your own risk, this might crash TypeScript
+//  */
+// export type Reverse<List extends any[]> = _Reverse<List, []>;
+
+// /**
+//  * @internal
+//  */
+// export type _Reverse<
+// 	Source extends any[],
+// 	Result extends any[] = [],
+// 	T = Tail<Source>,
+// 	T_ extends any[] = ForceTuple<T>,
+// 	H_ = Head<Source>
+// > = {
+// 	// If the source list is empty, return the result
+// 	1: Result,
+// 	// else prepend the head of source to the result list and
+// 	// continue recursion with the tail of the source
+// 	0: _Reverse<T_, Unshift<Result, H_>>,
+// }[Source extends [] ? 1 : 0];
+
+// /**
+//  * Returns the given tuple/array with the item type appended to it
+//  * WARNING: Use at your own risk, this might crash TypeScript
+//  */
+// export type Push<
+// 	Tuple extends any[], Element,
+// 	R = Reverse<Tuple>,
+// 	T extends any[] = ForceTuple<R>
+// > = Reverse<Unshift<T, Element>>;

@@ -13,7 +13,7 @@ should();
 // improve stubs for testing
 use(sinonChai);
 
-import { And, AssignableTo, Equals, Every, EveryStrict, Head, IndizesOf, IsTuple, KeyValuePairsOf, LengthOf, Not, Omit, Optional, Or, SemiPartial, Tail, UnionOf } from "./types";
+import { And, AssignableTo, Equals, Every, EveryStrict, Head, IndizesOf, IsTuple, KeyValuePairsOf, LengthOf, Not, Omit, Optional, Or, SemiPartial, Tail, UnionOf, Unshift } from "./types";
 
 // These tests all succeed during runtime
 // a failed test can only occur due to compile errors
@@ -634,9 +634,9 @@ describe.only("types => ", () => {
 
 		it("should return an empty objects if no properties from K exist on T", () => {
 			type Tests = [
-				Equals<Optional<{a: number}, never>, {}>,
-				Equals<Optional<{a: number, b: string[]}, "something">, {}>,
-				Equals<Optional<{a: number, b: string[]}, "some" | "props">, {}>
+				Equals<Optional<{ a: number }, never>, {}>,
+				Equals<Optional<{ a: number, b: string[] }, "something">, {}>,
+				Equals<Optional<{ a: number, b: string[] }, "some" | "props">, {}>
 			];
 
 			const success: Every<Tests, true> = true;
@@ -644,9 +644,9 @@ describe.only("types => ", () => {
 
 		it("should take all properties in K from T and make them optional", () => {
 			type Tests = [
-				Equals<Optional<{a: number}, "a">, {a?: number}>,
-				Equals<Optional<{a: number, b: string[]}, "a">, {a?: number}>,
-				Equals<Optional<{a: number, b: string[]}, "a" | "b">, {a?: number, b?: string[]}>
+				Equals<Optional<{ a: number }, "a">, { a?: number }>,
+				Equals<Optional<{ a: number, b: string[] }, "a">, { a?: number }>,
+				Equals<Optional<{ a: number, b: string[] }, "a" | "b">, { a?: number, b?: string[] }>
 			];
 
 			const success: Every<Tests, true> = true;
@@ -665,9 +665,9 @@ describe.only("types => ", () => {
 
 		it("should take all properties in K from T and make them optional WHILE keeping the rest", () => {
 			type Tests = [
-				Equals<SemiPartial<{a: number}, "a">, {a?: number}>,
-				Equals<SemiPartial<{a: number, b: string[]}, "a">, {a?: number, b: string[]}>,
-				Equals<SemiPartial<{a: number, b: string[]}, "a" | "b">, {a?: number, b?: string[]}>
+				Equals<SemiPartial<{ a: number }, "a">, { a?: number }>,
+				Equals<SemiPartial<{ a: number, b: string[] }, "a">, { a?: number, b: string[] }>,
+				Equals<SemiPartial<{ a: number, b: string[] }, "a" | "b">, { a?: number, b?: string[] }>
 			];
 
 			const success: Every<Tests, true> = true;
@@ -686,8 +686,8 @@ describe.only("types => ", () => {
 
 		it("should create a union with all {key, value} pairs", () => {
 			type Tests = [
-				Equals<KeyValuePairsOf<{a: 1}>, {key: "a", value: 1}>,
-				Equals<KeyValuePairsOf<{a: 1, b: 2}>, {key: "a", value: 1} | {key: "b", value: 2}>
+				Equals<KeyValuePairsOf<{ a: 1 }>, { key: "a", value: 1 }>,
+				Equals<KeyValuePairsOf<{ a: 1, b: 2 }>, { key: "a", value: 1 } | { key: "b", value: 2 }>
 			];
 
 			const success: Every<Tests, true> = true;
@@ -740,4 +740,51 @@ describe.only("types => ", () => {
 			const success: Every<Tests, true> = true;
 		});
 	});
+
+	describe("Unshift<T[], I> => ", () => {
+		it("should prepend the given element to the tuple/array", () => {
+			type Tests = [
+				Equals<Unshift<[], 1>, [1]>,
+				Equals<Unshift<[1], 2>, [2, 1]>,
+				Equals<Unshift<[number, string], boolean>, [boolean, number, string]>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+	});
+
+	// describe("Reverse<T[]> => ", () => {
+	// 	it("should work with empty arrays/tuples", () => {
+	// 		type Tests = [
+	// 			Equals<Reverse<[]>, []>
+	// 		];
+
+	// 		const success: Every<Tests, true> = true;
+	// 	});
+
+	// 	it("should return the first item's type", () => {
+	// 		type Tests = [
+	// 			Equals<Reverse<[1]>, [1]>,
+	// 			Equals<Reverse<[1, 2]>, [2, 1]>,
+	// 			Equals<Reverse<[3, 2, number]>, [number, 2, 3]>
+	// 		];
+
+	// 		const success: Every<Tests, true> = true;
+	// 	});
+	// });
+
+	// describe("Push<T[], I> => ", () => {
+	// 	it("should append the given element to the tuple/array", () => {
+	// 		type Tests = [
+	// 			Equals<Push<[], 1>, [1]>,
+	// 			Equals<Push<[1], 2>, [1, 2]>,
+	// 			Equals<Push<[number, string], boolean>, [number, string, boolean]>
+	// 		];
+
+	// 		const success: Every<Tests, true> = true;
+	// 	});
+
+	// });
+
 });
