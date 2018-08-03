@@ -2,62 +2,101 @@
 // Some dangerous recursive operations!
 // Beware of the dragons!
 
-import { LengthOf } from "./types";
+import { LengthOf, Omit } from "./types";
+import { extend } from "./objects";
 
 /**
- * Returns the logarithm to the base 2 of the length of T
+ * Returns the logarithm to the base 2 of L
  */
-export type LenLog2<
-	T extends any[],
-	L = LengthOf<T>
-> = number extends L ? never :
+export type Log2<L> =
+	number extends L ? never :
 	L extends 0 ? never : (
-	L extends 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 ?
-	L extends 1 | 2 | 3 | 4 ?
-	L extends 1 | 2 ?
-	L extends 1 ?
-	0 : 1 : 2 : 3 : 4
-);
+		L extends 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 ?
+		L extends 1 | 2 | 3 | 4 ?
+		L extends 1 | 2 ?
+		L extends 1 ?
+		0 : 1 : 2 : 3 : 4
+	);
 
 /**
- * Returns the logarithm to the base 2 of the (length of T + 1)
+ * Returns the logarithm to the base 2 of the (L + 1)
  */
-export type Magnitude<
-	T extends any[],
-	L = LengthOf<T>
-> = number extends L ? never : (
-	L extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 ?
-	L extends 0 | 1 | 2 | 3 ?
-	L extends 0 | 1 ?
-	L extends 0 ?
-	0 : 1 : 2 : 3 : 4
-);
+export type Magnitude<L> =
+	number extends L ? never : (
+		L extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 ?
+		L extends 0 | 1 | 2 | 3 ?
+		L extends 0 | 1 ?
+		L extends 0 ?
+		0 : 1 : 2 : 3 : 4
+	);
 
 /**
  * Returns the last item in T
  */
 export type Last<
 	T extends any[]
-> = {
-	0: T[0],
-	// depending on the length of T, drop the first half of it
-	1: Last<Drop1<T>>,
-	2: Last<Drop2<T>>,
-	3: Last<Drop4<T>>,
-	4: Last<Drop8<T>>,
-}[LenLog2<T>];
+	> = {
+		0: T[0],
+		// depending on the length of T, drop the first half of it
+		1: Last<Drop1<T>>,
+		2: Last<Drop2<T>>,
+		3: Last<Drop4<T>>,
+		4: Last<Drop8<T>>,
+	}[Log2<T["length"]>];
 
 export type ConcatReverse<
-	T1 extends any[], T2 extends any[] = []
-> = {
-	0: T2,
-	// depending on the length of T1, take the first half of T1,
-	// and prepend it to T2 in a reversed order
-	1: ConcatReverse<Drop1<T1>, ConcatReverse1<Take1<T1>, T2>>,
-	2: ConcatReverse<Drop2<T1>, ConcatReverse2<Take2<T1>, T2>>,
-	3: ConcatReverse<Drop4<T1>, ConcatReverse4<Take4<T1>, T2>>,
-	4: ConcatReverse<Drop8<T1>, ConcatReverse8<Take8<T1>, T2>>,
-}[Magnitude<T1>];
+	T1 extends any[], T2 extends any[]=[]
+	> = {
+		0: T2,
+		// depending on the length of T1, take the first half of T1,
+		// and prepend it to T2 in a reversed order
+		1: ConcatReverse<Drop1<T1>, ConcatReverse1<T1, T2>>,
+		2: ConcatReverse<Drop2<T1>, ConcatReverse2<T1, T2>>,
+		3: ConcatReverse<Drop4<T1>, ConcatReverse4<T1, T2>>,
+		4: ConcatReverse<Drop8<T1>, ConcatReverse8<T1, T2>>,
+	}[Magnitude<T1["length"]>];
+
+type Foo = [1, 5, 7, 8, 9, string];
+// type TakeLast<
+// 	T extends any[],
+// 	// Reduce the size of T by 1 and get the indizes of that tuple
+// 	AllKeysButLast = keyof Drop1<T>,
+// 	// Create a Record with only the last key of T and its type
+// 	U = { [K in Exclude<keyof T, AllKeysButLast>]: T[K] },
+// 	// And return that type
+// > = U[keyof U];
+type TakeLast<
+	T extends any[],
+	// Create a tuple which is 1 item shorter than T and determine its length
+	L1 extends number = Drop1<T>["length"],
+	// use that length to access the last index of T
+> = T[L1];
+type MapTuples<T1 extends any[], T2 extends any[]> = { [K in keyof T1]: K extends keyof T2 ? T2[K] : never };
+type Bar = MapTuples<[1, 2], [4, 5, 6]>;
+
+type DropLast<
+	T extends any[],
+	// create a tuple that is 1 shorter than T
+	MinusOne extends any[] = Drop1<T>,
+	// and keep only the entries with a corresponding index in T
+> = MapTuples<MinusOne, T>;
+type Test1 = DropLast<[1, 2, 3]>;
+
+type F1 = (arg1: number, arg2: string, c: (err: Error, ret: boolean) => void) => void;
+
+type Params<F extends (...args: any[]) => void> = F extends ((...args: infer TFArgs) => any) ? TFArgs : never;
+type ForceTuple<T> = T extends any[] ? T : any[];
+
+type Promisify<
+	F extends (...args: any[]) => void,
+	FArgs extends any[] = Params<F>,
+	PromiseArgs extends any[] = ForceTuple<DropLast<FArgs>>,
+	CallbackArgs extends any[] = Params<TakeLast<FArgs>>,
+	TError = CallbackArgs[0],
+	TResult = CallbackArgs[1]
+> = (...args: PromiseArgs) => Promise<TResult>;
+
+type FooBar = Promisify<F1>;
 
 /**
  * Returns the first item's type in a tuple
@@ -67,6 +106,8 @@ export type Head<T extends any[]> = Take1<T>;
  * Returns all but the first item's type in a tuple/array
  */
 export type Tail<T extends any[]> = Drop1<T>;
+
+// export type Concat<T1 extends any[], T2 extends any[]> = ConcatReverse<ConcatReverse<T1>, T2>;
 
 /**
  * Reverses the given list
