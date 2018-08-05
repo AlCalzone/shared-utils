@@ -2,8 +2,7 @@
 // Some dangerous recursive operations!
 // Beware of the dragons!
 
-import { LengthOf, Omit } from "./types";
-import { extend } from "./objects";
+import { Equals, LengthOf, Not, UnionOf } from "./types";
 
 /**
  * Returns the logarithm to the base 2 of L
@@ -45,7 +44,7 @@ export type Last<
 	}[Log2<T["length"]>];
 
 export type ConcatReverse<
-	T1 extends any[], T2 extends any[]=[]
+	T1 extends any[], T2 extends any[] = []
 	> = {
 		0: T2,
 		// depending on the length of T1, take the first half of T1,
@@ -139,3 +138,33 @@ type ConcatReverse1<T1 extends any[], T2 extends any[]> = ((a1: T1[0], ...rest: 
 type ConcatReverse2<T1 extends any[], T2 extends any[]> = ((a2: T1[1], a1: T1[0], ...rest: T2) => void) extends ((...args: infer R) => void) ? R : never;
 type ConcatReverse4<T1 extends any[], T2 extends any[]> = ((a4: T1[3], a3: T1[2], a2: T1[1], a1: T1[0], ...rest: T2) => void) extends ((...args: infer R) => void) ? R : never;
 type ConcatReverse8<T1 extends any[], T2 extends any[]> = ((a8: T1[7], a7: T1[6], a6: T1[5], a5: T1[4], a4: T1[3], a3: T1[2], a2: T1[1], a1: T1[0], ...rest: T2) => void) extends ((...args: infer R) => void) ? R : never;
+
+
+// DO NOT use these in production until https://github.com/Microsoft/TypeScript/issues/26155 is fixed
+
+/**
+ * Creates a Union of all numbers from 0 to N
+ * WARNING: This uses a recursive type definition which might stop working at any point
+ * Currently, N is capped at 98
+ */
+type Range<N, T extends number[] = []> = {
+	0: 0 | UnionOf<T>,
+	1: Range<N, Unshift<T, LengthOf<T>>>,
+}[Equals<LengthOf<Tail<T>>, N> extends true ? 0 : 1];
+
+/**
+ * Creates a Union of all numbers from N to M (both inclusive)
+ * WARNING: This uses a recursive type definition which might stop working at any point
+ * Currently, N and M are capped at 98
+ */
+type RangeStart<N, M> = Exclude<Range<M>, Range<N>> | N;
+
+/** Tests if N > M */
+type IsGreaterThan<N, M> = N extends Exclude<Range<N>, Range<M>> ? true : false;
+/** Tests if N <= M */
+type IsLessThanOrEqual<N, M> = Not<IsGreaterThan<N, M>>;
+/** Tests if N < M */
+type IsLessThan<N, M> = M extends Exclude<Range<M>, Range<N>> ? true : false;
+/** Tests if N >= M */
+type IsGreaterThanOrEqual<N, M> = Not<IsLessThan<N, M>>;
+
