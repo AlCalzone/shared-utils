@@ -1,4 +1,5 @@
-// shameless copy from https://github.com/Microsoft/TypeScript/issues/25760#issuecomment-406158222
+// TSLint seems to have problems with whitespace in rest tuples
+// tslint:disable:whitespace
 
 /**
  * Negates a boolean
@@ -62,15 +63,19 @@ export type UnionOf<T extends any[]> = T[number];
  */
 export type LengthOf<T extends any[]> = T["length"];
 
+export type IsFixedLength<T extends any[]> =
+	// if the length property is `number`, this is not fixed length
+	number extends LengthOf<T> ? false : true;
+
+export type IsVariableLength<T extends any[]> = Not<IsFixedLength<T>>;
+
 /**
  * Tests if a type is a fixed-length tuple (true) or an Array/open-ended tuple (false)
  */
 export type IsTuple<T extends any[]> =
-	// if the length is `number`, we either have an array or an open-ended tuple
-	number extends LengthOf<T> ? (
-		IndizesOf<T> extends number ? false // this is an array or an open-ended tuple of the form [...type[]]
-		: true // This is an open-ended tuple with at least 1 item
-	) : true; // This is a fixed-length tuple
+	IsFixedLength<T> extends true ? true  // This is a fixed-length tuple
+	: IndizesOf<T> extends number ? false // this is an array or an open-ended tuple of the form [...type[]]
+	: true;								  // This is an open-ended tuple with at least 1 item
 
 /**
  * Tests if all types in an array or tuple are assignable to T
@@ -143,37 +148,75 @@ export type Tail<T extends any[]> =
 export type Unshift<List extends any[], Item> =
 	((first: Item, ...rest: List) => any) extends ((...list: infer R) => any) ? R : never;
 
-// type ForceTuple<T> = T extends any[] ? T : any[];
+/**
+ * Returns a tuple of the function parameter types
+ */
+export type Arguments<F extends (...args: any[]) => any> = F extends ((...args: infer R) => any) ? R : never;
 
-// /**
-//  * Reverses the given list
-//  * WARNING: Use at your own risk, this might crash TypeScript
-//  */
-// export type Reverse<List extends any[]> = _Reverse<List, []>;
+/** Takes the elements from T2 that have a corresponding index in T1 */
+type MapTuples<T1 extends any[], T2 extends any[]> = { [K in keyof T1]: K extends keyof T2 ? T2[K] : never };
 
-// /**
-//  * @internal
-//  */
-// export type _Reverse<
-// 	Source extends any[],
-// 	Result extends any[] = [],
-// 	T = Tail<Source>,
-// 	T_ extends any[] = ForceTuple<T>,
-// 	H_ = Head<Source>
-// > = {
-// 	// If the source list is empty, return the result
-// 	1: Result,
-// 	// else prepend the head of source to the result list and
-// 	// continue recursion with the tail of the source
-// 	0: _Reverse<T_, Unshift<Result, H_>>,
-// }[Source extends [] ? 1 : 0];
+type TakeLastFixed<
+	T extends any[],
+	// Create a tuple which is 1 item shorter than T and determine its length
+	L1 extends number = Tail<T>["length"],
+	// use that length to access the last index of T
+> = T[L1];
 
-// /**
-//  * Returns the given tuple/array with the item type appended to it
-//  * WARNING: Use at your own risk, this might crash TypeScript
-//  */
-// export type Push<
-// 	Tuple extends any[], Element,
-// 	R = Reverse<Tuple>,
-// 	T extends any[] = ForceTuple<R>
-// > = Reverse<Unshift<T, Element>>;
+// A variable-length tuple has two potential last items:
+// the last fixed one and the type of the variable range
+type TakeLastVariable<
+	T extends any[],
+	// so we take the indizes of a tuple that is one shorter than T,
+	MinusOne = keyof Tail<T>,
+	// and the indizes of one that is one longer than T,
+	PlusOne = keyof Unshift<T, never>,
+	// and use the difference of that (= [length - 1, length])
+	// to index those two possible items
+	Index = Exclude<PlusOne, MinusOne>,
+	// @ts-ignore Index CAN be used to index T!
+	U = T[Index]
+> = U;
+
+/** Returns the last item in a tuple */
+export type TakeLast<T extends any[]> =
+	IsFixedLength<T> extends true
+		? TakeLastFixed<T>
+		: TakeLastVariable<T>;
+
+/** Removes the last item from a tuple */
+export type DropLast<
+	T extends any[],
+	// Determine the length of L
+	L extends number = LengthOf<T>,
+	// create a tuple that is 1 shorter than T
+	MinusOne extends any[] = Tail<T>,
+	// and keep only the entries with a corresponding index in T
+> = Equals<L, number> extends true
+	// this is an open-ended tuple or array, dropping the last item does nothing
+	? T
+	// this is a fixed-length tuple, we can drop one
+	: MapTuples<MinusOne, T>;
+
+/** Forces T to be a tuple - this might discard type information */
+type ForceTuple<T> = T extends any[] ? T : any[];
+/** Forces T to be a function - this might discard type information */
+type ForceFunction<T> = T extends ((...args: any[]) => any) ? T : ((...args: any[]) => any);
+
+/**
+ * Returns a promisified function signature for the given callback-style function
+ * WARNING: This is still experimental. The names of the inferred signature args are off by one!
+ */
+export type Promisify<
+	F extends (...args: any[]) => void,
+	// Extract the argument types
+	FArgs extends any[] = Arguments<F>,
+	// Infer the arguments for the promisified version
+	PromiseArgs extends any[] = ForceTuple<DropLast<FArgs>>,
+	// Parse the callback args
+	CallbackArgs extends any[] = Arguments<ForceFunction<TakeLast<FArgs>>>,
+	CallbackLength = LengthOf<CallbackArgs>,
+	TError = CallbackArgs[0],
+	// And extract the return value
+	TResult = 1 extends CallbackLength ? void : CallbackArgs[1]
+> = (...args: PromiseArgs) => Promise<TResult>;

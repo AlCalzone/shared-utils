@@ -2,6 +2,9 @@
 // tslint:disable:no-unused-expression
 // tslint:disable:variable-name
 
+// TSLint seems to have problems with whitespace in rest tuples
+// tslint:disable:whitespace
+
 // tslint:disable:interface-over-type-literal
 
 import { assert, expect, should, use } from "chai";
@@ -13,7 +16,7 @@ should();
 // improve stubs for testing
 use(sinonChai);
 
-import { And, AssignableTo, Equals, Every, EveryStrict, Head, IndizesOf, IsTuple, KeyValuePairsOf, LengthOf, Not, Omit, Optional, Or, SemiPartial, Tail, UnionOf, Unshift } from "./types";
+import { And, Arguments, AssignableTo, DropLast, Equals, Every, EveryStrict, Head, IndizesOf, IsFixedLength, IsTuple, IsVariableLength, KeyValuePairsOf, LengthOf, Not, Omit, Optional, Or, Promisify, SemiPartial, Tail, TakeLast, UnionOf, Unshift } from "./types";
 
 // These tests all succeed during runtime
 // a failed test can only occur due to compile errors
@@ -556,6 +559,46 @@ describe.only("types => ", () => {
 		});
 	});
 
+	describe("IsFixedLength<T[]> / IsVariableLength<T[]> => ", () => {
+		it("should return true / false for empty tuples", () => {
+			type Tests = [
+				// empty tuple
+				Equals<IsFixedLength<[]>, true>,
+				Equals<IsVariableLength<[]>, false>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should return true for fixed-length tuples", () => {
+			type Tests = [
+				// fixed-length tuples
+				Equals<IsFixedLength<[number]>, true>,
+				Equals<IsFixedLength<[number, number]>, true>,
+				Equals<IsFixedLength<[1, 2, "3"]>, true>,
+				Equals<IsVariableLength<[number]>, false>,
+				Equals<IsVariableLength<[number, number]>, false>,
+				Equals<IsVariableLength<[1, 2, "3"]>, false>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should return false for arrays and open-ended tuples", () => {
+			type Tests = [
+				// array
+				Equals<IsFixedLength<number[]>, false>,
+				Equals<IsFixedLength<[...number[]]>, false>,
+				Equals<IsFixedLength<[1, ...string[]]>, false>,
+				Equals<IsVariableLength<number[]>, true>,
+				Equals<IsVariableLength<[...number[]]>, true>,
+				Equals<IsVariableLength<[1, ...string[]]>, true>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+	});
+
 	describe("IsTuple<T[]> => ", () => {
 		it("should return true for empty tuples", () => {
 			type Tests = [
@@ -754,37 +797,139 @@ describe.only("types => ", () => {
 
 	});
 
-	// describe("Reverse<T[]> => ", () => {
-	// 	it("should work with empty arrays/tuples", () => {
-	// 		type Tests = [
-	// 			Equals<Reverse<[]>, []>
-	// 		];
+	describe("Arguments<F> => ", () => {
+		it("should return a tuple of the function's argument types", () => {
+			type F1 = () => void;
+			type F2 = (a1: number) => void;
+			type F3 = (a1: string, a2?: any) => string;
+			type F4 = (a1: boolean, ...rest: string[]) => any;
+			type F5 = (a1: number[]) => void;
 
-	// 		const success: Every<Tests, true> = true;
-	// 	});
+			type Tests = [
+				Equals<Arguments<F1>, []>,
+				Equals<Arguments<F2>, [number]>,
+				Equals<Arguments<F3>, [string, any?]>,
+				Equals<Arguments<F4>, [boolean, ...string[]]>,
+				Equals<Arguments<F5>, [number[]]>
+			];
 
-	// 	it("should return the first item's type", () => {
-	// 		type Tests = [
-	// 			Equals<Reverse<[1]>, [1]>,
-	// 			Equals<Reverse<[1, 2]>, [2, 1]>,
-	// 			Equals<Reverse<[3, 2, number]>, [number, 2, 3]>
-	// 		];
+			const success: Every<Tests, true> = true;
+		});
 
-	// 		const success: Every<Tests, true> = true;
-	// 	});
-	// });
+	});
 
-	// describe("Push<T[], I> => ", () => {
-	// 	it("should append the given element to the tuple/array", () => {
-	// 		type Tests = [
-	// 			Equals<Push<[], 1>, [1]>,
-	// 			Equals<Push<[1], 2>, [1, 2]>,
-	// 			Equals<Push<[number, string], boolean>, [number, string, boolean]>
-	// 		];
+	describe("TakeLast<T[]> => ", () => {
+		it("should return never for empty tuples", () => {
+			type Tests = [
+				Equals<TakeLast<[]>, never>
+			];
 
-	// 		const success: Every<Tests, true> = true;
-	// 	});
+			const success: Every<Tests, true> = true;
+		});
 
-	// });
+		it("should return the last item's type", () => {
+			type Tests = [
+				Equals<TakeLast<[1, 2]>, 2>,
+				Equals<TakeLast<[2, 3, number]>, number>,
+				// arrays
+				Equals<TakeLast<string[]>, string>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should work for open-ended tuples", () => {
+
+			type Tests = [
+				// open-ended tuples
+				Equals<TakeLast<[number, ...string[]]>, number | string>,
+				Equals<TakeLast<[number, boolean, ...string[]]>, boolean | string>,
+				Equals<TakeLast<[...string[]]>, string>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+	});
+
+	describe("DropLast<T[]> => ", () => {
+		it("should return an empty tuple for tuples/arrays with length less than 2", () => {
+			type Tests = [
+				Equals<DropLast<[]>, []>,
+				Equals<DropLast<[1]>, []>,
+				Equals<DropLast<[number]>, []>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should return a tuple of all but the last item's type", () => {
+			type Tests = [
+				Equals<DropLast<[1, 2]>, [1]>,
+				Equals<DropLast<[number, 2, 3]>, [number, 2]>,
+				// arrays
+				Equals<DropLast<string[]>, string[]>
+			];
+			type Foo = DropLast<[number, ...string[]]>;
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should work for open-ended tuples", () => {
+			type Tests = [
+				// open-ended tuples
+				Equals<DropLast<[number, ...string[]]>, [number, ...string[]]>,
+				Equals<DropLast<[...string[]]>, string[]>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+	});
+
+	describe("Promisify<T> => ", () => {
+		it("should correctly infer the return type", () => {
+
+			type F1 = (cb: (err: Error) => void) => void;
+			type P1 = Promisify<F1>;
+
+			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
+			type P2 = Promisify<F2>;
+
+			type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
+			type P3 = Promisify<F3>;
+
+			type Tests = [
+				Equals<ReturnType<P1>, Promise<void>>,
+				Equals<ReturnType<P2>, Promise<boolean>>,
+				Equals<ReturnType<P3>, Promise<number>>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should correctly infer the argument types", () => {
+
+			type F1 = (cb: (err: Error) => void) => void;
+			type P1 = Promisify<F1>;
+
+			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
+			type P2 = Promisify<F2>;
+
+			type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
+			type P3 = Promisify<F3>;
+
+			type F4 = (arg1: string, arg2: () => void, cb: (err: Error, ret: number) => void) => void;
+			type P4 = Promisify<F4>;
+
+			type Tests = [
+				Equals<Arguments<P1>, []>,
+				Equals<Arguments<P2>, []>,
+				Equals<Arguments<P3>, [string]>,
+				Equals<Arguments<P4>, [string, () => void]>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+	});
 
 });
