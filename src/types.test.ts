@@ -20,7 +20,7 @@ import { And, Arguments, AssignableTo, DropLast, Equals, Every, EveryStrict, Hea
 
 // These tests all succeed during runtime
 // a failed test can only occur due to compile errors
-describe.only("types => ", () => {
+describe("types => ", () => {
 
 	describe("AssignableTo<T1, T2> => ", () => {
 
