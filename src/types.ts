@@ -164,6 +164,22 @@ export type Unshift<List extends any[], Item> =
  */
 export type Arguments<F extends (...args: any[]) => any> = F extends ((...args: infer R) => any) ? R : never;
 
+/**
+ * Returns the Nth argument of F (0-based)
+ */
+export type ArgumentAt<
+	F extends (...args: any[]) => any,
+	N extends number,
+	ArgsTuple extends any[] = Arguments<F>,
+	Args = IsVariableLength<ArgsTuple> extends true
+		// keep variable length-tuples as-is
+		? ArgsTuple
+		// fixed length tuples need their non-existent indizes to be filled with never
+		: never[] & ArgsTuple,
+	// @ts-ignore N can be used to index Args
+	Ret = Args[N]
+> = Ret;
+
 /** Takes the elements from T2 that have a corresponding index in T1 */
 type MapTuples<T1 extends any[], T2 extends any[]> = { [K in keyof T1]: K extends keyof T2 ? T2[K] : never };
 

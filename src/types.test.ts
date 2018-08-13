@@ -18,6 +18,7 @@ use(sinonChai);
 
 import {
 	And,
+	ArgumentAt,
 	Arguments,
 	AssignableTo,
 	DropLast,
@@ -888,6 +889,40 @@ describe("types => ", () => {
 				Equals<Arguments<F3>, [string, any?]>,
 				Equals<Arguments<F4>, [boolean, ...string[]]>,
 				Equals<Arguments<F5>, [number[]]>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+	});
+
+	describe("ArgumentAt<F, N> => ", () => {
+		type F1 = () => void;
+		type F2 = (a1: number) => void;
+		type F3 = (a1: string, a2?: any) => string;
+		type F4 = (a1: boolean, ...rest: string[]) => any;
+		type F5 = (a1: number[]) => void;
+
+		it("should return the Nth argument of F", () => {
+			type Tests = [
+				Equals<ArgumentAt<F2, 0>, number>,
+				Equals<ArgumentAt<F3, 0>, string>,
+				Equals<ArgumentAt<F3, 1>, any>,
+				Equals<ArgumentAt<F4, 0>, boolean>,
+				Equals<ArgumentAt<F4, 1>, string>,
+				Equals<ArgumentAt<F5, 0>, number[]>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should return never when a higher index than the length is requested", () => {
+			type Tests = [
+				Equals<ArgumentAt<F1, 0>, never>,
+				Equals<ArgumentAt<F1, 1>, never>,
+				Equals<ArgumentAt<F2, 1>, never>,
+				Equals<ArgumentAt<F3, 2>, never>,
+				Equals<ArgumentAt<F5, 1>, never>
 			];
 
 			const success: Every<Tests, true> = true;
