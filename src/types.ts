@@ -47,11 +47,11 @@ export type IndizesOf<
 	T extends any[],
 	U = Omit<T, keyof []>,
 	NumericKeysOfT = keyof U
-> = NumericKeysOfT | (
-	// take the numeric keys of T
-	// and add number if this is an array or open-ended tuple
-	number extends LengthOf<T> ? number : never
-);
+	> = NumericKeysOfT | (
+		// take the numeric keys of T
+		// and add number if this is an array or open-ended tuple
+		number extends LengthOf<T> ? number : never
+	);
 
 /**
  * Creates a union from the types of an Array or tuple
@@ -131,6 +131,17 @@ export type KeyValuePairsOf<
 	> = U[keyof U];
 
 /**
+ * Returns a simplified representation of the type T. For example:
+ * Pick<{a: number, b: string }, "b"> & { a?: boolean } => { b: string, a?: boolean }
+ */
+export type Simplify<T extends object> = {[K in keyof T]: T[K]};
+
+/**
+ * Returns a composite type with the properties of T that are not in U plus all properties from U
+ */
+export type Overwrite<T extends object, U extends object> = Simplify<Omit<T, keyof T & keyof U> & U>;
+
+/**
  * Returns the first item's type in a tuple
  */
 export type Head<T extends any[]> =
@@ -161,7 +172,7 @@ type TakeLastFixed<
 	// Create a tuple which is 1 item shorter than T and determine its length
 	L1 extends number = Tail<T>["length"],
 	// use that length to access the last index of T
-> = T[L1];
+	> = T[L1];
 
 // A variable-length tuple has two potential last items:
 // the last fixed one and the type of the variable range
@@ -176,13 +187,13 @@ type TakeLastVariable<
 	Index = Exclude<PlusOne, MinusOne>,
 	// @ts-ignore Index CAN be used to index T!
 	U = T[Index]
-> = U;
+	> = U;
 
 /** Returns the last item in a tuple */
 export type TakeLast<T extends any[]> =
 	IsFixedLength<T> extends true
-		? TakeLastFixed<T>
-		: TakeLastVariable<T>;
+	? TakeLastFixed<T>
+	: TakeLastVariable<T>;
 
 /** Removes the last item from a tuple */
 export type DropLast<
@@ -190,9 +201,9 @@ export type DropLast<
 	// Determine the length of L
 	L extends number = LengthOf<T>,
 	// create a tuple that is 1 shorter than T
-	MinusOne extends any[] = Tail<T>,
+	MinusOne extends any[]= Tail<T>,
 	// and keep only the entries with a corresponding index in T
-> = Equals<L, number> extends true
+	> = Equals<L, number> extends true
 	// this is an open-ended tuple or array, dropping the last item does nothing
 	? T
 	// this is a fixed-length tuple, we can drop one
@@ -210,13 +221,13 @@ type ForceFunction<T> = T extends ((...args: any[]) => any) ? T : ((...args: any
 export type Promisify<
 	F extends (...args: any[]) => void,
 	// Extract the argument types
-	FArgs extends any[] = Arguments<F>,
+	FArgs extends any[]= Arguments<F>,
 	// Infer the arguments for the promisified version
-	PromiseArgs extends any[] = ForceTuple<DropLast<FArgs>>,
+	PromiseArgs extends any[]= ForceTuple<DropLast<FArgs>>,
 	// Parse the callback args
-	CallbackArgs extends any[] = Arguments<ForceFunction<TakeLast<FArgs>>>,
+	CallbackArgs extends any[]= Arguments<ForceFunction<TakeLast<FArgs>>>,
 	CallbackLength = LengthOf<CallbackArgs>,
 	TError = CallbackArgs[0],
 	// And extract the return value
 	TResult = 1 extends CallbackLength ? void : CallbackArgs[1]
-> = (...args: PromiseArgs) => Promise<TResult>;
+	> = (...args: PromiseArgs) => Promise<TResult>;

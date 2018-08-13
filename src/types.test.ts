@@ -16,7 +16,34 @@ should();
 // improve stubs for testing
 use(sinonChai);
 
-import { And, Arguments, AssignableTo, DropLast, Equals, Every, EveryStrict, Head, IndizesOf, IsFixedLength, IsTuple, IsVariableLength, KeyValuePairsOf, LengthOf, Not, Omit, Optional, Or, Promisify, SemiPartial, Tail, TakeLast, UnionOf, Unshift } from "./types";
+import {
+	And,
+	Arguments,
+	AssignableTo,
+	DropLast,
+	Equals,
+	Every,
+	EveryStrict,
+	Head,
+	IndizesOf,
+	IsFixedLength,
+	IsTuple,
+	IsVariableLength,
+	KeyValuePairsOf,
+	LengthOf,
+	Not,
+	Omit,
+	Optional,
+	Or,
+	Overwrite,
+	Promisify,
+	SemiPartial,
+	Simplify,
+	Tail,
+	TakeLast,
+	UnionOf,
+	Unshift,
+} from "./types";
 
 // These tests all succeed during runtime
 // a failed test can only occur due to compile errors
@@ -731,6 +758,55 @@ describe("types => ", () => {
 			type Tests = [
 				Equals<KeyValuePairsOf<{ a: 1 }>, { key: "a", value: 1 }>,
 				Equals<KeyValuePairsOf<{ a: 1, b: 2 }>, { key: "a", value: 1 } | { key: "b", value: 2 }>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+	});
+
+	describe("Simplify<T> => ", () => {
+		it("should leave empty objects unchanged", () => {
+			type Tests = [
+				Equals<Simplify<{}>, {}> // empty union
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should return a simplified representation of object types", () => {
+			type Tests = [
+				Equals<Simplify<{ b: string } & { a?: boolean }>, { b: string, a?: boolean }>,
+				Equals<Simplify<Pick<{ a: number, b: string }, "b"> & { a?: boolean }>, { b: string, a?: boolean }>,
+				Equals<Simplify<{ a: "a" } & { a: "b" }>, { a: "a" & "b" }>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+	});
+
+	describe("Overwrite<T, U> => ", () => {
+		it("should leave empty objects unchanged", () => {
+			type Tests = [
+				Equals<Overwrite<{}, {}>, {}> // empty union
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("when one argument is an empty object, return the other one", () => {
+			type Tests = [
+				Equals<Overwrite<{}, {a: number}>, {a: number}>,
+				Equals<Overwrite<{a: string}, {}>, {a: string}>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
+		it("should return the properties from T which are not in U plus the properties from U", () => {
+			type Tests = [
+				Equals<Overwrite<{ b: string }, { a?: boolean }>, { b: string, a?: boolean }>,
+				Equals<Overwrite<{ a: number, b: string }, { a?: boolean }>, { b: string, a?: boolean }>,
+				Equals<Overwrite<{ a: "a" }, { a: "b" }>, { a: "b" }>
 			];
 
 			const success: Every<Tests, true> = true;
