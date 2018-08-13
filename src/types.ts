@@ -231,3 +231,20 @@ export type Promisify<
 	// And extract the return value
 	TResult = 1 extends CallbackLength ? void : CallbackArgs[1]
 	> = (...args: PromiseArgs) => Promise<TResult>;
+
+// tslint:disable:jsdoc-format => code cannot have leading asterisks
+/**
+ * Marking a parameter of a generic function with `NoInfer` causes its type
+ * to be inferred from other arguments with the same type instead of creating a union.
+ * Example:
+ * ```ts
+ const foo = <T>(arg1: T, arg2: T) => arg2;
+ foo({a: 1}, {b: 2})
+ // gets inferred as {a: number, b?: undefined} | {a?: undefined, b: number}
+ const bar = <T>(arg1: T, arg2: NoInfer<T>) => arg2;
+ bar({a: 1}, {b: 2})
+ // is an error: "a" is missing in type {b: 2}
+ ```
+ */
+export type NoInfer<T> = T & {[K in keyof T]: T[K]};
+// tslint:enable:jsdoc-format

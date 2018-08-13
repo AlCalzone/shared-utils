@@ -31,6 +31,7 @@ import {
 	IsVariableLength,
 	KeyValuePairsOf,
 	LengthOf,
+	NoInfer,
 	Not,
 	Omit,
 	Optional,
@@ -795,8 +796,8 @@ describe("types => ", () => {
 
 		it("when one argument is an empty object, return the other one", () => {
 			type Tests = [
-				Equals<Overwrite<{}, {a: number}>, {a: number}>,
-				Equals<Overwrite<{a: string}, {}>, {a: string}>
+				Equals<Overwrite<{}, { a: number }>, { a: number }>,
+				Equals<Overwrite<{ a: string }, {}>, { a: string }>
 			];
 
 			const success: Every<Tests, true> = true;
@@ -1006,6 +1007,40 @@ describe("types => ", () => {
 
 			const success: Every<Tests, true> = true;
 		});
+	});
+
+	describe("NoInfer<T> => ", () => {
+		it("should prevent inferring generic type arguments from the marked parameter", () => {
+			const testNoInferArg2 = <T>(arg1: T, arg2: NoInfer<T>) => arg2 as T;
+			const testInferArg2 = <T>(arg1: T, arg2: T) => arg2;
+
+			// Does not currently work: https://github.com/Microsoft/TypeScript/issues/26408
+			// // @ts-ignore: this is an intentional error
+			// const test1 = testNoInferArg2({ a: 1 }, { b: 2 });
+			// // @ts-ignore: this is an intentional error
+			// const test2 = testNoInferArg2({ a: 1 }, { a: 1, b: 2 });
+
+			class Foo { }
+			class Bar extends Foo { }
+
+			const testNotInferred = testNoInferArg2(new Foo(), new Bar());
+			const testInferred = testInferArg2(new Foo(), new Bar());
+
+			type Tests = [
+				// Does not currently work: https://github.com/Microsoft/TypeScript/issues/26408
+				// Not<Equals<typeof test1, { a: 1 }>>,
+				// Not<Equals<typeof test1, { b: 2 }>>,
+
+				// Not<Equals<typeof test2, { a: 1 }>>,
+				// Not<Equals<typeof test2, { a: 1, b: 2 }>>,
+
+				Equals<typeof testNotInferred, Foo>,
+				Equals<typeof testInferred, Bar>
+			];
+
+			const success: Every<Tests, true> = true;
+		});
+
 	});
 
 });
