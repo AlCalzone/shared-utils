@@ -2,7 +2,10 @@ module.exports = {
 	out: "docs/",
 	mode: "modules",
 	moduleResolution: "node",
-	exclude: "src/index.ts",
+	exclude: [
+		"**/src/index.ts",
+		"**/src/types/*.ts"
+	],
 	externalPattern: "node_modules",
 	excludeNotExported: true,
 	excludePrivate: true,
