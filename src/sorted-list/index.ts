@@ -146,12 +146,22 @@ export class SortedList<T> {
 		return node.value;
 	}
 
+	/** Returns the first item from the list without removing it */
+	public peekStart(): T {
+		return this.first && this.first.value;
+	}
+
 	/** Removes the last item from the list and returns it */
 	public pop(): T {
 		if (this._length === 0) return;
 		const node = this.last;
 		this.removeNode(node);
 		return node.value;
+	}
+
+	/** Returns the last item from the list without removing it */
+	public peekEnd(): T {
+		return this.last && this.last.value;
 	}
 
 	/** Removes a specific node from the list */

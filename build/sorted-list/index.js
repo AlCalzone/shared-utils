@@ -1,4 +1,5 @@
 "use strict";
+/** @module sorted-list */
 Object.defineProperty(exports, "__esModule", { value: true });
 const comparable_1 = require("../comparable");
 /**
@@ -115,6 +116,10 @@ class SortedList {
         this.removeNode(node);
         return node.value;
     }
+    /** Returns the first item from the list without removing it */
+    peekStart() {
+        return this.first && this.first.value;
+    }
     /** Removes the last item from the list and returns it */
     pop() {
         if (this._length === 0)
@@ -122,6 +127,10 @@ class SortedList {
         const node = this.last;
         this.removeNode(node);
         return node.value;
+    }
+    /** Returns the last item from the list without removing it */
+    peekEnd() {
+        return this.last && this.last.value;
     }
     /** Removes a specific node from the list */
     removeNode(node) {

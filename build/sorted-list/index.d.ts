@@ -1,3 +1,4 @@
+/** @module sorted-list */
 import { Comparer } from "../comparable";
 /**
  * A list that automatically sorts its items to guarantee that they are always in order
@@ -34,8 +35,12 @@ export declare class SortedList<T> {
     private removeOne;
     /** Removes the first item from the list and returns it */
     shift(): T;
+    /** Returns the first item from the list without removing it */
+    peekStart(): T;
     /** Removes the last item from the list and returns it */
     pop(): T;
+    /** Returns the last item from the list without removing it */
+    peekEnd(): T;
     /** Removes a specific node from the list */
     private removeNode;
     /** Tests if the given item is contained in the list */

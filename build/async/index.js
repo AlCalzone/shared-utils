@@ -1,7 +1,5 @@
 "use strict";
-///
-/// Stellt einen Promise-Wrapper für asynchrone Node-Funktionen zur Verfügung
-///
+/** @module async */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }

@@ -1,4 +1,5 @@
 "use strict";
+/** @module objects */
 Object.defineProperty(exports, "__esModule", { value: true });
 /** Provides a polyfill for Object.entries */
 function entries(obj) {

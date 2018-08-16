@@ -77,6 +77,20 @@ describe("sorted-list => ", () => {
 		expect(list.shift()).to.be.undefined;
 	});
 
+	it("peekStart() should return the smallest item in the list without removing it from the list", () => {
+		const containedItems = [2, -1, 5, 4, 9, 8];
+		const expected = [...containedItems].sort();
+		const list = new SortedList(containedItems);
+		list.peekStart().should.equal(-1);
+		list.length.should.equal(expected.length);
+		expect(list.toArray()).to.deep.equal(expected);
+	});
+
+	it("peekStart() should return undefined for empty lists", () => {
+		const list = new SortedList([]);
+		expect(list.peekStart()).to.be.undefined;
+	});
+
 	it("pop() should remove the largest item in the list and return it", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const list = new SortedList(containedItems);
@@ -89,6 +103,20 @@ describe("sorted-list => ", () => {
 	it("pop() should return undefined for empty lists", () => {
 		const list = new SortedList([]);
 		expect(list.pop()).to.be.undefined;
+	});
+
+	it("peekEnd() should return the smallest item in the list without removing it from the list", () => {
+		const containedItems = [2, -1, 5, 4, 9, 8];
+		const expected = [...containedItems].sort();
+		const list = new SortedList(containedItems);
+		list.peekEnd().should.equal(9);
+		list.length.should.equal(expected.length);
+		expect(list.toArray()).to.deep.equal(expected);
+	});
+
+	it("peekEnd() should return undefined for empty lists", () => {
+		const list = new SortedList([]);
+		expect(list.peekEnd()).to.be.undefined;
 	});
 
 	it("adding items to an empty list should work", () => {
