@@ -204,4 +204,10 @@ describe("sorted-list => ", () => {
 		expect(() => new SortedList([largeObj, smallObj])).to.throw("comparer");
 	});
 
+	it("find() should return the first item matching the given predicate", () => {
+		const containedItems = [1, 5, 2, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		list.find(item => item > 3).should.equal(4);
+	});
+
 });

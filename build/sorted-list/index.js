@@ -16,13 +16,12 @@ function findPrevNode(firstNode, item, comparer) {
     return ret;
 }
 /**
- * Seeks the list from the beginning and finds an item in the list
+ * Seeks the list from the beginning and returns the first item matching the given predicate
  */
-function findNode(firstNode, item, comparer) {
+function findNode(firstNode, predicate) {
     let curNode = firstNode;
-    // while item > prevNode.value
     while (curNode != null) {
-        if (comparer(curNode.value, item) === 0)
+        if (predicate(curNode.value))
             return curNode;
         curNode = curNode.next;
     }
@@ -104,7 +103,7 @@ class SortedList {
     removeOne(item) {
         if (this._length === 0)
             return;
-        const node = findNode(this.first, item, this.comparer);
+        const node = this.findNodeForItem(item);
         if (node != null)
             this.removeNode(node);
     }
@@ -151,7 +150,17 @@ class SortedList {
     }
     /** Tests if the given item is contained in the list */
     contains(item) {
-        return findNode(this.first, item, this.comparer) != null;
+        return this.findNodeForItem(item) != null;
+    }
+    /** Returns the first item matching the given predicate */
+    find(predicate) {
+        const ret = findNode(this.first, predicate);
+        if (ret != null)
+            return ret.value;
+    }
+    /** Returns the first item matching the given predicate */
+    findNodeForItem(item) {
+        return findNode(this.first, val => this.comparer(val, item) === 0);
     }
     /** Removes all items from the list */
     clear() {

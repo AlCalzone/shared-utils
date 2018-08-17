@@ -23,13 +23,12 @@ function findPrevNode<T>(firstNode: SortedListNode<T>, item: T, comparer: Compar
 }
 
 /**
- * Seeks the list from the beginning and finds an item in the list
+ * Seeks the list from the beginning and returns the first item matching the given predicate
  */
-function findNode<T>(firstNode: SortedListNode<T>, item: T, comparer: Comparer<T>): SortedListNode<T> {
+function findNode<T>(firstNode: SortedListNode<T>, predicate: (item: T) => boolean): SortedListNode<T> {
 	let curNode = firstNode;
-	// while item > prevNode.value
 	while (curNode != null) {
-		if (comparer(curNode.value, item) === 0) return curNode;
+		if (predicate(curNode.value)) return curNode;
 		curNode = curNode.next;
 	}
 }
@@ -134,7 +133,7 @@ export class SortedList<T> {
 	private removeOne(item: T) {
 		if (this._length === 0) return;
 
-		const node = findNode(this.first, item, this.comparer);
+		const node = this.findNodeForItem(item);
 		if (node != null) this.removeNode(node);
 	}
 
@@ -182,7 +181,18 @@ export class SortedList<T> {
 
 	/** Tests if the given item is contained in the list */
 	public contains(item: T): boolean {
-		return findNode(this.first, item, this.comparer) != null;
+		return this.findNodeForItem(item) != null;
+	}
+
+	/** Returns the first item matching the given predicate */
+	public find(predicate: (item: T) => boolean): T {
+		const ret = findNode(this.first, predicate);
+		if (ret != null) return ret.value;
+	}
+
+	/** Returns the first item matching the given predicate */
+	private findNodeForItem(item: T): SortedListNode<T> {
+		return findNode(this.first, val => this.comparer(val, item) === 0);
 	}
 
 	/** Removes all items from the list */
