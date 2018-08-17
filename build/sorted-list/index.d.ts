@@ -45,6 +45,10 @@ export declare class SortedList<T> {
     private removeNode;
     /** Tests if the given item is contained in the list */
     contains(item: T): boolean;
+    /** Returns the first item matching the given predicate */
+    find(predicate: (item: T) => boolean): T;
+    /** Returns the first item matching the given predicate */
+    private findNodeForItem;
     /** Removes all items from the list */
     clear(): void;
     [Symbol.iterator](): IterableIterator<T>;
