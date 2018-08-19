@@ -194,7 +194,7 @@ jobs:
 
       - run:
           name: Flatten the build directory structure
-          command: mv build/*.{ts,js} . && rm -rf build
+          command: mv build/**/*.{ts,js} . && rm -rf build
       - run:
           name: Replace all references inside package.json
           command: sed -i 's/build\/index\./index\./' package.json
