@@ -33,6 +33,8 @@ export declare class SortedList<T> {
     remove(...items: T[]): number;
     /** Removes a single item from the list */
     private removeOne;
+    /** Returns the item at the given index */
+    get(index: number): T;
     /** Removes the first item from the list and returns it */
     shift(): T;
     /** Returns the first item from the list without removing it */

@@ -45,6 +45,14 @@ function wrappedDefaultComparer<T>(a: T, b: T) {
 	}
 }
 
+function isIndex(prop: number | string | symbol): boolean {
+	// An indexer can only be a non-negative integer
+	if (typeof prop === "string") prop = Number.parseInt(prop);
+	if (typeof prop !== "number" || !Number.isInteger(prop)) return false;
+	if (prop < 0) return false;
+	return true;
+}
+
 /**
  * A list that automatically sorts its items to guarantee that they are always in order
  */
@@ -80,6 +88,16 @@ export class SortedList<T> {
 		private readonly comparer: Comparer<T> = wrappedDefaultComparer,
 	) {
 		if (source != null) this.add(...source);
+		// Enable indexed access
+		return new Proxy(this, {
+			get(target, property, receiver) {
+				if (isIndex(property)) {
+					return target.get(property as number);
+				} else {
+					return target[property];
+				}
+			},
+		});
 	}
 
 	/** Inserts new items into the sorted list and returns the new length */
@@ -135,6 +153,16 @@ export class SortedList<T> {
 
 		const node = this.findNodeForItem(item);
 		if (node != null) this.removeNode(node);
+	}
+
+	/** Returns the item at the given index */
+	public get(index: number): T {
+		if (!isIndex(index)) throw new Error(`${index} is not a valid index`);
+		let curNode = this.first;
+		while (curNode != null && --index >= 0) {
+			curNode = curNode.next;
+		}
+		return curNode != null ? curNode.value : undefined;
 	}
 
 	/** Removes the first item from the list and returns it */
