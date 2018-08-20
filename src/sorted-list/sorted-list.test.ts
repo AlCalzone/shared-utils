@@ -210,4 +210,33 @@ describe("sorted-list => ", () => {
 		list.find(item => item > 3).should.equal(4);
 	});
 
+	it("get() should return the sorted element at the given index", () => {
+		const containedItems = [1, 5, 2, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		const expected = [...containedItems].sort();
+		for (let i = 0; i < expected.length; i++) {
+			list.get(i).should.equal(expected[i]);
+		}
+		expect(list.get(expected.length)).to.be.undefined;
+	});
+
+	it("calling get() with an invalid index should throw", () => {
+		const containedItems = [1, 5, 2, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		const invalidIndizes = [-1, 0.5, Math.PI, Number.POSITIVE_INFINITY, Number.NaN];
+		for (const index of invalidIndizes) {
+			expect(() => list.get(index)).to.throw("valid");
+		}
+	});
+
+	it("alternatively, the elements should be accessible using the index notation", () => {
+		const containedItems = [1, 5, 2, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		const expected = [...containedItems].sort();
+		for (let i = 0; i < expected.length; i++) {
+			list[i].should.equal(expected[i]);
+		}
+		expect(list[list.length]).to.be.undefined;
+	});
+
 });
