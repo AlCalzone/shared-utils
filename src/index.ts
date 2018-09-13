@@ -6,6 +6,7 @@ import * as deferredPromise from "./deferred-promise";
 import * as math from "./math";
 import * as objects from "./objects";
 import * as strings from "./strings";
+import * as typeguards from "./typeguards";
 import * as types from "./types";
 
 export {
@@ -15,5 +16,6 @@ export {
 	math,
 	objects,
 	strings,
+	typeguards,
 	types,
 };
