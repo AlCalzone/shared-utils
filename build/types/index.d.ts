@@ -108,25 +108,10 @@ export declare type Arguments<F extends (...args: any[]) => any> = F extends ((.
  * Returns the Nth argument of F (0-based)
  */
 export declare type ArgumentAt<F extends (...args: any[]) => any, N extends number, ArgsTuple extends any[] = Arguments<F>, Args = IsVariableLength<ArgsTuple> extends true ? ArgsTuple : never[] & ArgsTuple, Ret = Args[N]> = Ret;
-/** Takes the elements from T2 that have a corresponding index in T1 */
-declare type MapTuples<T1 extends any[], T2 extends any[]> = {
-    [K in keyof T1]: K extends keyof T2 ? T2[K] : never;
-};
 declare type TakeLastFixed<T extends any[], L1 extends number = Tail<T>["length"]> = T[L1];
 declare type TakeLastVariable<T extends any[], MinusOne = keyof Tail<T>, PlusOne = keyof Unshift<T, never>, Index = Exclude<PlusOne, MinusOne>, U = T[Index]> = U;
 /** Returns the last item in a tuple */
 export declare type TakeLast<T extends any[]> = IsFixedLength<T> extends true ? TakeLastFixed<T> : TakeLastVariable<T>;
-/** Removes the last item from a tuple */
-export declare type DropLast<T extends any[], L extends number = LengthOf<T>, MinusOne extends any[] = Tail<T>> = Equals<L, number> extends true ? T : MapTuples<MinusOne, T>;
-/** Forces T to be a tuple - this might discard type information */
-declare type ForceTuple<T> = T extends any[] ? T : any[];
-/** Forces T to be a function - this might discard type information */
-declare type ForceFunction<T> = T extends ((...args: any[]) => any) ? T : ((...args: any[]) => any);
-/**
- * Returns a promisified function signature for the given callback-style function
- * WARNING: This is still experimental. The names of the inferred signature args are off by one!
- */
-export declare type Promisify<F extends (...args: any[]) => void, FArgs extends any[] = Arguments<F>, PromiseArgs extends any[] = ForceTuple<DropLast<FArgs>>, CallbackArgs extends any[] = Arguments<ForceFunction<TakeLast<FArgs>>>, CallbackLength = LengthOf<CallbackArgs>, TError = CallbackArgs[0], TResult = 1 extends CallbackLength ? void : CallbackArgs[1]> = (...args: PromiseArgs) => Promise<TResult>;
 /**
  * Marking a parameter of a generic function with `NoInfer` causes its type
  * to be inferred from other arguments with the same type instead of creating a union.

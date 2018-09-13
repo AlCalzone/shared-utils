@@ -211,42 +211,43 @@ export type TakeLast<T extends any[]> =
 	? TakeLastFixed<T>
 	: TakeLastVariable<T>;
 
-/** Removes the last item from a tuple */
-export type DropLast<
-	T extends any[],
-	// Determine the length of L
-	L extends number = LengthOf<T>,
-	// create a tuple that is 1 shorter than T
-	MinusOne extends any[]= Tail<T>,
-	// and keep only the entries with a corresponding index in T
-	> = Equals<L, number> extends true
-	// this is an open-ended tuple or array, dropping the last item does nothing
-	? T
-	// this is a fixed-length tuple, we can drop one
-	: MapTuples<MinusOne, T>;
+// Broken right now
+// /** Removes the last item from a tuple */
+// export type DropLast<
+// 	T extends any[],
+// 	// Determine the length of L
+// 	L extends number = LengthOf<T>,
+// 	// create a tuple that is 1 shorter than T
+// 	MinusOne extends any[]= Tail<T>,
+// 	// and keep only the entries with a corresponding index in T
+// 	> = Equals<L, number> extends true
+// 	// this is an open-ended tuple or array, dropping the last item does nothing
+// 	? T
+// 	// this is a fixed-length tuple, we can drop one
+// 	: MapTuples<MinusOne, T>;
 
-/** Forces T to be a tuple - this might discard type information */
-type ForceTuple<T> = T extends any[] ? T : any[];
-/** Forces T to be a function - this might discard type information */
-type ForceFunction<T> = T extends ((...args: any[]) => any) ? T : ((...args: any[]) => any);
+// /** Forces T to be a tuple - this might discard type information */
+// type ForceTuple<T> = T extends any[] ? T : any[];
+// /** Forces T to be a function - this might discard type information */
+// type ForceFunction<T> = T extends ((...args: any[]) => any) ? T : ((...args: any[]) => any);
 
-/**
- * Returns a promisified function signature for the given callback-style function
- * WARNING: This is still experimental. The names of the inferred signature args are off by one!
- */
-export type Promisify<
-	F extends (...args: any[]) => void,
-	// Extract the argument types
-	FArgs extends any[]= Arguments<F>,
-	// Infer the arguments for the promisified version
-	PromiseArgs extends any[]= ForceTuple<DropLast<FArgs>>,
-	// Parse the callback args
-	CallbackArgs extends any[]= Arguments<ForceFunction<TakeLast<FArgs>>>,
-	CallbackLength = LengthOf<CallbackArgs>,
-	TError = CallbackArgs[0],
-	// And extract the return value
-	TResult = 1 extends CallbackLength ? void : CallbackArgs[1]
-	> = (...args: PromiseArgs) => Promise<TResult>;
+// /**
+//  * Returns a promisified function signature for the given callback-style function
+//  * WARNING: This is still experimental. The names of the inferred signature args are off by one!
+//  */
+// export type Promisify<
+// 	F extends (...args: any[]) => void,
+// 	// Extract the argument types
+// 	FArgs extends any[]= Arguments<F>,
+// 	// Infer the arguments for the promisified version
+// 	PromiseArgs extends any[]= ForceTuple<DropLast<FArgs>>,
+// 	// Parse the callback args
+// 	CallbackArgs extends any[]= Arguments<ForceFunction<TakeLast<FArgs>>>,
+// 	CallbackLength = LengthOf<CallbackArgs>,
+// 	TError = CallbackArgs[0],
+// 	// And extract the return value
+// 	TResult = 1 extends CallbackLength ? void : CallbackArgs[1]
+// 	> = (...args: PromiseArgs) => Promise<TResult>;
 
 // tslint:disable:jsdoc-format => code cannot have leading asterisks
 /**
