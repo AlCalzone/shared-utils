@@ -61,7 +61,7 @@ export type UnionOf<T extends any[]> = T[number];
 /**
  * Returns the length of an array or tuple
  */
-export type LengthOf<T extends any[]> = T["length"];
+export type LengthOf<T extends any[]> = T extends {length: infer R} ? R : never;
 
 export type IsFixedLength<T extends any[]> =
 	// if the length property is `number`, this is not fixed length
@@ -76,6 +76,20 @@ export type IsTuple<T extends any[]> =
 	IsFixedLength<T> extends true ? true  // This is a fixed-length tuple
 	: IndizesOf<T> extends number ? false // this is an array or an open-ended tuple of the form [...type[]]
 	: true;								  // This is an open-ended tuple with at least 1 item
+
+/** Converts a number between 0 and 99 to its corresponding string representation */
+export type ToString<N extends number> = [
+	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+	"10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+	"20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
+	"30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
+	"40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
+	"50", "51", "52", "53", "54", "55", "56", "57", "58", "59",
+	"60", "61", "62", "63", "64", "65", "66", "67", "68", "69",
+	"70", "71", "72", "73", "74", "75", "76", "77", "78", "79",
+	"80", "81", "82", "83", "84", "85", "86", "87", "88", "89",
+	"90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
+][N];
 
 /**
  * Tests if all types in an array or tuple are assignable to T
@@ -134,12 +148,12 @@ export type KeyValuePairsOf<
  * Returns a simplified representation of the type T. For example:
  * Pick<{a: number, b: string }, "b"> & { a?: boolean } => { b: string, a?: boolean }
  */
-export type Simplify<T extends object> = {[K in keyof T]: T[K]};
+export type Simplify<T extends {}> = {[K in keyof T]: T[K]};
 
 /**
  * Returns a composite type with the properties of T that are not in U plus all properties from U
  */
-export type Overwrite<T extends object, U extends object> = Simplify<Omit<T, keyof T & keyof U> & U>;
+export type Overwrite<T extends {}, U extends {}> = Simplify<Omit<T, keyof T & keyof U> & U>;
 
 /**
  * Returns the first item's type in a tuple
@@ -165,53 +179,58 @@ export type Unshift<List extends any[], Item> =
 export type Arguments<F extends (...args: any[]) => any> = F extends ((...args: infer R) => any) ? R : never;
 
 /**
+ * Forces T to be of type Type - This can discard type information
+ */
+type ForceType<T, Type> = T extends Type ? T : Type;
+
+/**
  * Returns the Nth argument of F (0-based)
  */
 export type ArgumentAt<
 	F extends (...args: any[]) => any,
 	N extends number,
+	NStr extends string = ToString<N>,
 	ArgsTuple extends any[] = Arguments<F>,
-	Args = IsVariableLength<ArgsTuple> extends true
+	Ret = IsVariableLength<ArgsTuple> extends true
 		// keep variable length-tuples as-is
-		? ArgsTuple
+		? ArgsTuple[N]
 		// fixed length tuples need their non-existent indizes to be filled with never
-		: never[] & ArgsTuple,
-	// @ts-ignore N can be used to index Args
-	Ret = Args[N]
+		: (NStr extends IndizesOf<ArgsTuple> ? ArgsTuple[NStr] : never),
 > = Ret;
 
 /** Takes the elements from T2 that have a corresponding index in T1 */
 type MapTuples<T1 extends any[], T2 extends any[]> = { [K in keyof T1]: K extends keyof T2 ? T2[K] : never };
 
-type TakeLastFixed<
-	T extends any[],
-	// Create a tuple which is 1 item shorter than T and determine its length
-	L1 extends number = Tail<T>["length"],
-	// use that length to access the last index of T
-	> = T[L1];
-
-// A variable-length tuple has two potential last items:
-// the last fixed one and the type of the variable range
-type TakeLastVariable<
-	T extends any[],
-	// so we take the indizes of a tuple that is one shorter than T,
-	MinusOne = keyof Tail<T>,
-	// and the indizes of one that is one longer than T,
-	PlusOne = keyof Unshift<T, never>,
-	// and use the difference of that (= [length - 1, length])
-	// to index those two possible items
-	Index = Exclude<PlusOne, MinusOne>,
-	// @ts-ignore Index CAN be used to index T!
-	U = T[Index]
-	> = U;
-
-/** Returns the last item in a tuple */
-export type TakeLast<T extends any[]> =
-	IsFixedLength<T> extends true
-	? TakeLastFixed<T>
-	: TakeLastVariable<T>;
-
 // Broken right now
+
+// type TakeLastFixed<
+// 	T extends any[],
+// 	// Create a tuple which is 1 item shorter than T and determine its length
+// 	L1 extends number = LengthOf<Tail<T>>,
+// 	// use that length to access the last index of T
+// 	> = T[L1];
+
+// // A variable-length tuple has two potential last items:
+// // the last fixed one and the type of the variable range
+// type TakeLastVariable<
+// 	T extends any[],
+// 	// so we take the indizes of a tuple that is one shorter than T,
+// 	MinusOne extends keyof T = IndizesOf<Tail<T>>,
+// 	// and the indizes of one that is one longer than T,
+// 	PlusOne = IndizesOf<Unshift<T, never>>,
+// 	// and use the difference of that (= [length - 1, length])
+// 	// to index those two possible items
+// 	Index = Exclude<PlusOne, MinusOne>,
+// 	// We need to force the type here because we know the index exists
+// 	U = T[Index]
+// 	> = U;
+
+// /** Returns the last item in a tuple */
+// export type TakeLast<T extends any[]> =
+// 	IsFixedLength<T> extends true
+// 	? TakeLastFixed<T>
+// 	: TakeLastVariable<T>;
+
 // /** Removes the last item from a tuple */
 // export type DropLast<
 // 	T extends any[],

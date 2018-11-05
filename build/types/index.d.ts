@@ -30,13 +30,17 @@ export declare type UnionOf<T extends any[]> = T[number];
 /**
  * Returns the length of an array or tuple
  */
-export declare type LengthOf<T extends any[]> = T["length"];
+export declare type LengthOf<T extends any[]> = T extends {
+    length: infer R;
+} ? R : never;
 export declare type IsFixedLength<T extends any[]> = number extends LengthOf<T> ? false : true;
 export declare type IsVariableLength<T extends any[]> = Not<IsFixedLength<T>>;
 /**
  * Tests if a type is a fixed-length tuple (true) or an Array/open-ended tuple (false)
  */
 export declare type IsTuple<T extends any[]> = IsFixedLength<T> extends true ? true : IndizesOf<T> extends number ? false : true;
+/** Converts a number between 0 and 99 to its corresponding string representation */
+export declare type ToString<N extends number> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"][N];
 /**
  * Tests if all types in an array or tuple are assignable to T
  */
@@ -81,13 +85,13 @@ export declare type KeyValuePairsOf<T extends Record<string, any>, U = {
  * Returns a simplified representation of the type T. For example:
  * Pick<{a: number, b: string }, "b"> & { a?: boolean } => { b: string, a?: boolean }
  */
-export declare type Simplify<T extends object> = {
+export declare type Simplify<T extends {}> = {
     [K in keyof T]: T[K];
 };
 /**
  * Returns a composite type with the properties of T that are not in U plus all properties from U
  */
-export declare type Overwrite<T extends object, U extends object> = Simplify<Omit<T, keyof T & keyof U> & U>;
+export declare type Overwrite<T extends {}, U extends {}> = Simplify<Omit<T, keyof T & keyof U> & U>;
 /**
  * Returns the first item's type in a tuple
  */
@@ -107,11 +111,7 @@ export declare type Arguments<F extends (...args: any[]) => any> = F extends ((.
 /**
  * Returns the Nth argument of F (0-based)
  */
-export declare type ArgumentAt<F extends (...args: any[]) => any, N extends number, ArgsTuple extends any[] = Arguments<F>, Args = IsVariableLength<ArgsTuple> extends true ? ArgsTuple : never[] & ArgsTuple, Ret = Args[N]> = Ret;
-declare type TakeLastFixed<T extends any[], L1 extends number = Tail<T>["length"]> = T[L1];
-declare type TakeLastVariable<T extends any[], MinusOne = keyof Tail<T>, PlusOne = keyof Unshift<T, never>, Index = Exclude<PlusOne, MinusOne>, U = T[Index]> = U;
-/** Returns the last item in a tuple */
-export declare type TakeLast<T extends any[]> = IsFixedLength<T> extends true ? TakeLastFixed<T> : TakeLastVariable<T>;
+export declare type ArgumentAt<F extends (...args: any[]) => any, N extends number, NStr extends string = ToString<N>, ArgsTuple extends any[] = Arguments<F>, Ret = IsVariableLength<ArgsTuple> extends true ? ArgsTuple[N] : (NStr extends IndizesOf<ArgsTuple> ? ArgsTuple[NStr] : never)> = Ret;
 /**
  * Marking a parameter of a generic function with `NoInfer` causes its type
  * to be inferred from other arguments with the same type instead of creating a union.
@@ -128,4 +128,3 @@ export declare type TakeLast<T extends any[]> = IsFixedLength<T> extends true ? 
 export declare type NoInfer<T> = T & {
     [K in keyof T]: T[K];
 };
-export {};
