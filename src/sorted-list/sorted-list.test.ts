@@ -210,6 +210,12 @@ describe("sorted-list => ", () => {
 		list.find(item => item > 3).should.equal(4);
 	});
 
+	it("find() should return undefined if no item matches the predicate", () => {
+		const containedItems = [1, 5, 2, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		expect(list.find(item => item < 0)).to.equal(undefined);
+	});
+
 	it("get() should return the sorted element at the given index", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
