@@ -29,22 +29,37 @@ describe("lib/typeguards =>", () => {
 	});
 
 	describe("isArray() => ", () => {
-		it("should return true for array literals", () => {
-			isArray([]).should.be.true;
-			isArray([1, 2, 3]).should.be.true;
+
+		function doTest() {
+			it("should return true for array literals", () => {
+				isArray([]).should.be.true;
+				isArray([1, 2, 3]).should.be.true;
+			});
+
+			it("should return true for Array instances", () => {
+				isArray(new Array()).should.be.true;
+			});
+
+			it("should return false for everything else", () => {
+				[
+					{}, new Object(), new Buffer(0),
+					null, undefined,
+					1, 2, 3, "1", "2", "3",
+					true, false,
+				].forEach(val => isArray(val).should.be.false);
+			});
+		}
+
+		describe(`with native support for "Array.isArray"`, () => {
+			doTest();
 		});
 
-		it("should return true for Array instances", () => {
-			isArray(new Array()).should.be.true;
-		});
+		describe(`without native support for "Array.isArray"`, () => {
+			const originalIsArray = Array.isArray;
 
-		it("should return false for everything else", () => {
-			[
-				{}, new Object(), new Buffer(0),
-				null, undefined,
-				1, 2, 3, "1", "2", "3",
-				true, false,
-			].forEach(val => isArray(val).should.be.false);
+			before(() => Array.isArray = undefined);
+			doTest();
+			after(() => Array.isArray = originalIsArray);
 		});
 	});
 });
