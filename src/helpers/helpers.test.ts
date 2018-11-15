@@ -28,13 +28,14 @@ describe("helpers => ", () => {
 
 		it("has the correct types", () => {
 			function testNever(foo: 1|2) {
-				if (foo === 1 || foo === 2) {}
-				else {
+				if (foo === 1 || foo === 2) {
+					// nothing to do here
+				} else {
 					never = assertNever(foo);
 				}
 			}
 			testNever(1);
 			testNever(2);
-		})
+		});
 	});
 });
