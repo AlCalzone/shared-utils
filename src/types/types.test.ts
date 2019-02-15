@@ -19,9 +19,9 @@ use(sinonChai);
 import {
 	And,
 	ArgumentAt,
-	Arguments,
 	AssignableTo,
-	// DropLast,
+	CallbackAPIReturnType,
+	DropLast,
 	Equals,
 	Every,
 	EveryStrict,
@@ -38,11 +38,12 @@ import {
 	Optional,
 	Or,
 	Overwrite,
-	// Promisify,
+	Promisify,
 	SemiPartial,
 	Simplify,
 	Tail,
-	// TakeLast,
+	TakeLast,
+	TakeLastArgument,
 	UnionOf,
 	Unshift,
 } from ".";
@@ -675,22 +676,22 @@ describe("types => ", () => {
 
 	});
 
-	describe("Arguments<F> => ", () => {
-		it("should return a tuple of the function's argument types", () => {
-			type F1 = () => void;
-			type F2 = (a1: number) => void;
-			type F3 = (a1: string, a2?: any) => string;
-			type F4 = (a1: boolean, ...rest: string[]) => any;
-			type F5 = (a1: number[]) => void;
+	// describe("Arguments<F> => ", () => {
+	// 	it("should return a tuple of the function's argument types", () => {
+	// 		type F1 = () => void;
+	// 		type F2 = (a1: number) => void;
+	// 		type F3 = (a1: string, a2?: any) => string;
+	// 		type F4 = (a1: boolean, ...rest: string[]) => any;
+	// 		type F5 = (a1: number[]) => void;
 
-			assertTrue<Equals<Arguments<F1>, []>>();
-			assertTrue<Equals<Arguments<F2>, [number]>>();
-			assertTrue<Equals<Arguments<F3>, [string, any?]>>();
-			assertTrue<Equals<Arguments<F4>, [boolean, ...string[]]>>();
-			assertTrue<Equals<Arguments<F5>, [number[]]>>();
-		});
+	// 		assertTrue<Equals<Arguments<F1>, []>>();
+	// 		assertTrue<Equals<Arguments<F2>, [number]>>();
+	// 		assertTrue<Equals<Arguments<F3>, [string, any?]>>();
+	// 		assertTrue<Equals<Arguments<F4>, [boolean, ...string[]]>>();
+	// 		assertTrue<Equals<Arguments<F5>, [number[]]>>();
+	// 	});
 
-	});
+	// });
 
 	describe("ArgumentAt<F, N> => ", () => {
 		type F1 = () => void;
@@ -718,41 +719,42 @@ describe("types => ", () => {
 
 	});
 
-	// This does not currently work
-	describe.skip("TakeLast<T[]> => ", () => {
+	describe("TakeLast<T[]> => ", () => {
 		it("should return never for empty tuples", () => {
-			// assertTrue<Equals<TakeLast<[]>, never>>();
+			assertTrue<Equals<TakeLast<[]>, never>>();
 		});
 
 		it("should return the last item's type", () => {
-			// assertTrue<Equals<TakeLast<[1, 2]>, 2>>();
-			// assertTrue<Equals<TakeLast<[2, 3, number]>, number>>();
+			assertTrue<Equals<TakeLast<[1, 2]>, 2>>();
+			assertTrue<Equals<TakeLast<[2, 3, number]>, number>>();
 			// // arrays
 			// assertTrue<Equals<TakeLast<string[]>, string>>();
 		});
 
-		it("should work for open-ended tuples", () => {
+		// This does not currently work
+		it.skip("should work for open-ended tuples", () => {
 			// assertTrue<Equals<TakeLast<[number, ...string[]]>, number | string>>();
 			// assertTrue<Equals<TakeLast<[number, boolean, ...string[]]>, boolean | string>>();
 			// assertTrue<Equals<TakeLast<[...string[]]>, string>>();
 		});
 	});
 
-	describe.skip("DropLast<T[]> => ", () => {
+	describe("DropLast<T[]> => ", () => {
 		it("should return an empty tuple for tuples/arrays with length less than 2", () => {
-			// assertTrue<Equals<DropLast<[]>, []>>();
-			// assertTrue<Equals<DropLast<[1]>, []>>();
-			// assertTrue<Equals<DropLast<[number]>, []>>();
+			assertTrue<Equals<DropLast<[]>, []>>();
+			assertTrue<Equals<DropLast<[1]>, []>>();
+			assertTrue<Equals<DropLast<[number]>, []>>();
 		});
 
 		it("should return a tuple of all but the last item's type", () => {
-			// assertTrue<Equals<DropLast<[1, 2]>, [1]>>();
-			// assertTrue<Equals<DropLast<[number, 2, 3]>, [number, 2]>>();
+			assertTrue<Equals<DropLast<[1, 2]>, [1]>>();
+			assertTrue<Equals<DropLast<[number, 2, 3]>, [number, 2]>>();
 			// arrays
 			// assertTrue<Equals<DropLast<string[]>, string[]>>();
 		});
 
-		it("should work for open-ended tuples", () => {
+		// This does not currently work
+		it.skip("should work for open-ended tuples", () => {
 			// open-ended tuples
 			// assertTrue<Equals<DropLast<[number, ...string[]]>, [number, ...string[]]>>();
 			// assertTrue<Equals<DropLast<[...string[]]>, string[]>>();
@@ -760,42 +762,81 @@ describe("types => ", () => {
 
 	});
 
-	describe.skip("Promisify<T> => ", () => {
+	describe("LastArg<T> => ", () => {
+		it("should correctly the last argument of a method", () => {
+			type F1 = () => void;
+			type P1 = TakeLastArgument<F1>;
+
+			type F2 = (a1: number) => void;
+			type P2 = TakeLastArgument<F2>;
+
+			type F3 = (a1: number, a2: string) => void;
+			type P3 = TakeLastArgument<F3>;
+
+			type F4 = (a1: number, a2: string, a3: any, a4: unknown, a5: () => void) => void;
+			type P4 = TakeLastArgument<F4>;
+
+			assertTrue<Equals<P1, never>>();
+			assertTrue<Equals<P2, number>>();
+			assertTrue<Equals<P3, string>>();
+			assertTrue<Equals<P4, () => void>>();
+
+		});
+	});
+
+	describe("CallbackAPIReturnType<T> => ", () => {
+		it("should correctly infer the return type of the callback argument", () => {
+
+			type F1 = (cb: (err?: Error) => void) => void;
+			type P1 = CallbackAPIReturnType<F1>;
+
+			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
+			type P2 = CallbackAPIReturnType<F2>;
+
+			type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
+			type P3 = CallbackAPIReturnType<F3>;
+
+			assertTrue<Equals<P1, void>>();
+			assertTrue<Equals<P2, boolean>>();
+			assertTrue<Equals<P3, number>>();
+		});
+	});
+
+	describe("Promisify<T> => ", () => {
 		it("should correctly infer the return type", () => {
 
-			// type F1 = (cb: (err: Error) => void) => void;
-			// type P1 = Promisify<F1>;
+			type F1 = (cb: (err: Error) => void) => void;
+			type P1 = Promisify<F1>;
 
-			// type F2 = (cb: (err: Error, ret: boolean) => void) => void;
-			// type P2 = Promisify<F2>;
+			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
+			type P2 = Promisify<F2>;
 
-			// type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
-			// type P3 = Promisify<F3>;
+			type F3 = (one: string, cb: (err: Error, ret: number) => void) => void;
+			type P3 = Promisify<F3>;
 
-			// assertTrue<Equals<ReturnType<P1>, Promise<void>>>();
-			// assertTrue<Equals<ReturnType<P2>, Promise<boolean>>>();
-			// assertTrue<Equals<ReturnType<P3>, Promise<number>>>();
+			assertTrue<Equals<ReturnType<P1>, Promise<void>>>();
+			assertTrue<Equals<ReturnType<P2>, Promise<boolean>>>();
+			assertTrue<Equals<ReturnType<P3>, Promise<number>>>();
 		});
 
-		// This does not currently work
 		it("should correctly infer the argument types", () => {
 
-			// type F1 = (cb: (err: Error) => void) => void;
-			// type P1 = Promisify<F1>;
+			type F1 = (cb: (err: Error) => void) => void;
+			type P1 = Promisify<F1>;
 
-			// type F2 = (cb: (err: Error, ret: boolean) => void) => void;
-			// type P2 = Promisify<F2>;
+			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
+			type P2 = Promisify<F2>;
 
-			// type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
-			// type P3 = Promisify<F3>;
+			type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
+			type P3 = Promisify<F3>;
 
-			// type F4 = (arg1: string, arg2: () => void, cb: (err: Error, ret: number) => void) => void;
-			// type P4 = Promisify<F4>;
+			type F4 = (arg1: string, arg2: () => void, cb: (err: Error, ret: number) => void) => void;
+			type P4 = Promisify<F4>;
 
-			// assertTrue<Equals<Arguments<P1>, []>>();
-			// assertTrue<Equals<Arguments<P2>, []>>();
-			// assertTrue<Equals<Arguments<P3>, [string]>>();
-			// assertTrue<Equals<Arguments<P4>, [string, () => void]>>();
+			assertTrue<Equals<Parameters<P1>, []>>();
+			assertTrue<Equals<Parameters<P2>, []>>();
+			assertTrue<Equals<Parameters<P3>, [string]>>();
+			assertTrue<Equals<Parameters<P4>, [string, () => void]>>();
 		});
 	});
 

@@ -105,13 +105,9 @@ export declare type Tail<T extends any[]> = ((...args: T) => any) extends ((head
  */
 export declare type Unshift<List extends any[], Item> = ((first: Item, ...rest: List) => any) extends ((...list: infer R) => any) ? R : never;
 /**
- * Returns a tuple of the function parameter types
- */
-export declare type Arguments<F extends (...args: any[]) => any> = F extends ((...args: infer R) => any) ? R : never;
-/**
  * Returns the Nth argument of F (0-based)
  */
-export declare type ArgumentAt<F extends (...args: any[]) => any, N extends number, NStr extends string = ToString<N>, ArgsTuple extends any[] = Arguments<F>, Ret = IsVariableLength<ArgsTuple> extends true ? ArgsTuple[N] : (NStr extends IndizesOf<ArgsTuple> ? ArgsTuple[NStr] : never)> = Ret;
+export declare type ArgumentAt<F extends (...args: any[]) => any, N extends number, NStr extends string = ToString<N>, ArgsTuple extends any[] = Parameters<F>, Ret = IsVariableLength<ArgsTuple> extends true ? ArgsTuple[N] : (NStr extends IndizesOf<ArgsTuple> ? ArgsTuple[NStr] : never)> = Ret;
 /**
  * Marking a parameter of a generic function with `NoInfer` causes its type
  * to be inferred from other arguments with the same type instead of creating a union.
@@ -128,3 +124,15 @@ export declare type ArgumentAt<F extends (...args: any[]) => any, N extends numb
 export declare type NoInfer<T> = T & {
     [K in keyof T]: T[K];
 };
+/** Returns the type of the last argument of a function (up to 8 arguments are supported) */
+export declare type TakeLastArgument<T extends (...args: any[]) => any> = TakeLast<Parameters<T>>;
+export declare type TakeLast<T extends any[]> = T extends [] ? never : T extends [infer U1] ? U1 : T extends [any, infer U2] ? U2 : T extends [any, any, infer U3] ? U3 : T extends [any, any, any, infer U4] ? U4 : T extends [any, any, any, any, infer U5] ? U5 : T extends [any, any, any, any, any, infer U6] ? U6 : T extends [any, any, any, any, any, any, infer U7] ? U7 : T extends [any, any, any, any, any, any, any, infer U8] ? U8 : {};
+/** Drops the last item from a tuple with up to 8 items */
+export declare type DropLast<T extends any[]> = T extends [] ? [] : T extends [any] ? [] : T extends [infer U11, any] ? [U11] : T extends [infer U21, infer U22, any] ? [U21, U22] : T extends [infer U31, infer U32, infer U33, any] ? [U31, U32, U33] : T extends [infer U41, infer U42, infer U43, infer U44, any] ? [U41, U42, U43, U44] : T extends [infer U51, infer U52, infer U53, infer U54, infer U55, any] ? [U51, U52, U53, U54, U55] : T extends [infer U61, infer U62, infer U63, infer U64, infer U65, infer U66, any] ? [U61, U62, U63, U64, U65, U66] : T extends [infer U71, infer U72, infer U73, infer U74, infer U75, infer U76, infer U77, any] ? [U71, U72, U73, U74, U75, U76, U77] : never;
+/** Returns the "return" type of a callback-style API */
+export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb = TakeLastArgument<T>> = TCb extends ((error: Error | undefined) => any) ? void : TCb extends ((error: Error | undefined, ret?: infer U) => any) ? U : never;
+/**
+ * Returns a promisified function signature for the given callback-style function.
+ * WARNING: This is still experimental. The names of the inferred signature args are wrong!
+ */
+export declare type Promisify<T extends (...args: any[]) => any, TReturn = CallbackAPIReturnType<T>, TArgs extends any[] = DropLast<Parameters<T>>> = (...args: TArgs) => Promise<TReturn>;
