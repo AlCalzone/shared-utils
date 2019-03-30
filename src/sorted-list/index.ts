@@ -47,7 +47,7 @@ function wrappedDefaultComparer<T>(a: T, b: T) {
 
 function isIndex(prop: number | string | symbol): boolean {
 	// An indexer can only be a non-negative integer
-	if (typeof prop === "string") prop = Number.parseInt(prop);
+	if (typeof prop === "string") prop = Number.parseInt(prop, 10);
 	if (typeof prop !== "number" || !Number.isInteger(prop)) return false;
 	if (prop < 0) return false;
 	return true;
