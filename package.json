@@ -51,7 +51,7 @@
     "yargs": "^13.2.2"
   },
   "dependencies": {
-    "debug": "^3.1.0"
+    "debug": "^4.1.1"
   },
   "scripts": {
     "build": "node_modules/.bin/tsc",
