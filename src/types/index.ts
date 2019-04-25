@@ -333,7 +333,7 @@ export type CallbackAPIReturnType<
 	TCb = TakeLastArgument<T>,
 > =
 	TCb extends ((error: Error | undefined) => any) ? void :
-	TCb extends ((error: Error | undefined, ret?: infer U) => any) ? U :
+	TCb extends ((error: Error | undefined, ret: infer U) => any) ? U :
 	never
 ;
 

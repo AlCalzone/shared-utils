@@ -14,8 +14,8 @@ export function createDeferredPromise<T = void>(): DeferredPromise<T> {
 		rej = reject;
 	}) as DeferredPromise<T>;
 
-	promise.resolve = res;
-	promise.reject = rej;
+	promise.resolve = res!;
+	promise.reject = rej!;
 
 	return promise;
 }

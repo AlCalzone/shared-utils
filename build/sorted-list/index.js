@@ -9,7 +9,7 @@ function findPrevNode(firstNode, item, comparer) {
     let ret;
     let prevNode = firstNode;
     // while item > prevNode.value
-    while (prevNode != null && comparer(prevNode.value, item) > 0) {
+    while (prevNode != undefined && comparer(prevNode.value, item) > 0) {
         ret = prevNode;
         prevNode = prevNode.next;
     }
@@ -83,8 +83,8 @@ class SortedList {
     /** Adds a single item to the list */
     addOne(item) {
         const newNode = {
-            prev: null,
-            next: null,
+            prev: undefined,
+            next: undefined,
             value: item,
         };
         if (this._length === 0) {
@@ -186,7 +186,7 @@ class SortedList {
     /** Returns the first item matching the given predicate */
     find(predicate) {
         const ret = findNode(this.first, predicate);
-        if (ret != null)
+        if (ret != undefined)
             return ret.value;
     }
     /** Returns the first item matching the given predicate */
@@ -195,7 +195,7 @@ class SortedList {
     }
     /** Removes all items from the list */
     clear() {
-        this.first = this.last = null;
+        this.first = this.last = undefined;
         this._length = 0;
     }
     *[Symbol.iterator]() {

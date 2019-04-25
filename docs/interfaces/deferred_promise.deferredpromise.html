@@ -107,6 +107,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited"><a href="deferred_promise.deferredpromise.html#catch" class="tsd-kind-icon">catch</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="deferred_promise.deferredpromise.html#finally" class="tsd-kind-icon">finally</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="deferred_promise.deferredpromise.html#reject" class="tsd-kind-icon">reject</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="deferred_promise.deferredpromise.html#resolve" class="tsd-kind-icon">resolve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited"><a href="deferred_promise.deferredpromise.html#then" class="tsd-kind-icon">then</a></li>
@@ -123,18 +124,18 @@
 					<div class="tsd-signature tsd-kind-icon">Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PromiseConstructor</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in D:/shared-utils/node_modules/typescript/lib/lib.es2015.promise.d.ts:216</li>
+							<li>Defined in D:/shared-utils/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.promise.d.ts:216</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="___tostringtag" class="tsd-anchor"></a>
 					<h3>__@to<wbr>String<wbr>Tag</h3>
-					<div class="tsd-signature tsd-kind-icon">__@to<wbr>String<wbr>Tag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Promise"</span></div>
+					<div class="tsd-signature tsd-kind-icon">__@to<wbr>String<wbr>Tag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from Promise.[Symbol.toStringTag]</p>
 						<ul>
-							<li>Defined in D:/shared-utils/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:169</li>
+							<li>Defined in D:/shared-utils/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:169</li>
 						</ul>
 					</aside>
 				</section>
@@ -152,7 +153,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from Promise.catch</p>
 								<ul>
-									<li>Defined in D:/shared-utils/node_modules/typescript/lib/lib.es5.d.ts:1343</li>
+									<li>Defined in D:/shared-utils/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1403</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -180,6 +181,40 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="finally" class="tsd-anchor"></a>
+					<h3>finally</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">finally<span class="tsd-signature-symbol">(</span>onfinally<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from Promise.finally</p>
+								<ul>
+									<li>Defined in D:/shared-utils/node_modules/typedoc/node_modules/typescript/lib/lib.es2018.promise.d.ts:31</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+									resolved value cannot be modified from the callback.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onfinally: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The callback to execute when the Promise is settled (fulfilled or rejected).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A Promise for the completion of the callback.</p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="reject" class="tsd-anchor"></a>
 					<h3>reject</h3>
@@ -190,7 +225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/89b935f/src/deferred-promise/index.ts#L5">deferred-promise/index.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/4689801/src/deferred-promise/index.ts#L5">deferred-promise/index.ts:5</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -213,7 +248,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/89b935f/src/deferred-promise/index.ts#L4">deferred-promise/index.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/4689801/src/deferred-promise/index.ts#L4">deferred-promise/index.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -237,7 +272,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from Promise.then</p>
 								<ul>
-									<li>Defined in D:/shared-utils/node_modules/typescript/lib/lib.es5.d.ts:1336</li>
+									<li>Defined in D:/shared-utils/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1396</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -283,6 +318,36 @@
 						<a href="../index.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_async_async_test_.html">"async/async.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_comparable_comparable_test_.html">"comparable/comparable.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_deferred_promise_deferred_promise_test_.html">"deferred-<wbr>promise/deferred-<wbr>promise.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_helpers_helpers_test_.html">"helpers/helpers.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_index_test_.html">"index.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_math_math_test_.html">"math/math.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_objects_test_.html">"objects/objects.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_sorted_list_sorted_list_test_.html">"sorted-<wbr>list/sorted-<wbr>list.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_strings_strings_test_.html">"strings/strings.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_typeguards_typeguards_test_.html">"typeguards/typeguards.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/async.html">async</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -326,6 +391,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
 								<a href="deferred_promise.deferredpromise.html#catch" class="tsd-kind-icon">catch</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="deferred_promise.deferredpromise.html#finally" class="tsd-kind-icon">finally</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="deferred_promise.deferredpromise.html#reject" class="tsd-kind-icon">reject</a>

@@ -45,7 +45,7 @@ export function composeObject<T = any>(properties: KeyValuePair<T>[]) {
  * to create a new object.
  */
 export function extend(
-	target: Record<string, any>,
+	target: Record<string, any> | undefined | null,
 	// tslint:disable-next-line:trailing-comma
 	...sources: Record<string, any>[]
 ) {

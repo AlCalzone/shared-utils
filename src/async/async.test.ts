@@ -96,7 +96,7 @@ describe("async => ", () => {
 
 		it("should execute the given promises in a sequence", (done) => {
 			const leSpy = spy();
-			function doWait(time, result) {
+			function doWait(time: number, result: number | {} | PromiseLike<{}>) {
 				return new Promise(res => {
 					setTimeout(() => {
 						leSpy(result);

@@ -4,18 +4,18 @@ import { Comparer, defaultComparer } from "../comparable";
 
 interface SortedListNode<T> {
 	value: T;
-	prev: SortedListNode<T>;
-	next: SortedListNode<T>;
+	prev: SortedListNode<T> | undefined;
+	next: SortedListNode<T> | undefined;
 }
 
 /**
  * Seeks the list from the beginning and finds the position to add the new item
  */
-function findPrevNode<T>(firstNode: SortedListNode<T>, item: T, comparer: Comparer<T>): SortedListNode<T> {
-	let ret: SortedListNode<T>;
-	let prevNode = firstNode;
+function findPrevNode<T>(firstNode: SortedListNode<T>, item: T, comparer: Comparer<T>): SortedListNode<T> | undefined {
+	let ret: SortedListNode<T> | undefined;
+	let prevNode: SortedListNode<T> | undefined = firstNode;
 	// while item > prevNode.value
-	while (prevNode != null && comparer(prevNode.value, item) > 0) {
+	while (prevNode != undefined && comparer(prevNode.value, item) > 0) {
 		ret = prevNode;
 		prevNode = prevNode.next;
 	}
@@ -25,8 +25,8 @@ function findPrevNode<T>(firstNode: SortedListNode<T>, item: T, comparer: Compar
 /**
  * Seeks the list from the beginning and returns the first item matching the given predicate
  */
-function findNode<T>(firstNode: SortedListNode<T>, predicate: (item: T) => boolean): SortedListNode<T> {
-	let curNode = firstNode;
+function findNode<T>(firstNode: SortedListNode<T> | undefined, predicate: (item: T) => boolean): SortedListNode<T>| undefined {
+	let curNode: SortedListNode<T> | undefined = firstNode;
 	while (curNode != null) {
 		if (predicate(curNode.value)) return curNode;
 		curNode = curNode.next;
@@ -58,8 +58,8 @@ function isIndex(prop: number | string | symbol): boolean {
  */
 export class SortedList<T> {
 
-	private first: SortedListNode<T>;
-	private last: SortedListNode<T>;
+	private first: SortedListNode<T> | undefined;
+	private last: SortedListNode<T> | undefined;
 
 	private _length: number = 0;
 	public get length(): number {
@@ -94,7 +94,7 @@ export class SortedList<T> {
 				if (isIndex(property)) {
 					return target.get(property as number);
 				} else {
-					return target[property];
+					return (target as any)[property];
 				}
 			},
 		});
@@ -111,8 +111,8 @@ export class SortedList<T> {
 	/** Adds a single item to the list */
 	private addOne(item: T) {
 		const newNode: SortedListNode<T> = {
-			prev: null,
-			next: null,
+			prev: undefined,
+			next: undefined,
 			value: item,
 		};
 		if (this._length === 0) {
@@ -120,7 +120,7 @@ export class SortedList<T> {
 			this.first = this.last = newNode;
 		} else {
 			// add an item between two nodes
-			const prevNode = findPrevNode(this.first, item, this.comparer);
+			const prevNode = findPrevNode(this.first!, item, this.comparer);
 			if (prevNode == null) {
 				// the new node is the first one
 				newNode.next = this.first;
@@ -156,7 +156,7 @@ export class SortedList<T> {
 	}
 
 	/** Returns the item at the given index */
-	public get(index: number): T {
+	public get(index: number): T | undefined {
 		if (!isIndex(index)) throw new Error(`${index} is not a valid index`);
 		let curNode = this.first;
 		while (curNode != null && --index >= 0) {
@@ -166,28 +166,28 @@ export class SortedList<T> {
 	}
 
 	/** Removes the first item from the list and returns it */
-	public shift(): T {
+	public shift(): T | undefined {
 		if (this._length === 0) return;
-		const node = this.first;
+		const node = this.first!;
 		this.removeNode(node);
 		return node.value;
 	}
 
 	/** Returns the first item from the list without removing it */
-	public peekStart(): T {
+	public peekStart(): T | undefined {
 		return this.first && this.first.value;
 	}
 
 	/** Removes the last item from the list and returns it */
-	public pop(): T {
+	public pop(): T | undefined {
 		if (this._length === 0) return;
-		const node = this.last;
+		const node = this.last!;
 		this.removeNode(node);
 		return node.value;
 	}
 
 	/** Returns the last item from the list without removing it */
-	public peekEnd(): T {
+	public peekEnd(): T | undefined {
 		return this.last && this.last.value;
 	}
 
@@ -213,19 +213,19 @@ export class SortedList<T> {
 	}
 
 	/** Returns the first item matching the given predicate */
-	public find(predicate: (item: T) => boolean): T {
+	public find(predicate: (item: T) => boolean): T | undefined {
 		const ret = findNode(this.first, predicate);
-		if (ret != null) return ret.value;
+		if (ret != undefined) return ret.value;
 	}
 
 	/** Returns the first item matching the given predicate */
-	private findNodeForItem(item: T): SortedListNode<T> {
+	private findNodeForItem(item: T): SortedListNode<T> | undefined {
 		return findNode(this.first, val => this.comparer(val, item) === 0);
 	}
 
 	/** Removes all items from the list */
 	public clear() {
-		this.first = this.last = null;
+		this.first = this.last = undefined;
 		this._length = 0;
 	}
 

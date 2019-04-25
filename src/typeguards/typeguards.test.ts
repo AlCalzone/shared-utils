@@ -57,7 +57,7 @@ describe("lib/typeguards =>", () => {
 		describe(`without native support for "Array.isArray"`, () => {
 			const originalIsArray = Array.isArray;
 
-			before(() => Array.isArray = undefined);
+			before(() => (Array.isArray as any) = undefined);
 			doTest();
 			after(() => Array.isArray = originalIsArray);
 		});

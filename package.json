@@ -54,10 +54,10 @@
     "debug": "^4.1.1"
   },
   "scripts": {
-    "build": "node_modules/.bin/tsc",
+    "build": "tsc -p src/tsconfig.build.json",
     "docs": "node node_modules/typedoc/bin/typedoc --options ./typedoc.js",
     "prebuild": "rimraf ./build",
-    "watch": "tsc --watch",
+    "watch": "npm run build -- --watch",
     "test:ts": "node_modules/.bin/mocha",
     "test": "npm run test:ts",
     "test:watch": "node_modules/.bin/mocha --watch",

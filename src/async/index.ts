@@ -8,6 +8,7 @@
 export function promisify<T>(fn: Function, context?: any): (...args: any[]) => Promise<T>;
 export function promisify(fn: Function, context?: any) {
 	return function(...args: any[]) {
+		// @ts-ignore We want this behavior
 		context = context || this;
 		return new Promise((resolve, reject) => {
 			fn.apply(context, [...args, (error: Error, result: any) => {
@@ -24,6 +25,7 @@ export function promisify(fn: Function, context?: any) {
 export function promisifyNoError<T>(fn: Function, context?: any): (...args: any[]) => Promise<T>;
 export function promisifyNoError(fn: Function, context?: any) {
 	return function(...args: any[]) {
+		// @ts-ignore We want this behavior
 		context = context || this;
 		return new Promise((resolve) => {
 			fn.apply(context, [...args, (result: any) => {
