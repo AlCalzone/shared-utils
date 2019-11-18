@@ -4,11 +4,12 @@ module.exports = {
 	moduleResolution: "node",
 	exclude: [
 		"**/src/index.ts",
+		"**/src/**/*.test.ts",
 		"**/src/types/*.ts"
 	],
 	externalPattern: "node_modules",
 	excludeNotExported: true,
 	excludePrivate: true,
-	target: "ES5",
+	target: "ES2015",
 	readme: "none",
 };
