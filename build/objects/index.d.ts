@@ -2,7 +2,7 @@
 export declare type Predicate<T> = (value: T, key: string) => boolean;
 export declare type KeyValuePair<T> = [string, T];
 /** Provides a polyfill for Object.entries */
-export declare function entries<T = any>(obj: Record<string, T>): [string, T][];
+export declare function entries<T = any>(obj: Record<string, T>): KeyValuePair<T>[];
 /** Provides a polyfill for Object.values */
 export declare function values<T = any>(obj: Record<string, T>): T[];
 /**
@@ -15,10 +15,10 @@ export declare function filter<T = any>(obj: Record<string, T>, predicate: Predi
  * Combines multiple key value pairs into an object
  * @param properties The key value pairs to combine into an object
  */
-export declare function composeObject<T = any>(properties: KeyValuePair<T>[]): {};
+export declare function composeObject<T = any>(properties: KeyValuePair<T>[]): Record<string, any>;
 /**
  * Deep merges multiple objects onto the target object.
  * This modifies the target object, so pass undefined or {}
  * to create a new object.
  */
-export declare function extend(target: Record<string, any>, ...sources: Record<string, any>[]): Record<string, any>;
+export declare function extend(target: Record<string, any> | undefined | null, ...sources: Record<string, any>[]): Record<string, any>;
