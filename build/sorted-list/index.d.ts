@@ -8,7 +8,7 @@ export declare class SortedList<T> {
     private first;
     private last;
     private _length;
-    readonly length: number;
+    get length(): number;
     /**
      * Creates a new empty sorted list
      */
@@ -53,7 +53,7 @@ export declare class SortedList<T> {
     private findNodeForItem;
     /** Removes all items from the list */
     clear(): void;
-    [Symbol.iterator](): IterableIterator<T>;
+    [Symbol.iterator](): Generator<T, void, unknown>;
     /** Flattens this list into an array */
     toArray(): T[];
 }

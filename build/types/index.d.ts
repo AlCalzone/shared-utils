@@ -131,7 +131,7 @@ export declare type TakeLast<T extends any[]> = T extends [] ? never : T extends
 /** Drops the last item from a tuple with up to 8 items */
 export declare type DropLast<T extends any[]> = T extends [] ? [] : T extends [any] ? [] : T extends [infer U11, any] ? [U11] : T extends [infer U21, infer U22, any] ? [U21, U22] : T extends [infer U31, infer U32, infer U33, any] ? [U31, U32, U33] : T extends [infer U41, infer U42, infer U43, infer U44, any] ? [U41, U42, U43, U44] : T extends [infer U51, infer U52, infer U53, infer U54, infer U55, any] ? [U51, U52, U53, U54, U55] : T extends [infer U61, infer U62, infer U63, infer U64, infer U65, infer U66, any] ? [U61, U62, U63, U64, U65, U66] : T extends [infer U71, infer U72, infer U73, infer U74, infer U75, infer U76, infer U77, any] ? [U71, U72, U73, U74, U75, U76, U77] : never;
 /** Returns the "return" type of a callback-style API */
-export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb = TakeLastArgument<T>> = TCb extends ((error: Error | undefined) => any) ? void : TCb extends ((error: Error | undefined, ret?: infer U) => any) ? U : never;
+export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb = TakeLastArgument<T>> = TCb extends ((error: Error | undefined) => any) ? void : TCb extends ((error: Error | undefined, ret: infer U) => any) ? U : never;
 /**
  * Returns a promisified function signature for the given callback-style function.
  * WARNING: This is still experimental. The names of the inferred signature args are wrong!
