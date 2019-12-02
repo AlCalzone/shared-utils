@@ -17,6 +17,9 @@ export interface ExpiringSet<T> {
 	removeAllListeners(event?: ExpiringSetEvents<T>): this;
 }
 
+/**
+ * A Set that automatically removes items after a certain time has elapsed since they were added
+ */
 export class ExpiringSet<T> extends EventEmitter {
 	// The internal set used to store values
 	private _set: Set<T>;
