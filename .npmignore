@@ -1,19 +1,21 @@
-.git*
+# Exclude all dotfiles
+.*
+# Exclude all project files
 *.njsproj
 *.sln
 tsconfig.json
 tslint.json
+typedoc.js
+# Exclude package files
+alcalzone-shared-*.tgz
+# Exclude all folders we don't want in package.json
 test/
 tests/
 src/
-build/
-alcalzone-shared-*.tgz
-.vs*/
-.nyc_output/
 bin/
 obj/
 coverage/
 maintenance/
-.travis.yml
-.circleci/
 docs/
+# The build folder is split on CircleCI, so it shouldn't be included aswell
+build/
