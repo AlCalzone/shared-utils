@@ -1,5 +1,6 @@
 // tslint:disable:no-namespace
 
+import * as arrays from "./arrays";
 import * as async from "./async";
 import * as comparable from "./comparable";
 import * as deferredPromise from "./deferred-promise";
@@ -11,6 +12,7 @@ import * as typeguards from "./typeguards";
 import * as types from "./types";
 
 export {
+	arrays,
 	async,
 	comparable,
 	deferredPromise,
