@@ -4,21 +4,26 @@
 #
 
 # Define the used images
-node6: &node6
-  working_directory: &workdir_node6 ~/shared-utils/node6
-  docker:
-    - image: circleci/node:6
-
 node8: &node8
   working_directory: &workdir_node8 ~/shared-utils/node8
   docker:
     - image: circleci/node:8
 
+node10: &node10
+  working_directory: &workdir_node10 ~/shared-utils/node10
+  docker:
+    - image: circleci/node:10
+
+node12: &node12
+  working_directory: &workdir_node12 ~/shared-utils/node12
+  docker:
+    - image: circleci/node:12
+
 # use "latest" for lint and publish
 latest: &latest
   working_directory: &workdir_latest ~/shared-utils/latest
   docker:
-    - image: circleci/node:10
+    - image: circleci/node
 
 # some job filters
 tags_and_branches: &tags_and_branches
@@ -50,34 +55,6 @@ whitelist: &whitelist
 version: 2
 jobs:
 # ----------------------------------------------------
-  test_node6:
-    <<: *node6
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-node6-{{ checksum "package.json" }}
-
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
-          name: Remove unnecessary Dependencies
-          command: npm ls || true ; npm prune
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-node6-{{ checksum "package.json" }}
-
-      - run:
-          name: Run component tests
-          command: npm run test
-
-# ----------------------------------------------------
   test_node8:
     <<: *node8
 
@@ -100,6 +77,62 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-node8-{{ checksum "package.json" }}
+
+      - run:
+          name: Run component tests
+          command: npm run test
+
+# ----------------------------------------------------
+  test_node10:
+    <<: *node10
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-node10-{{ checksum "package.json" }}
+
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Remove unnecessary Dependencies
+          command: npm ls || true ; npm prune
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-node10-{{ checksum "package.json" }}
+
+      - run:
+          name: Run component tests
+          command: npm run test
+
+# ----------------------------------------------------
+  test_node12:
+    <<: *node12
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-node12-{{ checksum "package.json" }}
+
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Remove unnecessary Dependencies
+          command: npm ls || true ; npm prune
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-node12-{{ checksum "package.json" }}
 
       - run:
           name: Run component tests
@@ -213,9 +246,11 @@ workflows:
 
   test-and-deploy:
     jobs:
-      - test_node6:
-          <<: *tags_and_branches
       - test_node8:
+          <<: *tags_and_branches
+      - test_node10:
+          <<: *tags_and_branches
+      - test_node12:
           <<: *tags_and_branches
       - test_latest:
           <<: *tags_and_branches
@@ -228,8 +263,9 @@ workflows:
       # build only on tagged builds and if all tests succeeded
       - build:
           requires: 
-            - test_node6
             - test_node8
+            - test_node10
+            - test_node12
             - test_latest
           <<: *only_tags
 
