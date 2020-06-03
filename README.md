@@ -8,3 +8,10 @@
 A set of utilities shared between my projects
 
 Function documentation available [here](https://alcalzone.github.io/shared-utils/)
+
+## Changelog
+<!--
+	Placeholder for the next version (at the beginning of the line):
+	### __WORK IN PROGRESS__
+-->
+sorry, I was slacking :)
