@@ -1,4 +1,3 @@
-/** @module sorted-list */
 import { Comparer } from "../comparable";
 /**
  * A list that automatically sorts its items to guarantee that they are always in order

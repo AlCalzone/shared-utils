@@ -1,5 +1,3 @@
-/** @module objects */
-
 export type Predicate<T> = (value: T, key: string) => boolean;
 export type KeyValuePair<T> = [string, T];
 

@@ -1,5 +1,3 @@
-/** @module sorted-list */
-
 import { Comparer, defaultComparer } from "../comparable";
 
 interface SortedListNode<T> {

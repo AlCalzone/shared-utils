@@ -1,5 +1,4 @@
 "use strict";
-/** @module comparable */
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Tests if a given objects satisfies the Comparable<T> interface

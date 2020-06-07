@@ -1,6 +1,8 @@
 "use strict";
 // tslint:disable:no-namespace
 Object.defineProperty(exports, "__esModule", { value: true });
+const arrays = require("./arrays");
+exports.arrays = arrays;
 const async = require("./async");
 exports.async = async;
 const comparable = require("./comparable");

@@ -47,7 +47,7 @@
     "ts-node": "^8.9.1",
     "tslint": "^6.1.2",
     "typedoc": "^0.17.7",
-    "typedoc-plugin-external-module-name": "^2.1.0",
+    "typedoc-plugin-external-module-name": "^4.0.3",
     "typescript": "^3.1.6",
     "yargs": "^15.0.1"
   },

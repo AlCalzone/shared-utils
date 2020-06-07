@@ -1,5 +1,4 @@
 "use strict";
-/** @module sorted-list */
 Object.defineProperty(exports, "__esModule", { value: true });
 const comparable_1 = require("../comparable");
 /**

@@ -1,4 +1,3 @@
-/** @module objects */
 export declare type Predicate<T> = (value: T, key: string) => boolean;
 export declare type KeyValuePair<T> = [string, T];
 /** Provides a polyfill for Object.entries */

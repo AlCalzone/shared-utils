@@ -1,5 +1,4 @@
 "use strict";
-/** @module helpers */
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Asserts that all possible cases of a value have been checked

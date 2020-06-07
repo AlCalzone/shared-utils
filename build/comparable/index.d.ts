@@ -1,4 +1,3 @@
-/** @module comparable */
 export declare type CompareResult = -1 | 0 | 1;
 export declare type Comparer<T> = (a: T, b: T) => CompareResult;
 export interface Comparable<T> {

@@ -1,5 +1,4 @@
 "use strict";
-/** @module strings */
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Pads a string to the given length by repeatedly prepending the filler at the beginning of the string.

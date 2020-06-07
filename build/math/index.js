@@ -1,5 +1,4 @@
 "use strict";
-/** @module math */
 Object.defineProperty(exports, "__esModule", { value: true });
 /** limits a value to the range given by min/max */
 function clamp(value, min, max) {
