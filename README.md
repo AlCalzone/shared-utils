@@ -15,5 +15,5 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 2.3.0 (2020-06-08)
 * Added optional `unref` parameter to `async` -> `wait(ms, [unref])`
