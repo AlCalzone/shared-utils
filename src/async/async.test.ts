@@ -83,6 +83,18 @@ describe("async => ", () => {
 
 		});
 
+		it(`wait(${timeout}, true) should also wait ${timeout} ms`, (done) => {
+
+			const leSpy = spy();
+
+			wait(timeout, true).then(() => {
+				expect(Date.now()).to.equal(timeout);
+				done();
+			});
+			clock.runAll();
+
+		});
+
 		afterEach(() => {
 			clock.restore();
 		});
