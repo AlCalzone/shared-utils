@@ -1,5 +1,4 @@
 "use strict";
-/** @module deferred-promise */
 Object.defineProperty(exports, "__esModule", { value: true });
 function createDeferredPromise() {
     let res;

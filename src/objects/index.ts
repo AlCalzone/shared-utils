@@ -1,5 +1,3 @@
-/** @module objects */
-
 export type Predicate<T> = (value: T, key: string) => boolean;
 export type KeyValuePair<T> = [string, T];
 
@@ -45,7 +43,7 @@ export function composeObject<T = any>(properties: KeyValuePair<T>[]) {
  * to create a new object.
  */
 export function extend(
-	target: Record<string, any>,
+	target: Record<string, any> | undefined | null,
 	// tslint:disable-next-line:trailing-comma
 	...sources: Record<string, any>[]
 ) {

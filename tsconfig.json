@@ -1,7 +1,8 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "declaration": true,
+        "declaration": false,
+        "noEmit": true,
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmitOnError": true,
@@ -13,14 +14,16 @@
         "sourceMap": false,
         "inlineSourceMap": false,
         "stripInternal": true,
+        "strict": true,
+        "noImplicitAny": false,
         "target": "es2015",
+        "lib": ["ES2015"],
         "watch": false // true breaks circleci
     },
     "include": [
         "src/**/*.ts"
     ],
     "exclude": [
-        "src/**/*.test.ts",
         "build/**",
         "node_modules/**"
     ]

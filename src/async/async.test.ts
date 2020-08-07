@@ -83,6 +83,18 @@ describe("async => ", () => {
 
 		});
 
+		it(`wait(${timeout}, true) should also wait ${timeout} ms`, (done) => {
+
+			const leSpy = spy();
+
+			wait(timeout, true).then(() => {
+				expect(Date.now()).to.equal(timeout);
+				done();
+			});
+			clock.runAll();
+
+		});
+
 		afterEach(() => {
 			clock.restore();
 		});
@@ -96,7 +108,7 @@ describe("async => ", () => {
 
 		it("should execute the given promises in a sequence", (done) => {
 			const leSpy = spy();
-			function doWait(time, result) {
+			function doWait(time: number, result: number | {} | PromiseLike<{}>) {
 				return new Promise(res => {
 					setTimeout(() => {
 						leSpy(result);

@@ -67,7 +67,7 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		const expected = [2, 5, 4, 9, 8].sort();
-		list.shift().should.equal(-1);
+		list.shift()!.should.equal(-1);
 		list.length.should.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
@@ -81,7 +81,7 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const expected = [...containedItems].sort();
 		const list = new SortedList(containedItems);
-		list.peekStart().should.equal(-1);
+		list.peekStart()!.should.equal(-1);
 		list.length.should.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
@@ -95,7 +95,7 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		const expected = [2, -1, 5, 4, 8].sort();
-		list.pop().should.equal(9);
+		list.pop()!.should.equal(9);
 		list.length.should.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
@@ -109,7 +109,7 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const expected = [...containedItems].sort();
 		const list = new SortedList(containedItems);
-		list.peekEnd().should.equal(9);
+		list.peekEnd()!.should.equal(9);
 		list.length.should.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
@@ -207,7 +207,13 @@ describe("sorted-list => ", () => {
 	it("find() should return the first item matching the given predicate", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
-		list.find(item => item > 3).should.equal(4);
+		list.find(item => item > 3)!.should.equal(4);
+	});
+
+	it("find() should return undefined if no item matches the predicate", () => {
+		const containedItems = [1, 5, 2, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		expect(list.find(item => item < 0)).to.equal(undefined);
 	});
 
 	it("get() should return the sorted element at the given index", () => {
@@ -215,7 +221,7 @@ describe("sorted-list => ", () => {
 		const list = new SortedList(containedItems);
 		const expected = [...containedItems].sort();
 		for (let i = 0; i < expected.length; i++) {
-			list.get(i).should.equal(expected[i]);
+			list.get(i)!.should.equal(expected[i]);
 		}
 		expect(list.get(expected.length)).to.be.undefined;
 	});

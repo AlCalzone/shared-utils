@@ -1,5 +1,3 @@
-/** @module strings */
-
 /**
  * Pads a string to the given length by repeatedly prepending the filler at the beginning of the string.
  * @param str The string to pad

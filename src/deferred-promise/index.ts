@@ -1,5 +1,3 @@
-/** @module deferred-promise */
-
 export interface DeferredPromise<T> extends Promise<T> {
 	resolve(value?: T | PromiseLike<T>): void;
 	reject(reason?: any): void;
@@ -14,8 +12,8 @@ export function createDeferredPromise<T = void>(): DeferredPromise<T> {
 		rej = reject;
 	}) as DeferredPromise<T>;
 
-	promise.resolve = res;
-	promise.reject = rej;
+	promise.resolve = res!;
+	promise.reject = rej!;
 
 	return promise;
 }
