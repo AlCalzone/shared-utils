@@ -2,7 +2,7 @@
 // Some dangerous recursive operations!
 // Beware of the dragons!
 
-import { Equals, LengthOf, Not, UnionOf } from "./types";
+import { Equals, IndizesOf, LengthOf, Not, Range, UnionOf } from "./types";
 
 /**
  * Returns the logarithm to the base 2 of L
@@ -67,23 +67,33 @@ type Foo = [1, 5, 7, 8, 9, string];
 type TakeLast<
 	T extends any[],
 	// Create a tuple which is 1 item shorter than T and determine its length
-	L1 extends number = Drop1<T>["length"],
+	L1 extends number = Drop1<T>["length"]
 	// use that length to access the last index of T
 > = T[L1];
-type MapTuples<T1 extends any[], T2 extends any[]> = { [K in keyof T1]: K extends keyof T2 ? T2[K] : never };
+type MapTuples<T1 extends any[], T2 extends any[]> = {
+	[K in keyof T1]: K extends keyof T2 ? T2[K] : never;
+};
 type Bar = MapTuples<[1, 2], [4, 5, 6]>;
 
 type DropLast<
 	T extends any[],
 	// create a tuple that is 1 shorter than T
-	MinusOne extends any[] = Drop1<T>,
+	MinusOne extends any[] = Drop1<T>
 	// and keep only the entries with a corresponding index in T
 > = MapTuples<MinusOne, T>;
 type Test1 = DropLast<[1, 2, 3]>;
 
-type F1 = (arg1: number, arg2: string, c: (err: Error, ret: boolean) => void) => void;
+type F1 = (
+	arg1: number,
+	arg2: string,
+	c: (err: Error, ret: boolean) => void,
+) => void;
 
-type Params<F extends (...args: any[]) => void> = F extends ((...args: infer TFArgs) => any) ? TFArgs : never;
+type Params<F extends (...args: any[]) => void> = F extends (
+	...args: infer TFArgs
+) => any
+	? TFArgs
+	: never;
 type ForceTuple<T> = T extends any[] ? T : any[];
 
 type Promisify<
@@ -97,27 +107,13 @@ type Promisify<
 
 type FooBar = Promisify<F1>;
 
-/**
- * Returns the first item's type in a tuple
- */
-export type Head<T extends any[]> = Take1<T>;
-/**
- * Returns all but the first item's type in a tuple/array
- */
-export type Tail<T extends any[]> = Drop1<T>;
 
-// export type Concat<T1 extends any[], T2 extends any[]> = ConcatReverse<ConcatReverse<T1>, T2>;
 
 /**
  * Reverses the given list
  * WARNING: Use at your own risk, this might crash TypeScript
  */
 export type Reverse<T extends any[]> = ConcatReverse<T>;
-
-/**
- * Returns the given tuple/array with the item type prepended to it
- */
-export type Unshift<List extends any[], Item> = ConcatReverse1<[Item], List>;
 
 // Tis a big dragon: (This crashes TSServer)
 // export type Push<List extends any[], Item> = ConcatReverse<ConcatReverse<[Item], ConcatReverse<List>>>;
@@ -138,33 +134,4 @@ type ConcatReverse1<T1 extends any[], T2 extends any[]> = ((a1: T1[0], ...rest: 
 type ConcatReverse2<T1 extends any[], T2 extends any[]> = ((a2: T1[1], a1: T1[0], ...rest: T2) => void) extends ((...args: infer R) => void) ? R : never;
 type ConcatReverse4<T1 extends any[], T2 extends any[]> = ((a4: T1[3], a3: T1[2], a2: T1[1], a1: T1[0], ...rest: T2) => void) extends ((...args: infer R) => void) ? R : never;
 type ConcatReverse8<T1 extends any[], T2 extends any[]> = ((a8: T1[7], a7: T1[6], a6: T1[5], a5: T1[4], a4: T1[3], a3: T1[2], a2: T1[1], a1: T1[0], ...rest: T2) => void) extends ((...args: infer R) => void) ? R : never;
-
-
-// DO NOT use these in production until https://github.com/Microsoft/TypeScript/issues/26155 is fixed
-
-/**
- * Creates a Union of all numbers from 0 to N
- * WARNING: This uses a recursive type definition which might stop working at any point
- * Currently, N is capped at 98
- */
-type Range<N, T extends number[] = []> = {
-	0: 0 | UnionOf<T>,
-	1: Range<N, Unshift<T, LengthOf<T>>>,
-}[Equals<LengthOf<Tail<T>>, N> extends true ? 0 : 1];
-
-/**
- * Creates a Union of all numbers from N to M (both inclusive)
- * WARNING: This uses a recursive type definition which might stop working at any point
- * Currently, N and M are capped at 98
- */
-type RangeStart<N, M> = Exclude<Range<M>, Range<N>> | N;
-
-/** Tests if N > M */
-type IsGreaterThan<N, M> = N extends Exclude<Range<N>, Range<M>> ? true : false;
-/** Tests if N <= M */
-type IsLessThanOrEqual<N, M> = Not<IsGreaterThan<N, M>>;
-/** Tests if N < M */
-type IsLessThan<N, M> = M extends Exclude<Range<M>, Range<N>> ? true : false;
-/** Tests if N >= M */
-type IsGreaterThanOrEqual<N, M> = Not<IsLessThan<N, M>>;
 
