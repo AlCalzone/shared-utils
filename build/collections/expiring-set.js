@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExpiringSet = void 0;
 const events_1 = require("events");
 /**
  * A Set that automatically removes items after a certain time has elapsed since they were added

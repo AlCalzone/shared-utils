@@ -13,16 +13,27 @@ export declare type Or<T1 extends boolean, T2 extends boolean> = T1 extends true
 /**
  * Tests if the type TSource is assignable to TTarget
  */
-export declare type AssignableTo<TSource, TTarget> = [TSource] extends [TTarget] ? true : false;
+export declare type AssignableTo<TSource, TTarget> = [
+    TSource
+] extends [TTarget] ? true : false;
 /**
  * Tests if two types are equal
  */
-export declare type Equals<T, S> = [T] extends [S] ? ([S] extends [T] ? true : false) : false;
+export declare type Equals<T, S> = [
+    T
+] extends [S] ? ([
+    S
+] extends [T] ? true : false) : false;
 /**
  * Creates a union from the numeric keys of an Array or tuple.
  * The result is the union of all fixed entries and (if open-ended or an array) the type `number`
  */
 export declare type IndizesOf<T extends any[], U = Omit<T, keyof []>, NumericKeysOfT = keyof U> = NumericKeysOfT | (number extends LengthOf<T> ? number : never);
+/**
+ * Creates a union from the numeric keys of an Array or tuple.
+ * The result is the union of all fixed entries, but unlike `IndizesOf` does not include the type `number`
+ */
+export declare type FixedIndizesOf<T extends any[]> = keyof Omit<T, keyof []>;
 /**
  * Creates a union from the types of an Array or tuple
  */
@@ -40,7 +51,108 @@ export declare type IsVariableLength<T extends any[]> = Not<IsFixedLength<T>>;
  */
 export declare type IsTuple<T extends any[]> = IsFixedLength<T> extends true ? true : IndizesOf<T> extends number ? false : true;
 /** Converts a number between 0 and 99 to its corresponding string representation */
-export declare type ToString<N extends number> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"][N];
+export declare type ToString<N extends number> = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "75",
+    "76",
+    "77",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84",
+    "85",
+    "86",
+    "87",
+    "88",
+    "89",
+    "90",
+    "91",
+    "92",
+    "93",
+    "94",
+    "95",
+    "96",
+    "97",
+    "98",
+    "99"
+][N];
 /**
  * Tests if all types in an array or tuple are assignable to T
  */
@@ -95,15 +207,33 @@ export declare type Overwrite<T extends {}, U extends {}> = Simplify<Omit<T, key
 /**
  * Returns the first item's type in a tuple
  */
-export declare type Head<T extends any[]> = T extends [infer H, ...any[]] ? H : never;
+export declare type Head<T extends any[]> = T extends [infer R, ...any[]] ? R : never;
 /**
  * Returns all but the first item's type in a tuple/array
  */
-export declare type Tail<T extends any[]> = ((...args: T) => any) extends ((head: any, ...tail: infer R) => any) ? R : never;
+export declare type Tail<T extends any[]> = [
+    FixedIndizesOf<T>
+] extends [never] ? T : T extends [any, ...infer R] ? R : [];
+/**
+ * Returns all but the last item's type in a tuple/array
+ */
+export declare type Lead<T extends unknown[]> = T extends [] ? [] : T extends [...infer L, any] ? L : [];
+/**
+ * Returns the last item's type in a tuple
+ */
+export declare type Last<T extends unknown[]> = T extends [] ? never : T extends [...infer _, infer R] ? R : never;
 /**
  * Returns the given tuple/array with the item type prepended to it
  */
-export declare type Unshift<List extends any[], Item> = ((first: Item, ...rest: List) => any) extends ((...list: infer R) => any) ? R : never;
+export declare type Unshift<List extends any[], Item> = [Item, ...List];
+/**
+ * Returns the given tuple/array with the item type appended to it
+ */
+export declare type Push<List extends any[], Item> = [...List, Item];
+/**
+ * Concatenates the given tuples
+ */
+export declare type Concat<T1 extends any[], T2 extends any[]> = [...T1, ...T2];
 /**
  * Returns the Nth argument of F (0-based)
  */
@@ -124,16 +254,41 @@ export declare type ArgumentAt<F extends (...args: any[]) => any, N extends numb
 export declare type NoInfer<T> = T & {
     [K in keyof T]: T[K];
 };
-/** Returns the type of the last argument of a function (up to 8 arguments are supported) */
-export declare type TakeLastArgument<T extends (...args: any[]) => any> = TakeLast<Parameters<T>>;
-/** Takes the last item from a tuple with up to 8 items */
-export declare type TakeLast<T extends any[]> = T extends [] ? never : T extends [infer U1] ? U1 : T extends [any, infer U2] ? U2 : T extends [any, any, infer U3] ? U3 : T extends [any, any, any, infer U4] ? U4 : T extends [any, any, any, any, infer U5] ? U5 : T extends [any, any, any, any, any, infer U6] ? U6 : T extends [any, any, any, any, any, any, infer U7] ? U7 : T extends [any, any, any, any, any, any, any, infer U8] ? U8 : {};
-/** Drops the last item from a tuple with up to 8 items */
-export declare type DropLast<T extends any[]> = T extends [] ? [] : T extends [any] ? [] : T extends [infer U11, any] ? [U11] : T extends [infer U21, infer U22, any] ? [U21, U22] : T extends [infer U31, infer U32, infer U33, any] ? [U31, U32, U33] : T extends [infer U41, infer U42, infer U43, infer U44, any] ? [U41, U42, U43, U44] : T extends [infer U51, infer U52, infer U53, infer U54, infer U55, any] ? [U51, U52, U53, U54, U55] : T extends [infer U61, infer U62, infer U63, infer U64, infer U65, infer U66, any] ? [U61, U62, U63, U64, U65, U66] : T extends [infer U71, infer U72, infer U73, infer U74, infer U75, infer U76, infer U77, any] ? [U71, U72, U73, U74, U75, U76, U77] : never;
+/** Returns the type of the last argument of a function */
+export declare type LastArgument<T extends (...args: any[]) => any> = Last<Parameters<T>>;
 /** Returns the "return" type of a callback-style API */
-export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb = TakeLastArgument<T>> = TCb extends ((error: Error | undefined) => any) ? void : TCb extends ((error: Error | undefined, ret: infer U) => any) ? U : never;
+export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb extends (...args: any[]) => any = LastArgument<T>, TCbArgs = Parameters<TCb>> = TCbArgs extends [(Error | null | undefined)?] ? void : TCbArgs extends [Error | null | undefined, infer U] ? U : never;
 /**
  * Returns a promisified function signature for the given callback-style function.
- * WARNING: This is still experimental. The names of the inferred signature args are wrong!
  */
-export declare type Promisify<T extends (...args: any[]) => any, TReturn = CallbackAPIReturnType<T>, TArgs extends any[] = DropLast<Parameters<T>>> = (...args: TArgs) => Promise<TReturn>;
+export declare type Promisify<T extends (...args: any[]) => any, TReturn = CallbackAPIReturnType<T>, TArgs extends any[] = Lead<Parameters<T>>> = (...args: TArgs) => Promise<TReturn>;
+declare type BuildPowersOf2LengthArrays<N extends number, R extends never[][]> = R[0][N] extends never ? R : BuildPowersOf2LengthArrays<N, [[...R[0], ...R[0]], ...R]>;
+declare type ConcatLargestUntilDone<N extends number, R extends never[][], B extends never[]> = B["length"] extends N ? B : [...R[0], ...B][N] extends never ? ConcatLargestUntilDone<N, R extends [R[0], ...infer U] ? U extends never[][] ? U : never : never, B> : ConcatLargestUntilDone<N, R extends [R[0], ...infer U] ? U extends never[][] ? U : never : never, [...R[0], ...B]>;
+declare type Replace<R extends any[], T> = {
+    [K in keyof R]: T;
+};
+/** Creates a tuple of the given type with the given length */
+export declare type TupleOf<T, N extends number> = number extends N ? T[] : {
+    [K in N]: BuildPowersOf2LengthArrays<K, [[never]]> extends infer U ? U extends never[][] ? Replace<ConcatLargestUntilDone<K, U, []>, T> : never : never;
+}[N];
+/**
+ * Creates a Union of all numbers (converted to string) from 0 to N (exclusive)
+ * WARNING: This uses a recursive type definition which might stop working at any point
+ * N = 100000 seems to work currently.
+ */
+export declare type Range<N extends number> = IndizesOf<TupleOf<never, N>>;
+/**
+ * Creates a Union of all numbers from N (inclusive) to M (exclusive)
+ * WARNING: This uses a recursive type definition which might stop working at any point
+ * N = 100000 seems to work currently.
+ */
+export declare type RangeFrom<N extends number, M extends number> = Exclude<Range<M>, Range<N>>;
+/** Tests if N > M */
+export declare type IsGreaterThan<N extends number, M extends number, RangeN = Range<N>, RangeM = Range<M>, RangeDiff = Exclude<RangeN, RangeM>> = [RangeDiff] extends [never] ? false : true;
+/** Tests if N <= M */
+export declare type IsLessThanOrEqual<N extends number, M extends number, RangeN = Range<N>, RangeM = Range<M>, RangeDiff = Exclude<RangeN, RangeM>> = [RangeDiff] extends [never] ? true : false;
+/** Tests if N < M */
+export declare type IsLessThan<N extends number, M extends number, RangeN = Range<N>, RangeM = Range<M>, RangeDiff = Exclude<RangeM, RangeN>> = [RangeDiff] extends [never] ? false : true;
+/** Tests if N >= M */
+export declare type IsGreaterThanOrEqual<N extends number, M extends number, RangeN = Range<N>, RangeM = Range<M>, RangeDiff = Exclude<RangeM, RangeN>> = [RangeDiff] extends [never] ? true : false;
+export {};

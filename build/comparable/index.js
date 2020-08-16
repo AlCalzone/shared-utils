@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.defaultComparer = exports.compareNumberOrString = exports.isComparable = void 0;
 /**
  * Tests if a given objects satisfies the Comparable<T> interface
  * @param obj The object to test
