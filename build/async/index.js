@@ -12,6 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.promiseSequence = exports.wait = exports.promisifyNoError = exports.promisify = void 0;
 function promisify(fn, context) {
     return function (...args) {
         // @ts-ignore We want this behavior
@@ -42,10 +43,15 @@ function promisifyNoError(fn, context) {
 }
 exports.promisifyNoError = promisifyNoError;
 // tslint:enable:ban-types
-/** Creates a promise that waits for the specified time and then resolves */
-function wait(ms) {
+/**
+ * Creates a promise that waits for the specified time and then resolves
+ * @param unref Whether `unref()` should be called on the timeout
+ */
+function wait(ms, unref = false) {
     return new Promise((resolve) => {
-        setTimeout(resolve, ms);
+        const timeout = setTimeout(resolve, ms);
+        if (unref)
+            timeout.unref();
     });
 }
 exports.wait = wait;

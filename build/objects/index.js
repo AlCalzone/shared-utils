@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.extend = exports.composeObject = exports.filter = exports.values = exports.entries = void 0;
 /** Provides a polyfill for Object.entries */
 function entries(obj) {
     return Object.keys(obj)
