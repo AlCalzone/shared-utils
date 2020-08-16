@@ -15,5 +15,31 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+#### Breaking changes
+* Renamed the following types:
+  * `DropLast` -> `Lead`
+  * `TakeLast` -> `Last`
+  * `TakeLastArgument` -> `LastArgument`
+* TypeScript 4.1 (`@next`) is now required
+
+#### Features
+* Added the following types:
+  * `FixedIndizesOf<T[]>` - Like `IndizesOf`, but does not include the type `number` if the tuple/array is variable-length
+  * `Tail<T[]>` - Returns all but the first item's type in a tuple/array
+  * `Push<List[], Item>` - Returns the given tuple/array with the item type appended to it
+  * `Concat<T1[], T2[]>` - Concatenates the given tuples/arrays
+  * `TupleOf<T, N>` - Returns a tuple of length `N` with item types `T`.
+  * `Range<N>` - Creates a Union of all numbers (converted to string) from 0 to N (exclusive), e.g. `Range<4>` is equal to `"0" | "1" | "2" | "3"`.
+  * `RangeFrom<N, M>` - Creates a Union of all numbers from N (inclusive) to M (exclusive), e.g. `RangeFrom<2, 4>` is equal to `"2" | "3"`.
+  * `IsGreaterThan<N, M>` - is equal to `true` if `N > M`, otherwise `false`
+  * `IsLessThanOrEqual<N, M>` - is equal to `true` if `N <= M`, otherwise `false`
+  * `IsLessThan<N, M>` - is equal to `true` if `N < M`, otherwise `false`
+  * `IsGreaterThanOrEqual<N, M>` - is equal to `true` if `N >= M`, otherwise `false`
+
+#### Fixes
+* The type `CallbackAPIReturnType` now works with `strictNullChecks`.
+* The type `Promisify` is no longer experimental and no longer messes up the inferred signature argument names
+
 ### 2.3.0 (2020-06-08)
 * Added optional `unref` parameter to `async` -> `wait(ms, [unref])`

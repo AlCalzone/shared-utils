@@ -31,7 +31,7 @@ export declare type Equals<T, S> = [
 export declare type IndizesOf<T extends any[], U = Omit<T, keyof []>, NumericKeysOfT = keyof U> = NumericKeysOfT | (number extends LengthOf<T> ? number : never);
 /**
  * Creates a union from the numeric keys of an Array or tuple.
- * The result is the union of all fixed entries and (if open-ended or an array) the type `number`
+ * The result is the union of all fixed entries, but unlike `IndizesOf` does not include the type `number`
  */
 export declare type FixedIndizesOf<T extends any[]> = keyof Omit<T, keyof []>;
 /**
@@ -260,7 +260,6 @@ export declare type LastArgument<T extends (...args: any[]) => any> = Last<Param
 export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb extends (...args: any[]) => any = LastArgument<T>, TCbArgs = Parameters<TCb>> = TCbArgs extends [(Error | null | undefined)?] ? void : TCbArgs extends [Error | null | undefined, infer U] ? U : never;
 /**
  * Returns a promisified function signature for the given callback-style function.
- * WARNING: This is still experimental. The names of the inferred signature args are wrong!
  */
 export declare type Promisify<T extends (...args: any[]) => any, TReturn = CallbackAPIReturnType<T>, TArgs extends any[] = Lead<Parameters<T>>> = (...args: TArgs) => Promise<TReturn>;
 declare type BuildPowersOf2LengthArrays<N extends number, R extends never[][]> = R[0][N] extends never ? R : BuildPowersOf2LengthArrays<N, [[...R[0], ...R[0]], ...R]>;

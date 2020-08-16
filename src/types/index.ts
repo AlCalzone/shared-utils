@@ -55,7 +55,7 @@ export type IndizesOf<
 
 /**
  * Creates a union from the numeric keys of an Array or tuple.
- * The result is the union of all fixed entries and (if open-ended or an array) the type `number`
+ * The result is the union of all fixed entries, but unlike `IndizesOf` does not include the type `number`
  */
 export type FixedIndizesOf<T extends any[]> = keyof Omit<T, keyof []>;
 
@@ -262,7 +262,6 @@ export type CallbackAPIReturnType<
 
 /**
  * Returns a promisified function signature for the given callback-style function.
- * WARNING: This is still experimental. The names of the inferred signature args are wrong!
  */
 export type Promisify<T extends (...args: any[]) => any,
 	TReturn = CallbackAPIReturnType<T>,
