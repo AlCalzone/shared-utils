@@ -59,7 +59,7 @@
     "docs": "node node_modules/typedoc/bin/typedoc --options ./typedoc.js",
     "prebuild": "rimraf ./build",
     "watch": "npm run build -- --watch",
-    "test:ts": "node_modules/.bin/mocha",
+    "test:ts": "mocha src/**/*.test.ts",
     "test": "npm run test:ts",
     "test:watch": "node_modules/.bin/mocha --watch",
     "coverage": "node_modules/.bin/nyc npm test",
