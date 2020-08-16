@@ -15,7 +15,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 3.0.0 (2020-08-16)
 #### Breaking changes
 * Renamed the following types:
   * `DropLast` -> `Lead`

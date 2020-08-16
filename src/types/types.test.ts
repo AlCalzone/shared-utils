@@ -814,10 +814,6 @@ describe("types => ", () => {
 			type F3 = (one: string, cb: (err: Error, ret: number) => void) => void;
 			type P3 = Promisify<F3>;
 
-			type TCb = LastArgument<F2>;
-			type TArgs = Parameters<TCb>;
-			type Foo = TArgs extends [error: Error | undefined, ret: any] ? true : false;		
-
 			assertTrue<Equals<ReturnType<P1>, Promise<void>>>();
 			assertTrue<Equals<ReturnType<P2>, Promise<boolean>>>();
 			assertTrue<Equals<ReturnType<P3>, Promise<number>>>();
@@ -877,7 +873,7 @@ describe("types => ", () => {
 			assertTrue<Equals<TupleOf<any, 0>, []>>();
 			assertTrue<Equals<TupleOf<string, 2>, [string, string]>>();
 			assertTrue<Equals<
-				TupleOf<number | string, 3 | 4>, 
+				TupleOf<number | string, 3 | 4>,
 				[number | string, number | string, number | string]
 				 | [number | string, number | string, number | string, number | string]
 			>>();
