@@ -7,8 +7,7 @@
 
 // tslint:disable:interface-over-type-literal
 
-import { assert, expect, should, use } from "chai";
-import { SinonFakeTimers, spy, stub, useFakeTimers } from "sinon";
+import { should, use } from "chai";
 import * as sinonChai from "sinon-chai";
 
 // enable the should interface with sinon
@@ -21,16 +20,23 @@ import {
 	ArgumentAt,
 	AssignableTo,
 	CallbackAPIReturnType,
-	DropLast,
 	Equals,
 	Every,
 	EveryStrict,
+	FixedIndizesOf,
 	Head,
 	IndizesOf,
 	IsFixedLength,
+	IsGreaterThan,
+	IsGreaterThanOrEqual,
+	IsLessThan,
+	IsLessThanOrEqual,
 	IsTuple,
 	IsVariableLength,
 	KeyValuePairsOf,
+	Last,
+	LastArgument,
+	Lead,
 	LengthOf,
 	NoInfer,
 	Not,
@@ -39,13 +45,14 @@ import {
 	Or,
 	Overwrite,
 	Promisify,
+	Range,
+	RangeFrom,
 	SemiPartial,
 	Simplify,
 	Tail,
-	TakeLast,
-	TakeLastArgument,
+	TupleOf,
 	UnionOf,
-	Unshift,
+	Unshift
 } from ".";
 
 // Used to tests types
@@ -458,6 +465,21 @@ describe("types => ", () => {
 		});
 	});
 
+	describe("FixedIndizesOf<T[]> => ", () => {
+		it("should return never for empty tuples and array-types", () => {
+			assertTrue<Equals<FixedIndizesOf<[]>, never>>();
+			assertTrue<Equals<FixedIndizesOf<string[]>, never>>();
+		});
+
+		it("should return the fixed numeric indizes of the given tuple type", () => {
+			// fixed-length tuples
+			assertTrue<Equals<FixedIndizesOf<[number]>, "0">>();
+			assertTrue<Equals<FixedIndizesOf<[number, number]>, "0" | "1">>();
+			// open-ended tuples
+			assertTrue<Equals<FixedIndizesOf<[number, boolean?, ...string[]]>, "0" | "1">>();
+		});
+	});
+
 	describe("UnionOf<T[]> => ", () => {
 		it("should return never for empty tuples", () => {
 			assertTrue<Equals<UnionOf<[]>, never>>();
@@ -615,7 +637,7 @@ describe("types => ", () => {
 		it("should return a simplified representation of object types", () => {
 			assertTrue<Equals<Simplify<{ b: string } & { a?: boolean }>, { b: string, a?: boolean }>>();
 			assertTrue<Equals<Simplify<Pick<{ a: number, b: string }, "b"> & { a?: boolean }>, { b: string, a?: boolean }>>();
-			assertTrue<Equals<Simplify<{ a: "a" } & { a: "b" }>, { a: "a" & "b" }>>();
+			assertTrue<Equals<Simplify<{ a: "a" } | { a: "b" }>, { a: "a" | "b" }>>();
 		});
 	});
 
@@ -660,10 +682,28 @@ describe("types => ", () => {
 			assertTrue<Equals<Tail<[3, 2, number]>, [2, number]>>();
 			// open-ended tuples
 			assertTrue<Equals<Tail<[number, ...string[]]>, string[]>>();
-			assertTrue<Equals<Tail<[number, boolean, ...string[]]>, [boolean, ...string[]]>>();
+			assertTrue<Equals<Tail<[number, boolean?, ...string[]]>, [boolean?, ...string[]]>>();
+			// For array types, tail should be an identity operation
 			assertTrue<Equals<Tail<[...string[]]>, string[]>>();
-			// arrays
 			assertTrue<Equals<Tail<string[]>, string[]>>();
+		});
+	});
+
+	describe("Lead<T[]> => ", () => {
+		it("should return an empty tuple for tuples/arrays with length less than 2", () => {
+			assertTrue<Equals<Lead<[]>, []>>();
+			assertTrue<Equals<Lead<[1]>, []>>();
+			assertTrue<Equals<Lead<[number]>, []>>();
+		});
+
+		it("should return a tuple of all but the last item's type", () => {
+			assertTrue<Equals<Lead<[1, 2]>, [1]>>();
+			assertTrue<Equals<Lead<[boolean, 2, number]>, [boolean, 2]>>();
+			// For open-ended tuples and array types, Lead should be an identity operation
+			assertTrue<Equals<Lead<[number, ...string[]]>, [number, ...string[]]>>();
+			assertTrue<Equals<Lead<[number, boolean?, ...string[]]>, [number, boolean?, ...string[]]>>();
+			assertTrue<Equals<Lead<[...string[]]>, string[]>>();
+			assertTrue<Equals<Lead<string[]>, string[]>>();
 		});
 	});
 
@@ -675,23 +715,6 @@ describe("types => ", () => {
 		});
 
 	});
-
-	// describe("Arguments<F> => ", () => {
-	// 	it("should return a tuple of the function's argument types", () => {
-	// 		type F1 = () => void;
-	// 		type F2 = (a1: number) => void;
-	// 		type F3 = (a1: string, a2?: any) => string;
-	// 		type F4 = (a1: boolean, ...rest: string[]) => any;
-	// 		type F5 = (a1: number[]) => void;
-
-	// 		assertTrue<Equals<Arguments<F1>, []>>();
-	// 		assertTrue<Equals<Arguments<F2>, [number]>>();
-	// 		assertTrue<Equals<Arguments<F3>, [string, any?]>>();
-	// 		assertTrue<Equals<Arguments<F4>, [boolean, ...string[]]>>();
-	// 		assertTrue<Equals<Arguments<F5>, [number[]]>>();
-	// 	});
-
-	// });
 
 	describe("ArgumentAt<F, N> => ", () => {
 		type F1 = () => void;
@@ -719,62 +742,39 @@ describe("types => ", () => {
 
 	});
 
-	describe("TakeLast<T[]> => ", () => {
+	describe("Last<T[]> => ", () => {
 		it("should return never for empty tuples", () => {
-			assertTrue<Equals<TakeLast<[]>, never>>();
+			assertTrue<Equals<Last<[]>, never>>();
 		});
 
 		it("should return the last item's type", () => {
-			assertTrue<Equals<TakeLast<[1, 2]>, 2>>();
-			assertTrue<Equals<TakeLast<[2, 3, number]>, number>>();
-			// // arrays
-			// assertTrue<Equals<TakeLast<string[]>, string>>();
-		});
-
-		// This does not currently work
-		it.skip("should work for open-ended tuples", () => {
-			// assertTrue<Equals<TakeLast<[number, ...string[]]>, number | string>>();
-			// assertTrue<Equals<TakeLast<[number, boolean, ...string[]]>, boolean | string>>();
-			// assertTrue<Equals<TakeLast<[...string[]]>, string>>();
-		});
-	});
-
-	describe("DropLast<T[]> => ", () => {
-		it("should return an empty tuple for tuples/arrays with length less than 2", () => {
-			assertTrue<Equals<DropLast<[]>, []>>();
-			assertTrue<Equals<DropLast<[1]>, []>>();
-			assertTrue<Equals<DropLast<[number]>, []>>();
-		});
-
-		it("should return a tuple of all but the last item's type", () => {
-			assertTrue<Equals<DropLast<[1, 2]>, [1]>>();
-			assertTrue<Equals<DropLast<[number, 2, 3]>, [number, 2]>>();
+			assertTrue<Equals<Last<[1, 2]>, 2>>();
+			assertTrue<Equals<Last<[2, 3, number]>, number>>();
 			// arrays
-			// assertTrue<Equals<DropLast<string[]>, string[]>>();
+			assertTrue<Equals<Last<string[]>, string>>();
 		});
 
 		// This does not currently work
 		it.skip("should work for open-ended tuples", () => {
-			// open-ended tuples
-			// assertTrue<Equals<DropLast<[number, ...string[]]>, [number, ...string[]]>>();
-			// assertTrue<Equals<DropLast<[...string[]]>, string[]>>();
+			// assertTrue<Equals<Last<[number, ...string[]]>, number | string>>();
+			// assertTrue<Equals<Last<[number, boolean, ...string[]]>, boolean | string>>();
+			// assertTrue<Equals<Last<[...string[]]>, string>>();
 		});
-
 	});
 
 	describe("LastArg<T> => ", () => {
 		it("should correctly the last argument of a method", () => {
 			type F1 = () => void;
-			type P1 = TakeLastArgument<F1>;
+			type P1 = LastArgument<F1>;
 
 			type F2 = (a1: number) => void;
-			type P2 = TakeLastArgument<F2>;
+			type P2 = LastArgument<F2>;
 
 			type F3 = (a1: number, a2: string) => void;
-			type P3 = TakeLastArgument<F3>;
+			type P3 = LastArgument<F3>;
 
 			type F4 = (a1: number, a2: string, a3: any, a4: unknown, a5: () => void) => void;
-			type P4 = TakeLastArgument<F4>;
+			type P4 = LastArgument<F4>;
 
 			assertTrue<Equals<P1, never>>();
 			assertTrue<Equals<P2, number>>();
@@ -784,7 +784,7 @@ describe("types => ", () => {
 		});
 	});
 
-	describe.skip("CallbackAPIReturnType<T> => ", () => {
+	describe("CallbackAPIReturnType<T> => ", () => {
 		it("should correctly infer the return type of the callback argument", () => {
 
 			type F1 = (cb: (err?: Error) => void) => void;
@@ -797,13 +797,12 @@ describe("types => ", () => {
 			type P3 = CallbackAPIReturnType<F3>;
 
 			assertTrue<Equals<P1, void>>();
-			// Does not work with strictNullChecks
-			// assertTrue<Equals<P2, boolean>>();
-			// assertTrue<Equals<P3, number>>();
+			assertTrue<Equals<P2, boolean>>();
+			assertTrue<Equals<P3, number>>();
 		});
 	});
 
-	describe.skip("Promisify<T> => ", () => {
+	describe("Promisify<T> => ", () => {
 		it("should correctly infer the return type", () => {
 
 			type F1 = (cb: (err: Error) => void) => void;
@@ -815,10 +814,13 @@ describe("types => ", () => {
 			type F3 = (one: string, cb: (err: Error, ret: number) => void) => void;
 			type P3 = Promisify<F3>;
 
-			// TODO: Does not work with strictNullChecks
-			// assertTrue<Equals<ReturnType<P1>, Promise<void>>>();
-			// assertTrue<Equals<ReturnType<P2>, Promise<boolean>>>();
-			// assertTrue<Equals<ReturnType<P3>, Promise<number>>>();
+			type TCb = LastArgument<F2>;
+			type TArgs = Parameters<TCb>;
+			type Foo = TArgs extends [error: Error | undefined, ret: any] ? true : false;		
+
+			assertTrue<Equals<ReturnType<P1>, Promise<void>>>();
+			assertTrue<Equals<ReturnType<P2>, Promise<boolean>>>();
+			assertTrue<Equals<ReturnType<P3>, Promise<number>>>();
 		});
 
 		it("should correctly infer the argument types", () => {
@@ -845,35 +847,75 @@ describe("types => ", () => {
 	describe("NoInfer<T> => ", () => {
 		it("should prevent inferring generic type arguments from the marked parameter", () => {
 			const testNoInferArg2 = <T>(arg1: T, arg2: NoInfer<T>) => arg2 as T;
-			const testInferArg2 = <T>(arg1: T, arg2: T) => arg2;
 
-			// Does not currently work: https://github.com/Microsoft/TypeScript/issues/26408
-			// // @ts-ignore: this is an intentional error
-			// const test1 = testNoInferArg2({ a: 1 }, { b: 2 });
-			// // @ts-ignore: this is an intentional error
-			// const test2 = testNoInferArg2({ a: 1 }, { a: 1, b: 2 });
+			// @ts-expect-error: this is an intentional error
+			const test1 = testNoInferArg2({ a: 1 }, { b: 2 });
+			// @ts-expect-error: this is an intentional error
+			const test2 = testNoInferArg2({ a: 1 }, { a: 1, b: 2 });
 
-			class Foo { }
-			class Bar extends Foo { }
+			class Foo { private a; }
+			class Bar extends Foo { private b; }
 
 			const testNotInferred = testNoInferArg2(new Foo(), new Bar());
-			const testInferred = testInferArg2(new Foo(), new Bar());
 
 			type Tests = [
-				// Does not currently work: https://github.com/Microsoft/TypeScript/issues/26408
-				// Not<Equals<typeof test1, { a: 1 }>>,
-				// Not<Equals<typeof test1, { b: 2 }>>,
+				Not<Equals<typeof test1, { a: 1 }>>,
+				Not<Equals<typeof test1, { b: 2 }>>,
 
-				// Not<Equals<typeof test2, { a: 1 }>>,
-				// Not<Equals<typeof test2, { a: 1, b: 2 }>>,
+				Not<Equals<typeof test2, { a: 1 }>>,
+				Not<Equals<typeof test2, { a: 1, b: 2 }>>,
 
 				Equals<typeof testNotInferred, Foo>,
-				Equals<typeof testInferred, Bar>
 			];
 
 			const success: Every<Tests, true> = true;
 		});
-
 	});
+
+	describe("TupleOf<T> => ", () => {
+		it("should create a fixed-length tuple of the given type and length", () => {
+			assertTrue<Equals<TupleOf<any, 0>, []>>();
+			assertTrue<Equals<TupleOf<string, 2>, [string, string]>>();
+			assertTrue<Equals<
+				TupleOf<number | string, 3 | 4>, 
+				[number | string, number | string, number | string]
+				 | [number | string, number | string, number | string, number | string]
+			>>();
+		});
+
+		it("should create an array if the length is unknown", () => {
+			assertTrue<Equals<TupleOf<boolean, number>, boolean[]>>();
+		});
+	});
+
+	describe("Range<N> =>", () => {
+		it(`should return a union of numeric strings from "0" to "N-1"`, () => {
+			assertTrue<Equals<Range<0>, never>>();
+			assertTrue<Equals<Range<2>, "0" | "1">>();
+		})
+	})
+
+	describe("RangeFrom<N, M> =>", () => {
+		it(`should return a union of numeric strings from "N" to "M-1"`, () => {
+			assertTrue<Equals<RangeFrom<0, 0>, never>>();
+			assertTrue<Equals<RangeFrom<2000, 2003>, "2000" | "2001" | "2002">>();
+		})
+	})
+
+	describe("Comparisons =>", () => {
+		it(`should compare the given numeric types and return true/false`, () => {
+			type Tests = [
+				IsGreaterThan<200, 199>,
+				Not<IsGreaterThan<200,200>>,
+				IsGreaterThanOrEqual<99, 99>,
+				IsGreaterThanOrEqual<99, 98>,
+				IsLessThan<20, 22>,
+				Not<IsLessThan<22,22>>,
+				IsLessThanOrEqual<30, 32>,
+				IsLessThanOrEqual<32, 32>,
+			];
+			assertTrue<Every<Tests, true>>();
+		})
+	})
 
 });
