@@ -1,24 +1,14 @@
 "use strict";
-// tslint:disable:no-namespace
+/* istanbul ignore file */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.types = exports.typeguards = exports.strings = exports.objects = exports.math = exports.helpers = exports.deferredPromise = exports.comparable = exports.async = exports.arrays = void 0;
-const arrays = require("./arrays");
-exports.arrays = arrays;
-const async = require("./async");
-exports.async = async;
-const comparable = require("./comparable");
-exports.comparable = comparable;
-const deferredPromise = require("./deferred-promise");
-exports.deferredPromise = deferredPromise;
-const helpers = require("./helpers");
-exports.helpers = helpers;
-const math = require("./math");
-exports.math = math;
-const objects = require("./objects");
-exports.objects = objects;
-const strings = require("./strings");
-exports.strings = strings;
-const typeguards = require("./typeguards");
-exports.typeguards = typeguards;
-const types = require("./types");
-exports.types = types;
+exports.arrays = require("./arrays");
+exports.async = require("./async");
+exports.comparable = require("./comparable");
+exports.deferredPromise = require("./deferred-promise");
+exports.helpers = require("./helpers");
+exports.math = require("./math");
+exports.objects = require("./objects");
+exports.strings = require("./strings");
+exports.typeguards = require("./typeguards");
+exports.types = require("./types");
