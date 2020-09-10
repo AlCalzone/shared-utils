@@ -49,7 +49,7 @@
     "typedoc": "^0.17.8",
     "typedoc-plugin-external-module-name": "^4.0.3",
     "typescript": "^4.1.0-dev.20200816",
-    "yargs": "^15.4.1"
+    "yargs": "^16.0.3"
   },
   "dependencies": {
     "debug": "^4.1.1"
