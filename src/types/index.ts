@@ -179,16 +179,15 @@ export type Tail<T extends any[]> =
  */
 export type Lead<T extends unknown[]> = T extends []
 	? []
-	: T extends [...infer L, any]
-	? L
+	: T extends [...infer L, any] ? L
 	: [];
 /**
  * Returns the last item's type in a tuple
  */
 export type Last<T extends unknown[]> = T extends []
 	? never
-	: T extends [...infer _, infer R]
-	? R
+	: T extends [...infer _, infer R] ? R
+	: T extends [...infer _, (infer R)?] ? (R | undefined)
 	: never;
 
 /**
@@ -253,11 +252,12 @@ export type LastArgument<T extends (...args: any[]) => any> = Last<Parameters<T>
 export type CallbackAPIReturnType<
 	T extends (...args: any[]) => any,
 	TCb extends (...args: any[]) => any = LastArgument<T>,
-	TCbArgs = Parameters<TCb>,
+	TCbArgs = Parameters<Exclude<TCb, undefined>>,
 	> =
 	TCbArgs extends [(Error | null | undefined)?] ? void :
 	TCbArgs extends [Error | null | undefined, infer U] ? U :
-	never
+	TCbArgs extends any[] ? TCbArgs[1] :
+    never
 	;
 
 /**

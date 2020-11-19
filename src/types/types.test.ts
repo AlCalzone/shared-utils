@@ -752,6 +752,8 @@ describe("types => ", () => {
 			assertTrue<Equals<Last<[2, 3, number]>, number>>();
 			// arrays
 			assertTrue<Equals<Last<string[]>, string>>();
+			// Optional entries
+			assertTrue<Equals<Last<[1, 2?]>, 2 | undefined>>();
 		});
 
 		// This does not currently work
@@ -804,7 +806,6 @@ describe("types => ", () => {
 
 	describe("Promisify<T> => ", () => {
 		it("should correctly infer the return type", () => {
-
 			type F1 = (cb: (err: Error) => void) => void;
 			type P1 = Promisify<F1>;
 
@@ -820,7 +821,6 @@ describe("types => ", () => {
 		});
 
 		it("should correctly infer the argument types", () => {
-
 			type F1 = (cb: (err: Error) => void) => void;
 			type P1 = Promisify<F1>;
 
@@ -837,6 +837,44 @@ describe("types => ", () => {
 			assertTrue<Equals<Parameters<P2>, []>>();
 			assertTrue<Equals<Parameters<P3>, [string]>>();
 			assertTrue<Equals<Parameters<P4>, [string, () => void]>>();
+		});
+
+		it("test cases from https://github.com/microsoft/TypeScript/issues/41563", () => {
+
+			type F1 = (arg: string, cb: (err: unknown, result: number) => void) => void;
+			type P1 = Promisify<F1>;
+			type E1 = (arg: string) => Promise<number>;
+			assertTrue<Equals<P1, E1>>();
+
+			type F2 = (arg: string, cb: (err: any, result: number) => void) => void;
+			type P2 = Promisify<F2>;
+			type E2 = (arg: string) => Promise<number>;
+			assertTrue<Equals<P2, E2>>();
+
+			type F3 = (cb: (err: Error | null, result: number) => void) => void;
+			type P3 = Promisify<F3>;
+			type E3 = () => Promise<number>;
+			assertTrue<Equals<P3, E3>>();
+
+			type F4 = (cb: (err: Error | null) => void) => void;
+			type P4 = Promisify<F4>;
+			type E4 = () => Promise<void>;
+			assertTrue<Equals<P4, E4>>();
+
+			type F5 = (arg: string, cb: (err: Error | null, result: number) => void) => void;
+			type P5 = Promisify<F5>;
+			type E5 = (arg: string) => Promise<number>;
+			assertTrue<Equals<P5, E5>>();
+
+			type F6 = (arg: string, cb: (err: Error | null) => void) => void;
+			type P6 = Promisify<F6>;
+			type E6 = (arg: string) => Promise<void>;
+			assertTrue<Equals<P6, E6>>();
+
+			type F7 = (cb: (err?: Error | null) => void) => void;
+			type P7 = Promisify<F7>;
+			type E7 = () => Promise<void>;
+			assertTrue<Equals<P7, E7>>();
 		});
 	});
 
