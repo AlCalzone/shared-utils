@@ -181,6 +181,8 @@ export type Lead<T extends unknown[]> = T extends []
 	? []
 	: T extends [...infer L, any] ? L
 	: [];
+
+// tslint:disable:no-shadowed-variable
 /**
  * Returns the last item's type in a tuple
  */
@@ -189,6 +191,7 @@ export type Last<T extends unknown[]> = T extends []
 	: T extends [...infer _, infer R] ? R
 	: T extends [...infer _, (infer R)?] ? (R | undefined)
 	: never;
+// tslint:enable:no-shadowed-variable
 
 /**
  * Returns the given tuple/array with the item type prepended to it
@@ -257,7 +260,7 @@ export type CallbackAPIReturnType<
 	TCbArgs extends [(Error | null | undefined)?] ? void :
 	TCbArgs extends [Error | null | undefined, infer U] ? U :
 	TCbArgs extends any[] ? TCbArgs[1] :
-    never
+	never
 	;
 
 /**
