@@ -15,13 +15,17 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
+### 3.0.1 (2020-12-05)
+#### Fixes
+* The typeguard `isObject` no longer narrows the type of the argument to `object`
+
 ### 3.0.0 (2020-08-16)
 #### Breaking changes
 * Renamed the following types:
   * `DropLast` -> `Lead`
   * `TakeLast` -> `Last`
   * `TakeLastArgument` -> `LastArgument`
-* TypeScript 4.1 (`@next`) is now required
+* TypeScript 4.1 is now required
 
 #### Features
 * Added the following types:
