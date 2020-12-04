@@ -3,7 +3,6 @@ import { isArray, isObject } from ".";
 // tslint:disable:no-unused-expression
 
 describe("lib/typeguards =>", () => {
-
 	describe("isObject() => ", () => {
 		it("should return true for object literals", () => {
 			isObject({}).should.be.true;
@@ -20,16 +19,18 @@ describe("lib/typeguards =>", () => {
 		});
 
 		it("should return false for everything else", () => {
-			[
-				null, undefined,
-				1, 2, 3, "1", "2", "3",
-				true, false,
-			].forEach(val => isObject(val).should.be.false);
+			[null, undefined, 1, 2, 3, "1", "2", "3", true, false].forEach(
+				(val) => isObject(val).should.be.false,
+			);
+		});
+
+		it("should allow sub-indexing objects", () => {
+			const foo = { a: { b: "c" } } as unknown;
+			isObject(foo) && isObject(foo.a) && isObject(foo.a.b);
 		});
 	});
 
 	describe("isArray() => ", () => {
-
 		function doTest() {
 			it("should return true for array literals", () => {
 				isArray([]).should.be.true;
@@ -42,11 +43,20 @@ describe("lib/typeguards =>", () => {
 
 			it("should return false for everything else", () => {
 				[
-					{}, new Object(), new Buffer(0),
-					null, undefined,
-					1, 2, 3, "1", "2", "3",
-					true, false,
-				].forEach(val => isArray(val).should.be.false);
+					{},
+					new Object(),
+					new Buffer(0),
+					null,
+					undefined,
+					1,
+					2,
+					3,
+					"1",
+					"2",
+					"3",
+					true,
+					false,
+				].forEach((val) => isArray(val).should.be.false);
 			});
 		}
 
@@ -57,9 +67,15 @@ describe("lib/typeguards =>", () => {
 		describe(`without native support for "Array.isArray"`, () => {
 			const originalIsArray = Array.isArray;
 
-			before(() => (Array.isArray as any) = undefined);
+			before(() => ((Array.isArray as any) = undefined));
 			doTest();
-			after(() => Array.isArray = originalIsArray);
+			after(() => (Array.isArray = originalIsArray));
 		});
+
+		it("should allow working with the narrowed array", () => {
+			const foo = ["a", "b", "c"] as string | string[];
+			isArray(foo) && foo[0];
+		});
+
 	});
 });
