@@ -15,6 +15,10 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
+### 3.0.2 (2021-01-16)
+#### Fixes
+* The argument to `resolve` of `DeferredPromise` is no longer optional, except for `Promise<void>`
+
 ### 3.0.1 (2020-12-05)
 #### Fixes
 * The typeguard `isObject` no longer narrows the type of the argument to `object`
