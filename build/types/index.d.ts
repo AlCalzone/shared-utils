@@ -221,7 +221,7 @@ export declare type Lead<T extends unknown[]> = T extends [] ? [] : T extends [.
 /**
  * Returns the last item's type in a tuple
  */
-export declare type Last<T extends unknown[]> = T extends [] ? never : T extends [...infer _, infer R] ? R : never;
+export declare type Last<T extends unknown[]> = T extends [] ? never : T extends [...infer _, infer R] ? R : T extends [...infer _, (infer R)?] ? (R | undefined) : never;
 /**
  * Returns the given tuple/array with the item type prepended to it
  */
@@ -257,7 +257,7 @@ export declare type NoInfer<T> = T & {
 /** Returns the type of the last argument of a function */
 export declare type LastArgument<T extends (...args: any[]) => any> = Last<Parameters<T>>;
 /** Returns the "return" type of a callback-style API */
-export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb extends (...args: any[]) => any = LastArgument<T>, TCbArgs = Parameters<TCb>> = TCbArgs extends [(Error | null | undefined)?] ? void : TCbArgs extends [Error | null | undefined, infer U] ? U : never;
+export declare type CallbackAPIReturnType<T extends (...args: any[]) => any, TCb extends (...args: any[]) => any = LastArgument<T>, TCbArgs = Parameters<Exclude<TCb, undefined>>> = TCbArgs extends [(Error | null | undefined)?] ? void : TCbArgs extends [Error | null | undefined, infer U] ? U : TCbArgs extends any[] ? TCbArgs[1] : never;
 /**
  * Returns a promisified function signature for the given callback-style function.
  */
