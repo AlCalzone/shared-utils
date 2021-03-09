@@ -217,7 +217,7 @@ export declare type Tail<T extends any[]> = [
 /**
  * Returns all but the last item's type in a tuple/array
  */
-export declare type Lead<T extends unknown[]> = T extends [] ? [] : T extends [...infer L, infer _] ? L : T extends [...infer L] ? L : [];
+export declare type Lead<T extends unknown[]> = T extends [] ? [] : T extends [...infer L1, infer _] ? L1 : T extends [...infer L2] ? L2 : [];
 /**
  * Returns the last item's type in a tuple
  */

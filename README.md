@@ -15,6 +15,10 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+#### Fixes
+* Fixed compatibility with TypeScript 4.2
+
 ### 3.0.2 (2021-01-16)
 #### Fixes
 * The argument to `resolve` of `DeferredPromise` is no longer optional, except for `Promise<void>`
