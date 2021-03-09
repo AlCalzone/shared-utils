@@ -751,7 +751,7 @@ describe("types => ", () => {
 			assertTrue<Equals<Last<[1, 2]>, 2>>();
 			assertTrue<Equals<Last<[2, 3, number]>, number>>();
 			// arrays
-			assertTrue<Equals<Last<string[]>, string>>();
+			assertTrue<Equals<Last<string[]>, string | undefined>>();
 			// Optional entries
 			assertTrue<Equals<Last<[1, 2?]>, 2 | undefined>>();
 		});

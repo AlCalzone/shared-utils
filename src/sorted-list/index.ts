@@ -43,7 +43,7 @@ function wrappedDefaultComparer<T>(a: T, b: T) {
 	}
 }
 
-function isIndex(prop: number | string | symbol): boolean {
+function isIndex(prop: number | string | symbol): prop is string {
 	// An indexer can only be a non-negative integer
 	if (typeof prop === "string") prop = Number.parseInt(prop, 10);
 	if (typeof prop !== "number" || !Number.isInteger(prop)) return false;
@@ -90,7 +90,7 @@ export class SortedList<T> {
 		return new Proxy(this, {
 			get(target, property, receiver) {
 				if (isIndex(property)) {
-					return target.get(property as number);
+					return target.get(parseInt(property, 10));
 				} else {
 					return (target as any)[property];
 				}

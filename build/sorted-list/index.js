@@ -62,7 +62,7 @@ class SortedList {
         return new Proxy(this, {
             get(target, property, receiver) {
                 if (isIndex(property)) {
-                    return target.get(property);
+                    return target.get(parseInt(property, 10));
                 }
                 else {
                     return target[property];
