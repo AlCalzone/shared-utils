@@ -179,7 +179,10 @@ export type Tail<T extends any[]> =
  */
 export type Lead<T extends unknown[]> = T extends []
 	? []
-	: T extends [...infer L, any] ? L
+	// tuple with at least one trailing item
+	: T extends [...infer L, infer _] ? L
+	// tuple with trailing rest element / array
+	: T extends [...infer L] ? L
 	: [];
 
 // tslint:disable:no-shadowed-variable
