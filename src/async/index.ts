@@ -41,7 +41,8 @@ export function promisifyNoError(fn: Function, context?: any) {
 export function wait(ms: number, unref: boolean = false): Promise<void> {
 	return new Promise<void>((resolve) => {
 		const timeout = setTimeout(resolve, ms);
-		if (unref) timeout.unref();
+		// In a browser context (Electron), unref is not necessary or possible
+		if (unref && typeof timeout !== "number") timeout.unref();
 	});
 }
 

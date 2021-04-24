@@ -50,7 +50,8 @@ exports.promisifyNoError = promisifyNoError;
 function wait(ms, unref = false) {
     return new Promise((resolve) => {
         const timeout = setTimeout(resolve, ms);
-        if (unref)
+        // In a browser context (Electron), unref is not necessary or possible
+        if (unref && typeof timeout !== "number")
             timeout.unref();
     });
 }
