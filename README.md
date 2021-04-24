@@ -15,6 +15,10 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* Fix compatibility of `wait()` with Electron if `unref` is `true`
+* Dependency updates
+
 ### 3.0.3 (2021-03-09)
 #### Fixes
 * Fixed compatibility with TypeScript 4.2
