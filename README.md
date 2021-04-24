@@ -15,7 +15,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 3.0.4 (2021-04-24)
 * Fix compatibility of `wait()` with Electron if `unref` is `true`
 * Dependency updates
 
