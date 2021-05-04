@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for alcalzone-shared">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -51,13 +52,13 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../index.html">Globals</a>
+					<a href="../index.html">alcalzone-shared</a>
 				</li>
 				<li>
 					<a href="typeguards.html">typeguards</a>
 				</li>
 			</ul>
-			<h1>Module typeguards</h1>
+			<h1>Namespace typeguards</h1>
 		</div>
 	</div>
 </header>
@@ -71,8 +72,8 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="typeguards.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="typeguards.html#isobject" class="tsd-kind-icon">is<wbr>Object</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter"><a href="typeguards.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter"><a href="typeguards.html#isobject" class="tsd-kind-icon">is<wbr>Object</a></li>
 							</ul>
 						</section>
 					</div>
@@ -80,17 +81,17 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
 					<a name="isarray" class="tsd-anchor"></a>
 					<h3>is<wbr>Array</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">(</span>it<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">(</span>it<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/3a2a364/src/typeguards/index.ts#L17">src/typeguards/index.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/2558655/src/typeguards/index.ts#L17">src/typeguards/index.ts:17</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -98,30 +99,36 @@
 									<p>Tests whether the given variable is really an Array</p>
 								</div>
 							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>it: <span class="tsd-signature-type">any</span></h5>
+									<h5>it: <span class="tsd-signature-type">T</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The variable to test</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
 					<a name="isobject" class="tsd-anchor"></a>
 					<h3>is<wbr>Object</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Object<span class="tsd-signature-symbol">(</span>it<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">object</span></li>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Object&lt;T&gt;<span class="tsd-signature-symbol">(</span>it<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/3a2a364/src/typeguards/index.ts#L5">src/typeguards/index.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/AlCalzone/shared-utils/blob/2558655/src/typeguards/index.ts#L5">src/typeguards/index.ts:5</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -129,16 +136,22 @@
 									<p>Tests whether the given variable is a real object and not an Array</p>
 								</div>
 							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>it: <span class="tsd-signature-type">any</span></h5>
+									<h5>it: <span class="tsd-signature-type">T</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The variable to test</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">object</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">it</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -147,50 +160,47 @@
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../index.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../index.html">Exports</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class=" tsd-kind-namespace">
 						<a href="arrays.html">arrays</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class=" tsd-kind-namespace">
 						<a href="async.html">async</a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="collections.html">collections</a>
-					</li>
-					<li class=" tsd-kind-module">
+					<li class=" tsd-kind-namespace">
 						<a href="comparable.html">comparable</a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="deferred_promise.html">deferred-<wbr>promise</a>
+					<li class=" tsd-kind-namespace">
+						<a href="deferredpromise.html">deferred<wbr>Promise</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class=" tsd-kind-namespace">
 						<a href="helpers.html">helpers</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class=" tsd-kind-namespace">
 						<a href="math.html">math</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class=" tsd-kind-namespace">
 						<a href="objects.html">objects</a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="sorted_list.html">sorted-<wbr>list</a>
-					</li>
-					<li class=" tsd-kind-module">
+					<li class=" tsd-kind-namespace">
 						<a href="strings.html">strings</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class="current tsd-kind-namespace">
 						<a href="typeguards.html">typeguards</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="types.html">types</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module">
+					<li class=" tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="typeguards.html#isarray" class="tsd-kind-icon">is<wbr>Array</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
+					<li class=" tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="typeguards.html#isobject" class="tsd-kind-icon">is<wbr>Object</a>
 					</li>
 				</ul>
@@ -202,18 +212,6 @@
 	<div class="container">
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-			</ul>
 		</div>
 	</div>
 </footer>
@@ -222,6 +220,5 @@
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
