@@ -14,7 +14,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 4.0.0 (2021-06-19)
 * Node.js 12+ is now required
 
 ### 3.0.4 (2021-04-24)
