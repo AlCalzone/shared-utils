@@ -4,11 +4,6 @@
 #
 
 # Define the used images
-node10: &node10
-  working_directory: &workdir_node10 ~/shared-utils/node10
-  docker:
-    - image: circleci/node:10
-
 node12: &node12
   working_directory: &workdir_node12 ~/shared-utils/node12
   docker:
@@ -18,6 +13,11 @@ node14: &node14
   working_directory: &workdir_node14 ~/shared-utils/node14
   docker:
     - image: circleci/node:14
+
+node16: &node16
+  working_directory: &workdir_node16 ~/shared-utils/node16
+  docker:
+    - image: circleci/node:16
 
 # use "latest" for lint and publish
 latest: &latest
@@ -54,34 +54,6 @@ whitelist: &whitelist
 
 version: 2
 jobs:
-# ----------------------------------------------------
-  test_node10:
-    <<: *node10
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-node10-{{ checksum "package.json" }}
-
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
-          name: Remove unnecessary Dependencies
-          command: npm ls || true ; npm prune
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-node10-{{ checksum "package.json" }}
-
-      - run:
-          name: Run component tests
-          command: npm run test
-
 # ----------------------------------------------------
   test_node12:
     <<: *node12
@@ -133,6 +105,34 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-node14-{{ checksum "package.json" }}
+
+      - run:
+          name: Run component tests
+          command: npm run test
+
+# ----------------------------------------------------
+  test_node16:
+    <<: *node16
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-node16-{{ checksum "package.json" }}
+
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Remove unnecessary Dependencies
+          command: npm ls || true ; npm prune
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-node16-{{ checksum "package.json" }}
 
       - run:
           name: Run component tests
@@ -246,11 +246,11 @@ workflows:
 
   test-and-deploy:
     jobs:
-      - test_node10:
-          <<: *tags_and_branches
       - test_node12:
           <<: *tags_and_branches
       - test_node14:
+          <<: *tags_and_branches
+      - test_node16:
           <<: *tags_and_branches
       - test_latest:
           <<: *tags_and_branches
@@ -263,9 +263,9 @@ workflows:
       # build only on tagged builds and if all tests succeeded
       - build:
           requires: 
-            - test_node10
             - test_node12
             - test_node14
+            - test_node16
             - test_latest
           <<: *only_tags
 
