@@ -14,6 +14,8 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* Node.js 12+ is now required
 
 ### 3.0.4 (2021-04-24)
 * Fix compatibility of `wait()` with Electron if `unref` is `true`
