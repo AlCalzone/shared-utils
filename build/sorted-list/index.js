@@ -28,7 +28,7 @@ function findNode(firstNode, predicate) {
 }
 function wrappedDefaultComparer(a, b) {
     try {
-        return comparable_1.defaultComparer(a, b);
+        return (0, comparable_1.defaultComparer)(a, b);
     }
     catch (e) {
         if (e instanceof Error && /cannot compare/.test(e.message)) {
@@ -97,6 +97,7 @@ class SortedList {
             if (prevNode == null) {
                 // the new node is the first one
                 newNode.next = this.first;
+                newNode.next.prev = newNode;
                 this.first = newNode;
             }
             else {

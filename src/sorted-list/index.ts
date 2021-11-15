@@ -122,6 +122,7 @@ export class SortedList<T> {
 			if (prevNode == null) {
 				// the new node is the first one
 				newNode.next = this.first;
+				newNode.next!.prev = newNode;
 				this.first = newNode;
 			} else {
 				if (prevNode.next != null) {
