@@ -14,6 +14,9 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 4.0.1 (2021-11-15)
+`SortedQueue`: Fixed an issue where inserting an item before the first one would cause the queue to lose track of items
+
 ### 4.0.0 (2021-06-19)
 * Node.js 12+ is now required
 
