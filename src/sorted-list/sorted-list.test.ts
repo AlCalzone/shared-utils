@@ -7,7 +7,6 @@ should();
 import { SortedList } from ".";
 
 describe("sorted-list => ", () => {
-
 	it("should contain all items passed to it in the constructor and no others", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
@@ -183,23 +182,24 @@ describe("sorted-list => ", () => {
 	});
 
 	it("should compare custom items using their compareTo method if it exists", () => {
-		const largeObj = {compareTo: stub().returns(1)};
-		const smallObj = {compareTo: stub().returns(-1)};
+		const largeObj = { compareTo: stub().returns(1) };
+		const smallObj = { compareTo: stub().returns(-1) };
 		const list = new SortedList([largeObj, smallObj]);
-		expect(largeObj.compareTo.called || smallObj.compareTo.called).to.be.true;
+		expect(largeObj.compareTo.called || smallObj.compareTo.called).to.be
+			.true;
 		expect(list.toArray()).to.deep.equal([smallObj, largeObj]);
 	});
 
 	it("when the compareTo method throws an error it should be passed through", () => {
 		const faultyComparer = stub().throws(new Error("bogus error"));
-		const obj1 = {compareTo: faultyComparer};
-		const obj2 = {compareTo: faultyComparer};
+		const obj1 = { compareTo: faultyComparer };
+		const obj2 = { compareTo: faultyComparer };
 		const list = new SortedList();
 		expect(() => list.add(obj1, obj2)).to.throw("bogus");
 	});
 
 	it("should complain if only one item has a compareTo method", () => {
-		const largeObj = {compareTo: stub().returns(1)};
+		const largeObj = { compareTo: stub().returns(1) };
 		const smallObj = {};
 		expect(() => new SortedList([largeObj, smallObj])).to.throw("comparer");
 	});
@@ -207,13 +207,13 @@ describe("sorted-list => ", () => {
 	it("find() should return the first item matching the given predicate", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
-		list.find(item => item > 3)!.should.equal(4);
+		list.find((item) => item > 3)!.should.equal(4);
 	});
 
 	it("find() should return undefined if no item matches the predicate", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
-		expect(list.find(item => item < 0)).to.equal(undefined);
+		expect(list.find((item) => item < 0)).to.equal(undefined);
 	});
 
 	it("get() should return the sorted element at the given index", () => {
@@ -229,7 +229,13 @@ describe("sorted-list => ", () => {
 	it("calling get() with an invalid index should throw", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
-		const invalidIndizes = [-1, 0.5, Math.PI, Number.POSITIVE_INFINITY, Number.NaN];
+		const invalidIndizes = [
+			-1,
+			0.5,
+			Math.PI,
+			Number.POSITIVE_INFINITY,
+			Number.NaN,
+		];
 		for (const index of invalidIndizes) {
 			expect(() => list.get(index)).to.throw("valid");
 		}
@@ -245,4 +251,11 @@ describe("sorted-list => ", () => {
 		expect(list[list.length]).to.be.undefined;
 	});
 
+	it.only("adding and removing should not break the doubly linked list", () => {
+		const list = new SortedList<number>();
+		list.add(2);
+		list.add(1);
+		list.remove(2);
+		expect(list[0]).to.equal(1);
+	});
 });
