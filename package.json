@@ -52,7 +52,7 @@
     "yargs": "^17.3.0"
   },
   "dependencies": {
-    "debug": "^4.3.2"
+    "debug": "^4.3.3"
   },
   "scripts": {
     "build": "tsc -p src/tsconfig.build.json",
