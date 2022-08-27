@@ -10,14 +10,14 @@ export function isObject<T>(it: T): it is T & Record<string, unknown> {
 	return Object.prototype.toString.call(it) === "[object Object]";
 }
 
-type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N; 
+type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
 type IsAny<T> = IfAny<T, true, never>;
 
-type ExtractArray<T> = 
-     true extends IsAny<T> ? unknown[]
-     : T extends unknown[] ? T
-     : unknown extends T ? (T & unknown[])
-     : never;
+type ExtractArray<T> =
+		true extends IsAny<T> ? unknown[]
+		: T extends unknown[] ? T
+		: unknown extends T ? (T & unknown[])
+		: never;
 
 /**
  * Tests whether the given variable is really an Array

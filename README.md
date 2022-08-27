@@ -14,7 +14,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 4.0.3 (2022-08-27)
 * Update `isArray` to be compatible with TS 4.8 changes
 
 ### 4.0.1 (2021-11-15)
