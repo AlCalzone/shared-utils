@@ -2,7 +2,23 @@
  * Tests whether the given variable is a real object and not an Array
  * @param it The variable to test
  */
-export function isObject<T>(it: T): it is T & Record<string, unknown> {
+
+// We need an extensive conditional type here because TS stopped simplifying/narrowing
+// correctly in 4.8 (https://github.com/microsoft/TypeScript/issues/50671)
+export function isObject<T>(it: T): it is {} extends T
+	? // Narrow the `{}` type to an unspecified object
+	  T & Record<string | number | symbol, unknown>
+	: unknown extends T
+	? // treat unknown like `{}`
+	  T & Record<string | number | symbol, unknown>
+	: T extends object // function, array, {} or actual object
+	? T extends readonly unknown[]
+		? never // not an array
+		: T extends (...args: any[]) => any
+		? never // not a function
+		: T // no, an actual object
+	: never {
+
 	// This is necessary because:
 	// typeof null === 'object'
 	// typeof [] === 'object'
@@ -10,16 +26,20 @@ export function isObject<T>(it: T): it is T & Record<string, unknown> {
 	return Object.prototype.toString.call(it) === "[object Object]";
 }
 
-type ExtractArray<T> =
-	T extends readonly unknown[] ? T
-	: {} extends T ? (T & unknown[])
-	: never;
-
 /**
  * Tests whether the given variable is really an Array
  * @param it The variable to test
  */
-export function isArray<T>(it: T): it is T & ExtractArray<T> {
+
+// We need an extensive conditional type here because TS stopped simplifying/narrowing
+// correctly in 4.8 (https://github.com/microsoft/TypeScript/issues/50671)
+export function isArray<T>(
+	it: T,
+): it is T extends readonly unknown[]
+	? T
+	: {} extends T
+	? T & unknown[]
+	: never {
 	if (Array.isArray != null) return Array.isArray(it);
 	return Object.prototype.toString.call(it) === "[object Array]";
 }
