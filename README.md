@@ -14,7 +14,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 4.0.8 (2022-09-07)
 * Fix: Update return types of `isArray` and `isObject` to use an extensive conditional type to replace what used to work in TS 4.7
 
 ### 4.0.7 (2022-09-07)
