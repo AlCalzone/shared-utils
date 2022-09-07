@@ -14,6 +14,9 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* Fix: Update return types of `isArray` and `isObject` to use an extensive conditional type to replace what used to work in TS 4.7
+
 ### 4.0.7 (2022-09-07)
 Undo changes to `isObject` from `4.0.6`. TS narrowing in 4.8.2 is broken.
 
