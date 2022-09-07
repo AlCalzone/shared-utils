@@ -1,8 +1,14 @@
+type ExtractObject<T> =
+	T extends readonly unknown[] ? never
+	: {} extends T ? Record<string | number | symbol, unknown>
+	: T extends Record<string | number | symbol, unknown> ? T
+	: never;
+
 /**
  * Tests whether the given variable is a real object and not an Array
  * @param it The variable to test
  */
-export function isObject<T>(it: T): it is T & Record<string, unknown> {
+export function isObject<T>(it: T): it is T & ExtractObject<T> {
 	// This is necessary because:
 	// typeof null === 'object'
 	// typeof [] === 'object'
@@ -10,12 +16,8 @@ export function isObject<T>(it: T): it is T & Record<string, unknown> {
 	return Object.prototype.toString.call(it) === "[object Object]";
 }
 
-type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
-type IsAny<T> = IfAny<T, true, never>;
-
 type ExtractArray<T> =
-	true extends IsAny<T> ? unknown[]
-	: T extends readonly unknown[] ? T
+	T extends readonly unknown[] ? T
 	: {} extends T ? (T & unknown[])
 	: never;
 
