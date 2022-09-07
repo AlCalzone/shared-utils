@@ -14,10 +14,10 @@ type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
 type IsAny<T> = IfAny<T, true, never>;
 
 type ExtractArray<T> =
-		true extends IsAny<T> ? unknown[]
-		: T extends readonly unknown[] ? T
-		: unknown extends T ? (T & unknown[])
-		: never;
+	true extends IsAny<T> ? unknown[]
+	: T extends readonly unknown[] ? T
+	: {} extends T ? (T & unknown[])
+	: never;
 
 /**
  * Tests whether the given variable is really an Array
