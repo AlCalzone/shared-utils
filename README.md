@@ -14,7 +14,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 4.0.4 (2022-09-07)
 * Fix: narrowed type for `isArray` is inferred correctly for `readonly` arrays
 
 ### 4.0.3 (2022-08-27)
