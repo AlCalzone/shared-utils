@@ -14,7 +14,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 4.0.5 (2022-09-07)
 * Fix: correctly narrow return type of isArray for `{}` arguments
 
 ### 4.0.4 (2022-09-07)
