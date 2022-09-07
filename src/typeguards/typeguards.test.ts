@@ -93,6 +93,7 @@ describe("lib/typeguards =>", () => {
 			const _number = _unknown as number;
 			const _numberArray = _unknown as number[];
 			const _readonlyNumberArray = _unknown as readonly number[];
+			const _nonNullish = _unknown as {};
 
 			if (isArray(_any)) {
 				assertTrue<Equals<typeof _any, any>>();
@@ -129,6 +130,12 @@ describe("lib/typeguards =>", () => {
 					Equals<typeof _readonlyNumberArray, readonly number[]>
 				>();
 				_readonlyNumberArray;
+				// ^?
+			}
+
+			if (isArray(_nonNullish)) {
+				assertTrue<Equals<typeof _nonNullish, unknown[]>>();
+				_nonNullish;
 				// ^?
 			}
 		});
