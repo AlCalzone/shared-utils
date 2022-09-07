@@ -1,14 +1,8 @@
-type ExtractObject<T> =
-	T extends readonly unknown[] ? never
-	: {} extends T ? Record<string | number | symbol, unknown>
-	: T extends Record<string | number | symbol, unknown> ? T
-	: never;
-
 /**
  * Tests whether the given variable is a real object and not an Array
  * @param it The variable to test
  */
-export function isObject<T>(it: T): it is T & ExtractObject<T> {
+export function isObject<T>(it: T): it is T & Record<string, unknown> {
 	// This is necessary because:
 	// typeof null === 'object'
 	// typeof [] === 'object'

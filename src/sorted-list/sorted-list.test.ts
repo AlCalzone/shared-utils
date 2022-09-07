@@ -251,7 +251,7 @@ describe("sorted-list => ", () => {
 		expect(list[list.length]).to.be.undefined;
 	});
 
-	it.only("adding and removing should not break the doubly linked list", () => {
+	it("adding and removing should not break the doubly linked list", () => {
 		const list = new SortedList<number>();
 		list.add(2);
 		list.add(1);
