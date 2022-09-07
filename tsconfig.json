@@ -19,6 +19,7 @@
         "noImplicitAny": false,
         "target": "es2015",
         "lib": ["ES2015"],
+        "newLine": "lf",
         "watch": false // true breaks circleci
     },
     "include": [

@@ -15,7 +15,7 @@ type IsAny<T> = IfAny<T, true, never>;
 
 type ExtractArray<T> =
 		true extends IsAny<T> ? unknown[]
-		: T extends unknown[] ? T
+		: T extends readonly unknown[] ? T
 		: unknown extends T ? (T & unknown[])
 		: never;
 

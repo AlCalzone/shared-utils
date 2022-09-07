@@ -1,6 +1,15 @@
 import { assert, expect } from "chai";
 import { isArray, isObject } from ".";
+import type { Equals } from "../types";
 // tslint:disable:no-unused-expression
+
+// Used to tests types
+function assertTrue<T extends true>() {
+	return undefined!;
+}
+function assertFalse<T extends false>() {
+	return undefined!;
+}
 
 describe("lib/typeguards =>", () => {
 	describe("isObject() => ", () => {
@@ -77,5 +86,51 @@ describe("lib/typeguards =>", () => {
 			isArray(foo) && foo[0];
 		});
 
+		it("inferred types are correct", () => {
+			const _any = undefined as any;
+			const _unknown = undefined as unknown;
+			const _unknownArray = _unknown as unknown[];
+			const _number = _unknown as number;
+			const _numberArray = _unknown as number[];
+			const _readonlyNumberArray = _unknown as readonly number[];
+
+			if (isArray(_any)) {
+				assertTrue<Equals<typeof _any, any>>();
+				_any;
+				// ^?
+			}
+
+			if (isArray(_unknown)) {
+				assertTrue<Equals<typeof _unknown, unknown[]>>();
+				_unknown;
+				// ^?
+			}
+
+			if (isArray(_unknownArray)) {
+				assertTrue<Equals<typeof _unknownArray, unknown[]>>();
+				_unknownArray;
+				// ^?
+			}
+
+			if (isArray(_number)) {
+				assertTrue<Equals<typeof _number, never>>();
+				_number;
+				// ^?
+			}
+
+			if (isArray(_numberArray)) {
+				assertTrue<Equals<typeof _numberArray, number[]>>();
+				_numberArray;
+				// ^?
+			}
+
+			if (isArray(_readonlyNumberArray)) {
+				assertTrue<
+					Equals<typeof _readonlyNumberArray, readonly number[]>
+				>();
+				_readonlyNumberArray;
+				// ^?
+			}
+		});
 	});
 });
