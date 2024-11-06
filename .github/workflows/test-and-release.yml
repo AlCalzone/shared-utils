@@ -37,7 +37,7 @@ jobs:
         cache: 'yarn'
 
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      run: yarn install --immutable
 
     - name: Compile
       run: yarn build
@@ -91,7 +91,7 @@ jobs:
         echo "$EOF" >> $GITHUB_OUTPUT
 
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      run: yarn install --immutable
 
     - name: Create a clean build
       run: yarn build
