@@ -1,19 +1,4 @@
-// tslint:disable:no-console
-// tslint:disable:no-unused-expression
-// tslint:disable:variable-name
-
-// TSLint seems to have problems with whitespace in rest tuples
-// tslint:disable:whitespace
-
-// tslint:disable:interface-over-type-literal
-
-import { should, use } from "chai";
-import * as sinonChai from "sinon-chai";
-
-// enable the should interface with sinon
-should();
-// improve stubs for testing
-use(sinonChai);
+import { describe, it } from "vitest";
 
 import {
 	And,
@@ -52,19 +37,21 @@ import {
 	Tail,
 	TupleOf,
 	UnionOf,
-	Unshift
+	Unshift,
 } from ".";
 
 // Used to tests types
-function assertTrue<T extends true>() { return undefined!; }
-function assertFalse<T extends false>() { return undefined!; }
+function assertTrue<T extends true>() {
+	return undefined!;
+}
+function assertFalse<T extends false>() {
+	return undefined!;
+}
 
 // These tests all succeed during runtime
 // a failed test can only occur due to compile errors
 describe("types => ", () => {
-
 	describe("AssignableTo<T1, T2> => ", () => {
-
 		it("should return true if T1 equals T2", () => {
 			// number and numeric literals
 			assertTrue<AssignableTo<1, 1>>();
@@ -109,7 +96,7 @@ describe("types => ", () => {
 			assertTrue<AssignableTo<false, boolean>>();
 			// object and object literals
 			assertTrue<AssignableTo<{ a: number }, {}>>();
-			assertTrue<AssignableTo<{ a: number, b: any }, { a: number }>>();
+			assertTrue<AssignableTo<{ a: number; b: any }, { a: number }>>();
 			assertTrue<AssignableTo<{ a: number }, object>>();
 			// unions
 			assertTrue<AssignableTo<1, 1 | "2" | boolean>>();
@@ -157,7 +144,9 @@ describe("types => ", () => {
 			assertFalse<AssignableTo<[1, "2", string], [1, "2", boolean]>>();
 			assertFalse<AssignableTo<[], [1]>>();
 			assertFalse<AssignableTo<[1, "2", string], [1, 2]>>();
-			assertFalse<AssignableTo<[number, string, boolean], [1, "2", boolean]>>();
+			assertFalse<
+				AssignableTo<[number, string, boolean], [1, "2", boolean]>
+			>();
 			// nothing is assignable to never
 			assertFalse<AssignableTo<undefined, never>>();
 			assertFalse<AssignableTo<null, never>>();
@@ -328,7 +317,6 @@ describe("types => ", () => {
 			// Generics
 			assertTrue<Every<Promise<void>[], Promise<void>>>();
 			assertTrue<Every<Equals<1, 1>[], Equals<2, 2>>>();
-
 		});
 
 		it("should return false if an element in the type array is not assignable to the given type", () => {
@@ -374,13 +362,11 @@ describe("types => ", () => {
 			// Generics
 			assertFalse<Every<Promise<void>[], Promise<1>>>();
 			assertFalse<Every<Equals<1, 1>[], Equals<1, 2>>>();
-
 		});
 	});
 
 	describe("EveryStrict<TArr[], T> => ", () => {
 		it("should return true if all elements in the type array are strictly equal to the given type", () => {
-
 			// number and numeric literals
 			assertTrue<EveryStrict<1[], 1>>();
 			assertTrue<EveryStrict<number[], number>>();
@@ -427,9 +413,13 @@ describe("types => ", () => {
 			assertFalse<EveryStrict<{ a: number }[], object>>();
 			assertFalse<EveryStrict<{ a: number }[], {}>>();
 			// unions
-			assertFalse<EveryStrict<(1 | "2" | boolean)[], number | string | boolean>>();
+			assertFalse<
+				EveryStrict<(1 | "2" | boolean)[], number | string | boolean>
+			>();
 			// tuples
-			assertFalse<EveryStrict<[1, "2", string][], [number, string, string]>>();
+			assertFalse<
+				EveryStrict<[1, "2", string][], [number, string, string]>
+			>();
 			assertFalse<EveryStrict<[1, "2", string], 1 | "2" | string>>();
 			// undefined, null, never
 			// assertFalse<EveryStrict<null[], void>>();
@@ -457,7 +447,12 @@ describe("types => ", () => {
 			assertTrue<Equals<IndizesOf<[number]>, "0">>();
 			assertTrue<Equals<IndizesOf<[number, number]>, "0" | "1">>();
 			// open-ended tuples
-			assertTrue<Equals<IndizesOf<[number, number, ...string[]]>, "0" | "1" | number>>();
+			assertTrue<
+				Equals<
+					IndizesOf<[number, number, ...string[]]>,
+					"0" | "1" | number
+				>
+			>();
 		});
 
 		it("should return `number` for arrays", () => {
@@ -476,7 +471,12 @@ describe("types => ", () => {
 			assertTrue<Equals<FixedIndizesOf<[number]>, "0">>();
 			assertTrue<Equals<FixedIndizesOf<[number, number]>, "0" | "1">>();
 			// open-ended tuples
-			assertTrue<Equals<FixedIndizesOf<[number, boolean?, ...string[]]>, "0" | "1">>();
+			assertTrue<
+				Equals<
+					FixedIndizesOf<[number, boolean?, ...string[]]>,
+					"0" | "1"
+				>
+			>();
 		});
 	});
 
@@ -492,11 +492,17 @@ describe("types => ", () => {
 			// mixed tuples
 			assertTrue<Equals<UnionOf<[number, string]>, number | string>>();
 			// open-ended tuples
-			assertTrue<Equals<UnionOf<[number, number, ...string[]]>, number | string>>();
+			assertTrue<
+				Equals<UnionOf<[number, number, ...string[]]>, number | string>
+			>();
 			// arrays
-			assertTrue<Equals<UnionOf<(number | string | true)[]>, number | string | true>>();
+			assertTrue<
+				Equals<
+					UnionOf<(number | string | true)[]>,
+					number | string | true
+				>
+			>();
 		});
-
 	});
 
 	describe("LengthOf<T[]> => ", () => {
@@ -513,7 +519,9 @@ describe("types => ", () => {
 			// array
 			assertTrue<Equals<LengthOf<number[]>, number>>();
 			// open-ended tuples
-			assertTrue<Equals<LengthOf<[number, number, ...string[]]>, number>>();
+			assertTrue<
+				Equals<LengthOf<[number, number, ...string[]]>, number>
+			>();
 		});
 	});
 
@@ -572,15 +580,34 @@ describe("types => ", () => {
 
 		it("should keep existing properties if they are not to be excluded", () => {
 			assertTrue<Equals<Omit<{ a: number }, never>, { a: number }>>();
-			assertTrue<Equals<Omit<{ a: number, b: string[] }, "something">, { a: number, b: string[] }>>();
-			assertTrue<Equals<Omit<{ a: number, b: string[] }, "some" | "props">, { a: number, b: string[] }>>();
+			assertTrue<
+				Equals<
+					Omit<{ a: number; b: string[] }, "something">,
+					{ a: number; b: string[] }
+				>
+			>();
+			assertTrue<
+				Equals<
+					Omit<{ a: number; b: string[] }, "some" | "props">,
+					{ a: number; b: string[] }
+				>
+			>();
 		});
 
 		it("should keep remove the properties in the keys union from the type", () => {
 			assertTrue<Equals<Omit<{ a: number }, "a">, {}>>();
-			assertTrue<Equals<Omit<{ a: number, b: string[] }, "a">, { b: string[] }>>();
-			assertTrue<Equals<Omit<{ a: number, b: string[] }, "a" | "b">, {}>>();
-			assertTrue<Equals<Omit<{ a: number, b: string[], c: any }, "a" | "b">, { c: any }>>();
+			assertTrue<
+				Equals<Omit<{ a: number; b: string[] }, "a">, { b: string[] }>
+			>();
+			assertTrue<
+				Equals<Omit<{ a: number; b: string[] }, "a" | "b">, {}>
+			>();
+			assertTrue<
+				Equals<
+					Omit<{ a: number; b: string[]; c: any }, "a" | "b">,
+					{ c: any }
+				>
+			>();
 		});
 	});
 
@@ -593,16 +620,32 @@ describe("types => ", () => {
 
 		it("should return an empty objects if no properties from K exist on T", () => {
 			assertTrue<Equals<Optional<{ a: number }, never>, {}>>();
-			assertTrue<Equals<Optional<{ a: number, b: string[] }, "something">, {}>>();
-			assertTrue<Equals<Optional<{ a: number, b: string[] }, "some" | "props">, {}>>();
+			assertTrue<
+				Equals<Optional<{ a: number; b: string[] }, "something">, {}>
+			>();
+			assertTrue<
+				Equals<
+					Optional<{ a: number; b: string[] }, "some" | "props">,
+					{}
+				>
+			>();
 		});
 
 		it("should take all properties in K from T and make them optional", () => {
 			assertTrue<Equals<Optional<{ a: number }, "a">, { a?: number }>>();
-			assertTrue<Equals<Optional<{ a: number, b: string[] }, "a">, { a?: number }>>();
-			assertTrue<Equals<Optional<{ a: number, b: string[] }, "a" | "b">, { a?: number, b?: string[] }>>();
+			assertTrue<
+				Equals<
+					Optional<{ a: number; b: string[] }, "a">,
+					{ a?: number }
+				>
+			>();
+			assertTrue<
+				Equals<
+					Optional<{ a: number; b: string[] }, "a" | "b">,
+					{ a?: number; b?: string[] }
+				>
+			>();
 		});
-
 	});
 
 	describe("SemiPartial<T, K> => ", () => {
@@ -611,11 +654,22 @@ describe("types => ", () => {
 		});
 
 		it("should take all properties in K from T and make them optional WHILE keeping the rest", () => {
-			assertTrue<Equals<SemiPartial<{ a: number }, "a">, { a?: number }>>();
-			assertTrue<Equals<SemiPartial<{ a: number, b: string[] }, "a">, { a?: number, b: string[] }>>();
-			assertTrue<Equals<SemiPartial<{ a: number, b: string[] }, "a" | "b">, { a?: number, b?: string[] }>>();
+			assertTrue<
+				Equals<SemiPartial<{ a: number }, "a">, { a?: number }>
+			>();
+			assertTrue<
+				Equals<
+					SemiPartial<{ a: number; b: string[] }, "a">,
+					{ a?: number; b: string[] }
+				>
+			>();
+			assertTrue<
+				Equals<
+					SemiPartial<{ a: number; b: string[] }, "a" | "b">,
+					{ a?: number; b?: string[] }
+				>
+			>();
 		});
-
 	});
 
 	describe("KeyValuePairsOf<T> => ", () => {
@@ -624,8 +678,15 @@ describe("types => ", () => {
 		});
 
 		it("should create a union with all {key, value} pairs", () => {
-			assertTrue<Equals<KeyValuePairsOf<{ a: 1 }>, { key: "a", value: 1 }>>();
-			assertTrue<Equals<KeyValuePairsOf<{ a: 1, b: 2 }>, { key: "a", value: 1 } | { key: "b", value: 2 }>>();
+			assertTrue<
+				Equals<KeyValuePairsOf<{ a: 1 }>, { key: "a"; value: 1 }>
+			>();
+			assertTrue<
+				Equals<
+					KeyValuePairsOf<{ a: 1; b: 2 }>,
+					{ key: "a"; value: 1 } | { key: "b"; value: 2 }
+				>
+			>();
 		});
 	});
 
@@ -635,9 +696,23 @@ describe("types => ", () => {
 		});
 
 		it("should return a simplified representation of object types", () => {
-			assertTrue<Equals<Simplify<{ b: string } & { a?: boolean }>, { b: string, a?: boolean }>>();
-			assertTrue<Equals<Simplify<Pick<{ a: number, b: string }, "b"> & { a?: boolean }>, { b: string, a?: boolean }>>();
-			assertTrue<Equals<Simplify<{ a: "a" } | { a: "b" }>, { a: "a" | "b" }>>();
+			assertTrue<
+				Equals<
+					Simplify<{ b: string } & { a?: boolean }>,
+					{ b: string; a?: boolean }
+				>
+			>();
+			assertTrue<
+				Equals<
+					Simplify<
+						Pick<{ a: number; b: string }, "b"> & { a?: boolean }
+					>,
+					{ b: string; a?: boolean }
+				>
+			>();
+			assertTrue<
+				Equals<Simplify<{ a: "a" } | { a: "b" }>, { a: "a" | "b" }>
+			>();
 		});
 	});
 
@@ -652,8 +727,18 @@ describe("types => ", () => {
 		});
 
 		it("should return the properties from T which are not in U plus the properties from U", () => {
-			assertTrue<Equals<Overwrite<{ b: string }, { a?: boolean }>, { b: string, a?: boolean }>>();
-			assertTrue<Equals<Overwrite<{ a: number, b: string }, { a?: boolean }>, { b: string, a?: boolean }>>();
+			assertTrue<
+				Equals<
+					Overwrite<{ b: string }, { a?: boolean }>,
+					{ b: string; a?: boolean }
+				>
+			>();
+			assertTrue<
+				Equals<
+					Overwrite<{ a: number; b: string }, { a?: boolean }>,
+					{ b: string; a?: boolean }
+				>
+			>();
 			assertTrue<Equals<Overwrite<{ a: "a" }, { a: "b" }>, { a: "b" }>>();
 		});
 	});
@@ -682,7 +767,12 @@ describe("types => ", () => {
 			assertTrue<Equals<Tail<[3, 2, number]>, [2, number]>>();
 			// open-ended tuples
 			assertTrue<Equals<Tail<[number, ...string[]]>, string[]>>();
-			assertTrue<Equals<Tail<[number, boolean?, ...string[]]>, [boolean?, ...string[]]>>();
+			assertTrue<
+				Equals<
+					Tail<[number, boolean?, ...string[]]>,
+					[boolean?, ...string[]]
+				>
+			>();
 			// For array types, tail should be an identity operation
 			assertTrue<Equals<Tail<[...string[]]>, string[]>>();
 			assertTrue<Equals<Tail<string[]>, string[]>>();
@@ -700,8 +790,15 @@ describe("types => ", () => {
 			assertTrue<Equals<Lead<[1, 2]>, [1]>>();
 			assertTrue<Equals<Lead<[boolean, 2, number]>, [boolean, 2]>>();
 			// For open-ended tuples and array types, Lead should be an identity operation
-			assertTrue<Equals<Lead<[number, ...string[]]>, [number, ...string[]]>>();
-			assertTrue<Equals<Lead<[number, boolean?, ...string[]]>, [number, boolean?, ...string[]]>>();
+			assertTrue<
+				Equals<Lead<[number, ...string[]]>, [number, ...string[]]>
+			>();
+			assertTrue<
+				Equals<
+					Lead<[number, boolean?, ...string[]]>,
+					[number, boolean?, ...string[]]
+				>
+			>();
 			assertTrue<Equals<Lead<[...string[]]>, string[]>>();
 			assertTrue<Equals<Lead<string[]>, string[]>>();
 		});
@@ -711,9 +808,13 @@ describe("types => ", () => {
 		it("should prepend the given element to the tuple/array", () => {
 			assertTrue<Equals<Unshift<[], 1>, [1]>>();
 			assertTrue<Equals<Unshift<[1], 2>, [2, 1]>>();
-			assertTrue<Equals<Unshift<[number, string], boolean>, [boolean, number, string]>>();
+			assertTrue<
+				Equals<
+					Unshift<[number, string], boolean>,
+					[boolean, number, string]
+				>
+			>();
 		});
-
 	});
 
 	describe("ArgumentAt<F, N> => ", () => {
@@ -739,7 +840,6 @@ describe("types => ", () => {
 			assertTrue<Equals<ArgumentAt<F3, 2>, never>>();
 			assertTrue<Equals<ArgumentAt<F5, 1>, never>>();
 		});
-
 	});
 
 	describe("Last<T[]> => ", () => {
@@ -775,27 +875,34 @@ describe("types => ", () => {
 			type F3 = (a1: number, a2: string) => void;
 			type P3 = LastArgument<F3>;
 
-			type F4 = (a1: number, a2: string, a3: any, a4: unknown, a5: () => void) => void;
+			type F4 = (
+				a1: number,
+				a2: string,
+				a3: any,
+				a4: unknown,
+				a5: () => void,
+			) => void;
 			type P4 = LastArgument<F4>;
 
 			assertTrue<Equals<P1, never>>();
 			assertTrue<Equals<P2, number>>();
 			assertTrue<Equals<P3, string>>();
 			assertTrue<Equals<P4, () => void>>();
-
 		});
 	});
 
 	describe("CallbackAPIReturnType<T> => ", () => {
 		it("should correctly infer the return type of the callback argument", () => {
-
 			type F1 = (cb: (err?: Error) => void) => void;
 			type P1 = CallbackAPIReturnType<F1>;
 
 			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
 			type P2 = CallbackAPIReturnType<F2>;
 
-			type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
+			type F3 = (
+				arg1: string,
+				cb: (err: Error, ret: number) => void,
+			) => void;
 			type P3 = CallbackAPIReturnType<F3>;
 
 			assertTrue<Equals<P1, void>>();
@@ -812,7 +919,10 @@ describe("types => ", () => {
 			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
 			type P2 = Promisify<F2>;
 
-			type F3 = (one: string, cb: (err: Error, ret: number) => void) => void;
+			type F3 = (
+				one: string,
+				cb: (err: Error, ret: number) => void,
+			) => void;
 			type P3 = Promisify<F3>;
 
 			assertTrue<Equals<ReturnType<P1>, Promise<void>>>();
@@ -827,10 +937,17 @@ describe("types => ", () => {
 			type F2 = (cb: (err: Error, ret: boolean) => void) => void;
 			type P2 = Promisify<F2>;
 
-			type F3 = (arg1: string, cb: (err: Error, ret: number) => void) => void;
+			type F3 = (
+				arg1: string,
+				cb: (err: Error, ret: number) => void,
+			) => void;
 			type P3 = Promisify<F3>;
 
-			type F4 = (arg1: string, arg2: () => void, cb: (err: Error, ret: number) => void) => void;
+			type F4 = (
+				arg1: string,
+				arg2: () => void,
+				cb: (err: Error, ret: number) => void,
+			) => void;
 			type P4 = Promisify<F4>;
 
 			assertTrue<Equals<Parameters<P1>, []>>();
@@ -840,13 +957,18 @@ describe("types => ", () => {
 		});
 
 		it("test cases from https://github.com/microsoft/TypeScript/issues/41563", () => {
-
-			type F1 = (arg: string, cb: (err: unknown, result: number) => void) => void;
+			type F1 = (
+				arg: string,
+				cb: (err: unknown, result: number) => void,
+			) => void;
 			type P1 = Promisify<F1>;
 			type E1 = (arg: string) => Promise<number>;
 			assertTrue<Equals<P1, E1>>();
 
-			type F2 = (arg: string, cb: (err: any, result: number) => void) => void;
+			type F2 = (
+				arg: string,
+				cb: (err: any, result: number) => void,
+			) => void;
 			type P2 = Promisify<F2>;
 			type E2 = (arg: string) => Promise<number>;
 			assertTrue<Equals<P2, E2>>();
@@ -861,7 +983,10 @@ describe("types => ", () => {
 			type E4 = () => Promise<void>;
 			assertTrue<Equals<P4, E4>>();
 
-			type F5 = (arg: string, cb: (err: Error | null, result: number) => void) => void;
+			type F5 = (
+				arg: string,
+				cb: (err: Error | null, result: number) => void,
+			) => void;
 			type P5 = Promisify<F5>;
 			type E5 = (arg: string) => Promise<number>;
 			assertTrue<Equals<P5, E5>>();
@@ -887,8 +1012,12 @@ describe("types => ", () => {
 			// @ts-expect-error: this is an intentional error
 			const test2 = testNoInferArg2({ a: 1 }, { a: 1, b: 2 });
 
-			class Foo { private a; }
-			class Bar extends Foo { private b; }
+			class Foo {
+				private a;
+			}
+			class Bar extends Foo {
+				private b;
+			}
 
 			const testNotInferred = testNoInferArg2(new Foo(), new Bar());
 
@@ -897,7 +1026,7 @@ describe("types => ", () => {
 				Not<Equals<typeof test1, { b: 2 }>>,
 
 				Not<Equals<typeof test2, { a: 1 }>>,
-				Not<Equals<typeof test2, { a: 1, b: 2 }>>,
+				Not<Equals<typeof test2, { a: 1; b: 2 }>>,
 
 				Equals<typeof testNotInferred, Foo>,
 			];
@@ -910,11 +1039,18 @@ describe("types => ", () => {
 		it("should create a fixed-length tuple of the given type and length", () => {
 			assertTrue<Equals<TupleOf<any, 0>, []>>();
 			assertTrue<Equals<TupleOf<string, 2>, [string, string]>>();
-			assertTrue<Equals<
-				TupleOf<number | string, 3 | 4>,
-				[number | string, number | string, number | string]
-				 | [number | string, number | string, number | string, number | string]
-			>>();
+			assertTrue<
+				Equals<
+					TupleOf<number | string, 3 | 4>,
+					| [number | string, number | string, number | string]
+					| [
+							number | string,
+							number | string,
+							number | string,
+							number | string,
+					  ]
+				>
+			>();
 		});
 
 		it("should create an array if the length is unknown", () => {
@@ -926,30 +1062,31 @@ describe("types => ", () => {
 		it(`should return a union of numeric strings from "0" to "N-1"`, () => {
 			assertTrue<Equals<Range<0>, never>>();
 			assertTrue<Equals<Range<2>, "0" | "1">>();
-		})
-	})
+		});
+	});
 
 	describe("RangeFrom<N, M> =>", () => {
 		it(`should return a union of numeric strings from "N" to "M-1"`, () => {
 			assertTrue<Equals<RangeFrom<0, 0>, never>>();
-			assertTrue<Equals<RangeFrom<2000, 2003>, "2000" | "2001" | "2002">>();
-		})
-	})
+			assertTrue<
+				Equals<RangeFrom<2000, 2003>, "2000" | "2001" | "2002">
+			>();
+		});
+	});
 
 	describe("Comparisons =>", () => {
 		it(`should compare the given numeric types and return true/false`, () => {
 			type Tests = [
 				IsGreaterThan<200, 199>,
-				Not<IsGreaterThan<200,200>>,
+				Not<IsGreaterThan<200, 200>>,
 				IsGreaterThanOrEqual<99, 99>,
 				IsGreaterThanOrEqual<99, 98>,
 				IsLessThan<20, 22>,
-				Not<IsLessThan<22,22>>,
+				Not<IsLessThan<22, 22>>,
 				IsLessThanOrEqual<30, 32>,
 				IsLessThanOrEqual<32, 32>,
 			];
 			assertTrue<Every<Tests, true>>();
-		})
-	})
-
+		});
+	});
 });

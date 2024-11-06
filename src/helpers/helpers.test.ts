@@ -1,17 +1,4 @@
-// tslint:disable:no-console
-// tslint:disable:no-unused-expression
-// tslint:disable:variable-name
-
-import { assert, expect, should, use } from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import { SinonFakeTimers, spy, stub, useFakeTimers } from "sinon";
-import * as sinonChai from "sinon-chai";
-
-// enable the should interface with sinon
-should();
-// improve stubs for testing
-use(sinonChai);
-use(chaiAsPromised);
+import { expect, describe, it } from "vitest";
 
 import { assertNever } from ".";
 declare let never: never;
@@ -27,7 +14,7 @@ describe("helpers => ", () => {
 		});
 
 		it("has the correct types", () => {
-			function testNever(foo: 1|2) {
+			function testNever(foo: 1 | 2) {
 				if (foo === 1 || foo === 2) {
 					// nothing to do here
 				} else {

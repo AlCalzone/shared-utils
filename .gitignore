@@ -268,5 +268,17 @@ rfc/
 /.nyc_output
 coverage/
 
-# npm packet files
-alcalzone-shared-*.tgz
+# Output of 'npm pack'
+*.tgz
+
+# Yarn config and stuff
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# ESLint cache
+.eslintcache

@@ -1,3 +1,14 @@
 {
-	"typescript.tsdk": "node_modules\\typescript\\lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"editor.formatOnSave": false, // the default of true interferes with codeActionsOnSave
+	"editor.codeActionsOnSave": [
+		"source.fixAll.eslint",
+		"source.formatDocument"
+	],
+	// "eslint.codeActionsOnSave.mode": "problems",
+	// "eslint.codeActionsOnSave.rules": [
+	// 	"!report-unused-eslint-disable-comments", // Without this, disables for the above rules would be removed
+	// 	"*"
+	// ],
+
 }
