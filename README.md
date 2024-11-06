@@ -14,7 +14,7 @@ Function documentation available [here](https://alcalzone.github.io/shared-utils
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 5.0.0 (2024-11-06)
 * Breaking: Node.js 18 is now required
 * Breaking: When using TypeScript, `moduleResolution` must be set to `node16` in `tsconfig.json`
 * Breaking: `entries`, `values`, and `composeObject` were removed. Use the widely available `Object.entries`, `Object.values`, and `Object.fromEntries` instead.

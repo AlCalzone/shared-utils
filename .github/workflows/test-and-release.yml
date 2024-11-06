@@ -98,7 +98,7 @@ jobs:
 
     - name: Publish package to npm
       run: |
-        yarn npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+        yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
         yarn npm whoami
         yarn npm publish
 

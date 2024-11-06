@@ -1,6 +1,6 @@
 {
   "name": "alcalzone-shared",
-  "version": "4.0.8",
+  "version": "5.0.0",
   "description": "A set of utilities shared between my projects",
   "keywords": [],
   "type": "module",

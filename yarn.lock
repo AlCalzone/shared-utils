@@ -1146,7 +1146,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alcalzone-shared@npm:^4.0.1, alcalzone-shared@workspace:.":
+"alcalzone-shared@npm:^4.0.1":
+  version: 4.0.8
+  resolution: "alcalzone-shared@npm:4.0.8"
+  dependencies:
+    debug: "npm:^4.3.4"
+  checksum: 10/865743df1de64bf26bfa03c92321a7cdaad7dd79ee06eeb8a01599784628462f58dafcd649ea8e8bd72d24fed6933c2559a0eae0f8b58b6790a6c0352cf35f13
+  languageName: node
+  linkType: hard
+
+"alcalzone-shared@workspace:.":
   version: 0.0.0-use.local
   resolution: "alcalzone-shared@workspace:."
   dependencies:
