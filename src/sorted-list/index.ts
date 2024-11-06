@@ -1,4 +1,4 @@
-import { Comparer, defaultComparer } from "../comparable";
+import { type Comparer, defaultComparer } from "../comparable/index.js";
 
 interface SortedListNode<T> {
 	value: T;
@@ -9,7 +9,11 @@ interface SortedListNode<T> {
 /**
  * Seeks the list from the beginning and finds the position to add the new item
  */
-function findPrevNode<T>(firstNode: SortedListNode<T>, item: T, comparer: Comparer<T>): SortedListNode<T> | undefined {
+function findPrevNode<T>(
+	firstNode: SortedListNode<T>,
+	item: T,
+	comparer: Comparer<T>,
+): SortedListNode<T> | undefined {
 	let ret: SortedListNode<T> | undefined;
 	let prevNode: SortedListNode<T> | undefined = firstNode;
 	// while item > prevNode.value
@@ -23,7 +27,10 @@ function findPrevNode<T>(firstNode: SortedListNode<T>, item: T, comparer: Compar
 /**
  * Seeks the list from the beginning and returns the first item matching the given predicate
  */
-function findNode<T>(firstNode: SortedListNode<T> | undefined, predicate: (item: T) => boolean): SortedListNode<T>| undefined {
+function findNode<T>(
+	firstNode: SortedListNode<T> | undefined,
+	predicate: (item: T) => boolean,
+): SortedListNode<T> | undefined {
 	let curNode: SortedListNode<T> | undefined = firstNode;
 	while (curNode != null) {
 		if (predicate(curNode.value)) return curNode;
@@ -36,7 +43,9 @@ function wrappedDefaultComparer<T>(a: T, b: T) {
 		return defaultComparer(a, b);
 	} catch (e) {
 		if (e instanceof Error && /cannot compare/.test(e.message)) {
-			throw new Error("For sorted lists with element types other than number or string, provide a custom comparer or implement Comparable<T> on the elements");
+			throw new Error(
+				"For sorted lists with element types other than number or string, provide a custom comparer or implement Comparable<T> on the elements",
+			);
 		} else {
 			throw e;
 		}
@@ -55,7 +64,6 @@ function isIndex(prop: number | string | symbol): prop is string {
  * A list that automatically sorts its items to guarantee that they are always in order
  */
 export class SortedList<T> {
-
 	private first: SortedListNode<T> | undefined;
 	private last: SortedListNode<T> | undefined;
 
@@ -88,7 +96,7 @@ export class SortedList<T> {
 		if (source != null) this.add(...source);
 		// Enable indexed access
 		return new Proxy(this, {
-			get(target, property, receiver) {
+			get(target, property, _receiver) {
 				if (isIndex(property)) {
 					return target.get(parseInt(property, 10));
 				} else {
@@ -219,16 +227,16 @@ export class SortedList<T> {
 
 	/** Returns the first item matching the given predicate */
 	private findNodeForItem(item: T): SortedListNode<T> | undefined {
-		return findNode(this.first, val => this.comparer(val, item) === 0);
+		return findNode(this.first, (val) => this.comparer(val, item) === 0);
 	}
 
 	/** Removes all items from the list */
-	public clear() {
+	public clear(): void {
 		this.first = this.last = undefined;
 		this._length = 0;
 	}
 
-	public *[Symbol.iterator]() {
+	public *[Symbol.iterator](): Generator<T, void, unknown> {
 		let curItem = this.first;
 		while (curItem != null) {
 			yield curItem.value;

@@ -1,32 +1,14 @@
 {
-    "compileOnSave": true,
+    "extends": "@tsconfig/node18/tsconfig.json",
     "compilerOptions": {
-        "declaration": false,
-        "noEmit": true,
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noEmitOnError": true,
-        // "noImplicitAny": true,
-        "outDir": "build/",
-        "removeComments": false,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "sourceMap": false,
-        "inlineSourceMap": false,
-        "stripInternal": true,
-        "strict": true,
-        "skipLibCheck": true,
-        "noImplicitAny": false,
-        "target": "es2015",
-        "lib": ["ES2015"],
-        "newLine": "lf",
-        "watch": false // true breaks circleci
+        "declaration": true,
+        "outDir": "build/esm",
+        "sourceMap": true
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
     ],
     "exclude": [
-        "build/**",
-        "node_modules/**"
+        "**/*.test.ts",
     ]
 }

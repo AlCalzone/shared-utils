@@ -1,7 +1,6 @@
-import { assert, expect } from "chai";
+import { expect, describe, it, afterAll, beforeAll } from "vitest";
 import { isArray, isObject } from ".";
 import type { Equals } from "../types";
-// tslint:disable:no-unused-expression
 
 // Used to tests types
 function assertTrue<T extends true>() {
@@ -12,22 +11,22 @@ type UnspecifiedObject = Record<string | number | symbol, unknown>;
 describe("lib/typeguards =>", () => {
 	describe("isObject() => ", () => {
 		it("should return true for object literals", () => {
-			isObject({}).should.be.true;
-			isObject({ a: "b" }).should.be.true;
+			expect(isObject({})).toBe(true);
+			expect(isObject({ a: "b" })).toBe(true);
 		});
 
 		it("should return true for Object instances", () => {
-			isObject(new Object()).should.be.true;
+			expect(isObject(new Object())).toBe(true);
 		});
 
 		it("should return false for Arrays", () => {
-			isObject([]).should.be.false;
-			isObject(new Array()).should.be.false;
+			expect(isObject([])).toBe(false);
+			expect(isObject(new Array())).toBe(false);
 		});
 
 		it("should return false for everything else", () => {
 			[null, undefined, 1, 2, 3, "1", "2", "3", true, false].forEach(
-				(val) => isObject(val).should.be.false,
+				(val) => expect(isObject(val)).toBe(false),
 			);
 		});
 
@@ -113,19 +112,19 @@ describe("lib/typeguards =>", () => {
 	describe("isArray() => ", () => {
 		function doTest() {
 			it("should return true for array literals", () => {
-				isArray([]).should.be.true;
-				isArray([1, 2, 3]).should.be.true;
+				expect(isArray([])).toBe(true);
+				expect(isArray([1, 2, 3])).toBe(true);
 			});
 
 			it("should return true for Array instances", () => {
-				isArray(new Array()).should.be.true;
+				expect(isArray(new Array())).toBe(true);
 			});
 
 			it("should return false for everything else", () => {
 				[
 					{},
 					new Object(),
-					new Buffer(0),
+					Buffer.alloc(0),
 					null,
 					undefined,
 					1,
@@ -136,7 +135,7 @@ describe("lib/typeguards =>", () => {
 					"3",
 					true,
 					false,
-				].forEach((val) => isArray(val).should.be.false);
+				].forEach((val) => expect(isArray(val)).toBe(false));
 			});
 		}
 
@@ -146,10 +145,9 @@ describe("lib/typeguards =>", () => {
 
 		describe(`without native support for "Array.isArray"`, () => {
 			const originalIsArray = Array.isArray;
-
-			before(() => ((Array.isArray as any) = undefined));
+			beforeAll(() => ((Array.isArray as any) = undefined));
 			doTest();
-			after(() => (Array.isArray = originalIsArray));
+			afterAll(() => (Array.isArray = originalIsArray));
 		});
 
 		it("should allow working with the narrowed array", () => {

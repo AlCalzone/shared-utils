@@ -1,9 +1,4 @@
-// tslint:disable:no-unused-expression
-
-import { expect, should, use } from "chai";
-import { spy, stub } from "sinon";
-should();
-
+import { expect, describe, it, vi } from "vitest";
 import { SortedList } from ".";
 
 describe("sorted-list => ", () => {
@@ -11,19 +6,19 @@ describe("sorted-list => ", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		for (const item of containedItems) {
-			list.contains(item).should.be.true;
+			expect(list.contains(item)).to.be.true;
 		}
 
 		const nonContainedItems = [6, 3, 7, 10, -1, 0];
 		for (const item of nonContainedItems) {
-			list.contains(item).should.be.false;
+			expect(list.contains(item)).to.be.false;
 		}
 	});
 
 	it("should have the same length as the array passed in the constructor", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
-		list.length.should.equal(containedItems.length);
+		expect(list.length).to.equal(containedItems.length);
 	});
 
 	it("should be iterated in a sorted order", () => {
@@ -48,8 +43,8 @@ describe("sorted-list => ", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		const expected = [...containedItems, 3].sort();
-		list.add(3).should.equal(list.length);
-		list.length.should.equal(expected.length);
+		expect(list.add(3)).to.equal(list.length);
+		expect(list.length).to.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
@@ -57,8 +52,8 @@ describe("sorted-list => ", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		const expected = [1, 5, 2, 9, 8].sort();
-		list.remove(4).should.equal(list.length);
-		list.length.should.equal(expected.length);
+		expect(list.remove(4)).to.equal(list.length);
+		expect(list.length).to.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
@@ -66,8 +61,8 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		const expected = [2, 5, 4, 9, 8].sort();
-		list.shift()!.should.equal(-1);
-		list.length.should.equal(expected.length);
+		expect(list.shift()!).to.equal(-1);
+		expect(list.length).to.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
@@ -80,8 +75,8 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const expected = [...containedItems].sort();
 		const list = new SortedList(containedItems);
-		list.peekStart()!.should.equal(-1);
-		list.length.should.equal(expected.length);
+		expect(list.peekStart()!).to.equal(-1);
+		expect(list.length).to.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
@@ -94,8 +89,8 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		const expected = [2, -1, 5, 4, 8].sort();
-		list.pop()!.should.equal(9);
-		list.length.should.equal(expected.length);
+		expect(list.pop()!).to.equal(9);
+		expect(list.length).to.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
@@ -108,8 +103,8 @@ describe("sorted-list => ", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const expected = [...containedItems].sort();
 		const list = new SortedList(containedItems);
-		list.peekEnd()!.should.equal(9);
-		list.length.should.equal(expected.length);
+		expect(list.peekEnd()!).to.equal(9);
+		expect(list.length).to.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
@@ -120,37 +115,37 @@ describe("sorted-list => ", () => {
 
 	it("adding items to an empty list should work", () => {
 		const list = new SortedList<number>();
-		list.add(3).should.equal(1);
-		list.length.should.equal(1);
+		expect(list.add(3)).to.equal(1);
+		expect(list.length).to.equal(1);
 		expect(list.toArray()).to.deep.equal([3]);
 	});
 
 	it("adding identical items should work", () => {
 		const list = new SortedList<number>();
-		list.add(1).should.equal(1);
-		list.add(1).should.equal(2);
-		list.add(1).should.equal(3);
-		list.length.should.equal(3);
+		expect(list.add(1)).to.equal(1);
+		expect(list.add(1)).to.equal(2);
+		expect(list.add(1)).to.equal(3);
+		expect(list.length).to.equal(3);
 		expect(list.toArray()).to.deep.equal([1, 1, 1]);
 	});
 
 	it("replacing the first item should work", () => {
 		const list = new SortedList<number>([1, 3, 2]);
-		list.add(0).should.equal(4);
+		expect(list.add(0)).to.equal(4);
 		expect(list.toArray()).to.deep.equal([0, 1, 2, 3]);
 	});
 
 	it("removing the last item should work", () => {
 		const list = new SortedList<number>([3]);
-		list.remove(3).should.equal(0);
-		list.length.should.equal(0);
+		expect(list.remove(3)).to.equal(0);
+		expect(list.length).to.equal(0);
 		expect(list.toArray()).to.deep.equal([]);
 	});
 
 	it("calling remove on an empty list should work", () => {
 		const list = new SortedList<number>();
-		list.remove(3).should.equal(0);
-		list.length.should.equal(0);
+		expect(list.remove(3)).to.equal(0);
+		expect(list.length).to.equal(0);
 		expect(list.toArray()).to.deep.equal([]);
 	});
 
@@ -158,8 +153,8 @@ describe("sorted-list => ", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		const expected = [...containedItems].sort();
-		list.remove(-1).should.equal(list.length);
-		list.length.should.equal(expected.length);
+		expect(list.remove(-1)).to.equal(list.length);
+		expect(list.length).to.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
@@ -167,7 +162,7 @@ describe("sorted-list => ", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
 		list.clear();
-		list.length.should.equal(0);
+		expect(list.length).to.equal(0);
 		expect(list.toArray()).to.deep.equal([]);
 	});
 
@@ -176,22 +171,26 @@ describe("sorted-list => ", () => {
 	});
 
 	it("should compare custom items using the custom comparer", () => {
-		const comparer = stub().returns(0);
+		const comparer = vi.fn().mockReturnValue(0);
 		const list = new SortedList([{}, {}], comparer);
-		comparer.should.have.been.called;
+		expect(comparer).toHaveBeenCalled();
 	});
 
 	it("should compare custom items using their compareTo method if it exists", () => {
-		const largeObj = { compareTo: stub().returns(1) };
-		const smallObj = { compareTo: stub().returns(-1) };
+		const largeObj = { compareTo: vi.fn().mockReturnValue(1) };
+		const smallObj = { compareTo: vi.fn().mockReturnValue(-1) };
 		const list = new SortedList([largeObj, smallObj]);
-		expect(largeObj.compareTo.called || smallObj.compareTo.called).to.be
-			.true;
+		const callcount =
+			largeObj.compareTo.mock.calls.length +
+			smallObj.compareTo.mock.calls.length;
+		expect(callcount).toBeGreaterThan(0);
 		expect(list.toArray()).to.deep.equal([smallObj, largeObj]);
 	});
 
 	it("when the compareTo method throws an error it should be passed through", () => {
-		const faultyComparer = stub().throws(new Error("bogus error"));
+		const faultyComparer = vi.fn().mockImplementation(() => {
+			throw new Error("bogus error");
+		});
 		const obj1 = { compareTo: faultyComparer };
 		const obj2 = { compareTo: faultyComparer };
 		const list = new SortedList();
@@ -199,7 +198,7 @@ describe("sorted-list => ", () => {
 	});
 
 	it("should complain if only one item has a compareTo method", () => {
-		const largeObj = { compareTo: stub().returns(1) };
+		const largeObj = { compareTo: vi.fn().mockReturnValue(1) };
 		const smallObj = {};
 		expect(() => new SortedList([largeObj, smallObj])).to.throw("comparer");
 	});
@@ -207,7 +206,7 @@ describe("sorted-list => ", () => {
 	it("find() should return the first item matching the given predicate", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const list = new SortedList(containedItems);
-		list.find((item) => item > 3)!.should.equal(4);
+		expect(list.find((item) => item > 3)!).to.equal(4);
 	});
 
 	it("find() should return undefined if no item matches the predicate", () => {
@@ -221,7 +220,7 @@ describe("sorted-list => ", () => {
 		const list = new SortedList(containedItems);
 		const expected = [...containedItems].sort();
 		for (let i = 0; i < expected.length; i++) {
-			list.get(i)!.should.equal(expected[i]);
+			expect(list.get(i)!).to.equal(expected[i]);
 		}
 		expect(list.get(expected.length)).to.be.undefined;
 	});
@@ -246,7 +245,7 @@ describe("sorted-list => ", () => {
 		const list = new SortedList(containedItems);
 		const expected = [...containedItems].sort();
 		for (let i = 0; i < expected.length; i++) {
-			list[i].should.equal(expected[i]);
+			expect(list[i]).to.equal(expected[i]);
 		}
 		expect(list[list.length]).to.be.undefined;
 	});

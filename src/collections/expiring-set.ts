@@ -30,23 +30,20 @@ export class ExpiringSet<T> extends EventEmitter {
 	 */
 	public readonly expiryTime: number;
 
-	public constructor(
-		expiryTime: number,
-		iterable?: Iterable<T> | null | undefined,
-	) {
+	public constructor(expiryTime: number, iterable?: Iterable<T> | null) {
 		super();
 		if (expiryTime < 1) {
 			throw new Error("The expiry time must be a positive integer");
 		}
 		this.expiryTime = expiryTime;
 		this._set = new Set(iterable);
-		this._set.forEach(entry => this.queueForExpiry(entry));
+		this._set.forEach((entry) => this.queueForExpiry(entry));
 	}
 
 	private queueForExpiry(entry: T): void {
 		// Clear old timeouts
 		if (this._timeouts.has(entry)) {
-			clearTimeout(this._timeouts.get(entry)!);
+			clearTimeout(this._timeouts.get(entry));
 		}
 
 		const newTimeout = setTimeout(() => {
@@ -65,14 +62,14 @@ export class ExpiringSet<T> extends EventEmitter {
 
 	public clear(): void {
 		this._set.clear();
-		this._timeouts.forEach(timeout => clearTimeout(timeout));
+		this._timeouts.forEach((timeout) => clearTimeout(timeout));
 		this._timeouts.clear();
 	}
 
 	public delete(value: T): boolean {
 		const ret = this._set.delete(value);
 		if (this._timeouts.has(value)) {
-			clearTimeout(this._timeouts.get(value)!);
+			clearTimeout(this._timeouts.get(value));
 			this._timeouts.delete(value);
 		}
 		return ret;

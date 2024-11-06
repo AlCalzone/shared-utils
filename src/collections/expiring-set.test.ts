@@ -1,19 +1,13 @@
-// tslint:disable:no-unused-expression
-
-import { expect, should, use } from "chai";
-import { SinonFakeTimers, spy, stub, useFakeTimers } from "sinon";
-should();
-
+import { expect, describe, it, vi, beforeEach, afterEach } from "vitest";
 import { ExpiringSet } from ".";
 
 describe("expiring-set => ", () => {
-	let clock: SinonFakeTimers;
 	beforeEach(() => {
-		clock = useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		clock.restore();
+		vi.useRealTimers();
 	});
 
 	it("the constructor throws if an invalid expiry time is passed", () => {
@@ -26,19 +20,19 @@ describe("expiring-set => ", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const set = new ExpiringSet(1, containedItems);
 		for (const item of containedItems) {
-			set.has(item).should.be.true;
+			expect(set.has(item)).to.be.true;
 		}
 
 		const nonContainedItems = [6, 3, 7, 10, -1, 0];
 		for (const item of nonContainedItems) {
-			set.has(item).should.be.false;
+			expect(set.has(item)).to.be.false;
 		}
 	});
 
 	it("should have the same length as the array passed in the constructor", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
 		const set = new ExpiringSet(1, containedItems);
-		set.size.should.equal(containedItems.length);
+		expect(set.size).to.equal(containedItems.length);
 	});
 
 	it("should be iterated in the same order as a normal Set", () => {
@@ -87,112 +81,127 @@ describe("expiring-set => ", () => {
 
 	it("forEach() should work like the Set method", () => {
 		const containedItems = [1, 5, 2, 4, 9, 8];
-		const expected = spy();
-		const actual = spy();
+		const expected = vi.fn();
+		const actual = vi.fn();
 		new Set(containedItems).forEach((v1, v2) => expected(v1, v2));
 		new ExpiringSet(1, containedItems).forEach((v1, v2) => actual(v1, v2));
 
-		expect(expected.callCount).to.equal(containedItems.length);
-		expect(actual.callCount).to.equal(containedItems.length);
+		expect(expected).toHaveBeenCalledTimes(containedItems.length);
+		expect(actual).toHaveBeenCalledTimes(containedItems.length);
 
 		for (let i = 0; i < containedItems.length; i++) {
-			expect(expected.getCall(i).args).to.deep.equal(
-				actual.getCall(i).args,
-			);
+			expect(expected.mock.calls[i]).to.deep.equal(actual.mock.calls[i]);
 		}
 	});
 
-	it("after the given expiry time has elapsed, initial elements should be removed", done => {
+	it("after the given expiry time has elapsed, initial elements should be removed", () => {
 		const initial = [1, 2, 3, 4];
 		const set = new ExpiringSet(100, initial);
-		const expiredSpy = spy();
+		const expiredSpy = vi.fn();
 		set.on("expired", expiredSpy);
-		setTimeout(() => {
-			set.size.should.equal(0);
-			for (const val of initial) {
-				set.has(val).should.equal(false);
-				expiredSpy.should.have.been.calledWith(val);
-			}
-			done();
-		}, 150);
-		clock.runAll();
+
+		return new Promise<void>((done) => {
+			setTimeout(() => {
+				expect(set.size).to.equal(0);
+				for (const val of initial) {
+					expect(set.has(val)).to.be.false;
+					expect(expiredSpy).toHaveBeenCalledWith(val);
+				}
+				done();
+			}, 150);
+			vi.runAllTimers();
+		});
 	});
 
-	it("added elements should be expired on their own time", done => {
+	it("added elements should be expired on their own time", () => {
 		const set = new ExpiringSet(100);
-		const expiredSpy = spy();
+		const expiredSpy = vi.fn();
 		set.on("expired", expiredSpy);
-		setTimeout(() => set.add(5), 50);
-		setTimeout(() => {
-			set.size.should.equal(1);
-			set.has(5).should.be.true;
-			expiredSpy.should.not.have.been.calledWith(5);
-		}, 100);
-		setTimeout(() => {
-			set.size.should.equal(0);
-			set.has(5).should.be.false;
-			expiredSpy.should.have.been.calledWith(5);
-			done();
-		}, 151);
-		clock.runAll();
+
+		return new Promise<void>((done) => {
+			setTimeout(() => set.add(5), 50);
+			setTimeout(() => {
+				expect(set.size).toBe(1);
+				expect(set.has(5)).toBe(true);
+				expect(expiredSpy).not.toHaveBeenCalledWith(5);
+			}, 100);
+			setTimeout(() => {
+				expect(set.size).toBe(0);
+				expect(set.has(5)).toBe(false);
+				expect(expiredSpy).toHaveBeenCalledWith(5);
+				done();
+			}, 151);
+			vi.runAllTimers();
+		});
 	});
 
-	it("adding elements multiple times refreshes the expiry", done => {
+	it("adding elements multiple times refreshes the expiry", () => {
 		const set = new ExpiringSet(100);
-		const expiredSpy = spy();
+		const expiredSpy = vi.fn();
 		set.on("expired", expiredSpy);
 		set.add(5);
-		setTimeout(() => set.add(5), 50);
-		setTimeout(() => {
-			set.size.should.equal(1);
-			set.has(5).should.be.true;
-			expiredSpy.should.not.have.been.calledWith(5);
-		}, 101);
-		setTimeout(() => {
-			set.size.should.equal(0);
-			set.has(5).should.be.false;
-			expiredSpy.should.have.been.calledWith(5);
-			done();
-		}, 151);
-		clock.runAll();
+
+		return new Promise<void>((done) => {
+			setTimeout(() => set.add(5), 50);
+			setTimeout(() => {
+				expect(set.size).toBe(1);
+				expect(set.has(5)).toBe(true);
+				expect(expiredSpy).not.toHaveBeenCalledWith(5);
+			}, 101);
+			setTimeout(() => {
+				expect(set.size).toBe(0);
+				expect(set.has(5)).toBe(false);
+				expect(expiredSpy).toHaveBeenCalledWith(5);
+				done();
+			}, 151);
+			vi.runAllTimers();
+		});
 	});
 
-	it("the expired callback should not be called for deleted elements", done => {
+	it("the expired callback should not be called for deleted elements", () => {
 		const set = new ExpiringSet(100);
-		const expiredSpy = spy();
+		const expiredSpy = vi.fn();
 		set.on("expired", expiredSpy);
 		set.add(2);
-		setTimeout(() => set.delete(2), 50);
-		setTimeout(() => {
-			set.size.should.equal(0);
-			set.has(2).should.be.false;
-			expiredSpy.should.not.have.been.called;
-			done();
-		}, 150);
-		clock.runAll();
+
+		return new Promise<void>((done) => {
+			setTimeout(() => set.delete(2), 50);
+			setTimeout(() => {
+				expect(set.size).toBe(0);
+				expect(set.has(2)).toBe(false);
+				expect(expiredSpy).not.toHaveBeenCalled();
+				done();
+			}, 150);
+			vi.runAllTimers();
+		});
 	});
 
-	it("the expired callback should not be called after the set has been cleared", done => {
+	it("the expired callback should not be called after the set has been cleared", () => {
 		const set = new ExpiringSet(100, [1, 2, 3]);
-		const expiredSpy = spy();
+		const expiredSpy = vi.fn();
 		set.on("expired", expiredSpy);
-		setTimeout(() => set.clear(), 50);
-		setTimeout(() => {
-			set.size.should.equal(0);
-			expiredSpy.should.not.have.been.called;
-			done();
-		}, 150);
-		clock.runAll();
+
+		return new Promise<void>((done) => {
+			setTimeout(() => set.clear(), 50);
+			setTimeout(() => {
+				expect(set.size).toBe(0);
+				expect(expiredSpy).not.toHaveBeenCalled();
+				done();
+			}, 150);
+			vi.runAllTimers();
+		});
 	});
 
-	it("delete returns false for expired elements", done => {
+	it("delete returns false for expired elements", () => {
 		const set = new ExpiringSet(100);
 		set.add(2);
-		setTimeout(() => {
-			set.delete(2).should.equal(false);
-			done();
-		}, 150);
-		clock.runAll();
-	});
 
+		return new Promise<void>((done) => {
+			setTimeout(() => {
+				expect(set.delete(2)).toBe(false);
+				done();
+			}, 150);
+			vi.runAllTimers();
+		});
+	});
 });
