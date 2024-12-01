@@ -5,9 +5,9 @@ __metadata:
   version: 8
   cacheKey: 10
 
-"@alcalzone/esm2cjs@npm:^1.2.3":
-  version: 1.2.3
-  resolution: "@alcalzone/esm2cjs@npm:1.2.3"
+"@alcalzone/esm2cjs@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@alcalzone/esm2cjs@npm:1.4.1"
   dependencies:
     esbuild: "npm:^0.24.0"
     fs-extra: "npm:^10.1.0"
@@ -15,7 +15,7 @@ __metadata:
     yargs: "npm:^17.5.1"
   bin:
     esm2cjs: bin/esm2cjs.cjs
-  checksum: 10/fc472f63d091db4f3888e2f4be61992ba349a9e98036371713f08fa9a02a38ac611db0dcb1e7967f251f0cdd8a246406fa1557cd9a106718eaca32bacd17573f
+  checksum: 10/9133100b28480d03e03b3aca5777cd48308c01a8ff2cec1fa68e86fdde29b0c28a4559cd658676bc215bdb09b2cb5ba267744cfcb320283ef500c95985ea8c56
   languageName: node
   linkType: hard
 
@@ -1159,7 +1159,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "alcalzone-shared@workspace:."
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@alcalzone/release-script": "npm:~3.8.0"
     "@alcalzone/release-script-plugin-license": "npm:~3.7.0"
     "@tsconfig/node18": "npm:^18.2.4"
