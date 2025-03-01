@@ -50,7 +50,7 @@
     "typedoc": "^0.27.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.19.0",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.9"
   },
   "scripts": {
     "prebuild": "rimraf ./build",
