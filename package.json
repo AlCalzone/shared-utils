@@ -45,7 +45,7 @@
     "@types/node": "^18.19.64",
     "coveralls": "^3.1.1",
     "eslint": "^9.21.0",
-    "prettier": "^3.5.2",
+    "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
     "typedoc": "^0.27.2",
     "typescript": "^5.8.2",
